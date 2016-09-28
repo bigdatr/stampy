@@ -1,2 +1,3 @@
-# stampy
-The new and improved stampy
+# Stampy
+
+The new and improved stampy.

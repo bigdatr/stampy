@@ -12,13 +12,15 @@
     "build": "./node_modules/.bin/babel src --out-dir lib",
     "lint": "eslint src",
     "lint-fix": "eslint src --fix",
-    "tape": "tape -r ./tests/tests.js src/**/*-test.js",
-    "test": "nyc --report-dir=./coverage npm run tape && npm run check-coverage",
-    "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0"
+    "ava": "ava",
+    "test": "nyc --report-dir=./coverage npm run ava && npm run check-coverage",
+    "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
+    "docs": "jsdoc -c jsdoc/conf.json",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "devDependencies": {
-    "@kadira/storybook": "^1.19.0",
     "app-module-path": "^2.0.0",
+    "ava": "^0.16.0",
     "babel-cli": "^6.5.0",
     "babel-core": "^6.5.0",
     "babel-eslint": "^6.0.2",
@@ -33,15 +35,17 @@
     "eslint-plugin-babel": "^3.2.0",
     "eslint-plugin-jsx-a11y": "^0.6.2",
     "eslint-plugin-react": "^4.3.0",
+    "flow-bin": "^0.33.0",
     "git-url-parse": "^6.0.1",
-    "nyc": "^8.3.0",
+    "jsdoc": "^3.4.2",
+    "minami": "^1.1.1",
+    "nyc": "^6.6.1",
     "raw-loader": "^0.5.1",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.0",
     "react-docgen": "^2.10.0",
     "react-dom": "^15.3.2",
     "style-loader": "^0.13.1",
-    "tape": "^4.6.0",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
   },
@@ -54,6 +58,14 @@
   "main": "lib/index.js",
   "engines": {
     "npm": "^3.0.0"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "files": [
+      "src/**/*-test.js"
+    ]
   },
   "nyc": {
     "all": true,

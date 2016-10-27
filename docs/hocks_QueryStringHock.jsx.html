@@ -1,4 +1,44 @@
-// @flow
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>hocks/QueryStringHock.jsx - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Hocks.html">Hocks</a><ul class='methods'><li data-type='method'><a href="module-Hocks.html#~PropChangeHock">PropChangeHock</a></li><li data-type='method'><a href="module-Hocks.html#~QueryStringHock">QueryStringHock</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">hocks/QueryStringHock.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @flow
 
 import React, {Component, PropTypes} from 'react';
 import {fromJS, List, Map, is} from 'immutable';
@@ -19,7 +59,7 @@ import PropChangeHock from './PropChangeHock';
  * It also allows for array parameters, push state vs replace state, and firing a function whenever the query string changes.
  *
  * This component requires a `location` prop, which should be the location prop that react-router provides its route components.
- * This prop will automatically be received if this HOC is used on any components that are passed straight to a <Route> object.
+ * This prop will automatically be received if this HOC is used on any components that are passed straight to a &lt;Route> object.
  * If you're using react-router v1 then you'll also need to pass it a history prop that react-router provides.
  * If using react-router v2 then QueryStringHock will automatically connect via context.
  *
@@ -32,10 +72,10 @@ import PropChangeHock from './PropChangeHock';
  *     props.updateQuery({a: "A"});
  *   };
  *
- *   return <div>
- *     <p>Extremely simple React component</p>
- *     <p onClick={onClick}>Set a="A" in query string</p>
- *   </div>;
+ *   return &lt;div>
+ *     &lt;p>Extremely simple React component&lt;/p>
+ *     &lt;p onClick={onClick}>Set a="A" in query string&lt;/p>
+ *   &lt;/div>;
  * }
  *
  * const withQueryString = QueryStringHock();
@@ -46,30 +86,30 @@ import PropChangeHock from './PropChangeHock';
  * @param {Object} [config.defaultQuery] These defaults will be passed down in the query prop whenever they aren't present in the actual query string.
  * @param {string} [config.queryPropName = "query"] Sets the name of the query prop.
  * @param {boolean} [config.replaceState] - optional boolean, setting this to true will make query changes use replaceState instead of pushState
- * @param {Array<string>} [config.arrayParams] - If you have particular query parameters that you always want to return as arrays, name them in here. All arrayParams will also be an empty array if they are not present in the query string. By default react-router only passes an array of query param values back if there are more than one value in them.
+ * @param {Array&lt;string>} [config.arrayParams] - If you have particular query parameters that you always want to return as arrays, name them in here. All arrayParams will also be an empty array if they are not present in the query string. By default react-router only passes an array of query param values back if there are more than one value in them.
  * @param {QueryChangeFunction} [onQueryChangeFunction] A function to be called when the query string changes. By default this function is called on initial `componentDidMount` and every time any query param changes after this - to limit this use the third argument `onChangeParams`
- * @params [Array<string>] [onChangeParams] An array of the query parameters that, once changed, will cause `onQueryChangeFunction` to be fired.
+ * @params [Array&lt;string>] [onChangeParams] An array of the query parameters that, once changed, will cause `onQueryChangeFunction` to be fired.
  * @return {HockApplier}
  */
 
-const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
-    return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
+const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array&lt;string> = null): HockApplier => {
+    return (ComposedComponent: ReactClass&lt;any>): ReactClass&lt;any> => {
 
-       const replaceState: boolean = !!(config && config.replaceState);
-       const queryPropName: string = (config && config.queryPropName) || "query";
-       const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
-       const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
+       const replaceState: boolean = !!(config &amp;&amp; config.replaceState);
+       const queryPropName: string = (config &amp;&amp; config.queryPropName) || "query";
+       const arrayParams: List&lt;string> = (config &amp;&amp; fromJS(config.arrayParams)) || List();
+       const defaultQuery: Map&lt;string,any> = (config &amp;&amp; fromJS(config.defaultQuery)) || Map();
 
-       const propsToListenTo: Array<string> = !onChangeParams
+       const propsToListenTo: Array&lt;string> = !onChangeParams
            ? [queryPropName]
            : fromJS(onChangeParams)
                .map(param => `${queryPropName}.${param}`)
                .toJS();
 
-       const PreparedComposedComponent: ReactClass<any> = !onQueryChangeFunction
+       const PreparedComposedComponent: ReactClass&lt;any> = !onQueryChangeFunction
            ? ComposedComponent
            : PropChangeHock([queryPropName], (props) => {
-               onQueryChangeFunction && onQueryChangeFunction(propsToListenTo, props);
+               onQueryChangeFunction &amp;&amp; onQueryChangeFunction(propsToListenTo, props);
            })(ComposedComponent);
 
        class QueryStringHock extends Component {
@@ -88,7 +128,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
             */
 
            getQuery(props: Object) {
-               const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
+               const query: Map&lt;string,any> = defaultQuery.merge(fromJS(props.location.query));
 
                // ensures that all arrayParams are returned as arrays (not strings or blank)
                return arrayParams
@@ -143,7 +183,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
                    setQuery: this.setQuery,
                    updateQuery: this.updateQuery
                };
-               return <PreparedComposedComponent {...this.props} {...newProps} />;
+               return &lt;PreparedComposedComponent {...this.props} {...newProps} />;
            }
        }
 
@@ -170,3 +210,22 @@ export default QueryStringHock;
  * @param {Object} nextProps The updated props object.
  * @return {*} The returned value is not used.
  */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Thu Oct 27 2016 18:37:54 GMT+1100 (AEDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

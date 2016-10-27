@@ -1,14 +1,20 @@
 {
 	"source": {
-    	"include": [ "README.md", "src" ],
-    	"includePattern": ".+\\.jsx?(doc)?$"
+    "include": [ "README.md", "src" ],
+    "includePattern": ".+\\.jsx?(doc)?$"
 	},
 	"opts": {
-        "destination": "./docs/",
-        "recurse": true,
-        "template": "node_modules/minami"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ]
+     "destination": "./docs/",
+     "recurse": true,
+     "template": "node_modules/minami"
+  },
+  "plugins": [
+     "plugins/markdown",
+     "node_modules/jsdoc-babel"
+  ],
+  "babel": {
+    "extensions": ["js", "es6", "jsx"],
+    "presets": ["es2015", "stage-2", "react"],
+    "plugins": ["transform-flow-strip-types"]
+  }
 }

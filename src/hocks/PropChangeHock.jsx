@@ -24,12 +24,12 @@ import {fromJS} from 'immutable';
  *
  * export default withPropChange(MyComponent); // exports MyComponent with PropChangeHock as a higher order component
  *
- * @param {Array<String>} propKeys The props that you want to check for changes on. Nested objects or values can be passed in using dot notation inside strings e.g. `['page', query.name', 'query.age']`.
+ * @param {Array<string>} propKeys The props that you want to check for changes on. Nested objects or values can be passed in using dot notation inside strings e.g. `['page', query.name', 'query.age']`.
  * @param {PropChangeFunction} onPropChangeFunction The function to be called. It is passed a single argument, the updated props object.
  * @return {HockApplier}
  */
 
-const PropChangeHock = (propKeys: Array<String>, onPropChangeFunction: Function): HockApplier => {
+const PropChangeHock = (propKeys: Array<string>, onPropChangeFunction: Function): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<PropChangeHock> => {
 
         return class PropChangeHock extends Component {

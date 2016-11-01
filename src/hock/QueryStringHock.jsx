@@ -55,108 +55,108 @@ import PropChangeHock from './PropChangeHock';
 const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
 
-       const replaceState: boolean = !!(config && config.replaceState);
-       const queryPropName: string = (config && config.queryPropName) || "query";
-       const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
-       const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
+        const replaceState: boolean = !!(config && config.replaceState);
+        const queryPropName: string = (config && config.queryPropName) || "query";
+        const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
+        const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
 
-       const propsToListenTo: Array<string> = !onChangeParams
-           ? [queryPropName]
-           : fromJS(onChangeParams)
-               .map(param => `${queryPropName}.${param}`)
-               .toJS();
+        const propsToListenTo: Array<string> = !onChangeParams
+            ? [queryPropName]
+            : fromJS(onChangeParams)
+                .map(param => `${queryPropName}.${param}`)
+                .toJS();
 
-       const PreparedComposedComponent: ReactClass<any> = !onQueryChangeFunction
-           ? ComposedComponent
-           : PropChangeHock([queryPropName], (props) => {
-               onQueryChangeFunction && onQueryChangeFunction(propsToListenTo, props);
-           })(ComposedComponent);
+        const PreparedComposedComponent: ReactClass<any> = !onQueryChangeFunction
+            ? ComposedComponent
+            : PropChangeHock([queryPropName], (props) => {
+                onQueryChangeFunction && onQueryChangeFunction(propsToListenTo, props);
+            })(ComposedComponent);
 
-       class QueryStringHock extends Component {
+        class QueryStringHock extends Component {
 
-           constructor(props) {
-               super(props);
+            constructor(props) {
+                super(props);
 
-               // explicit bind until es7
-               this.updateQuery = this.updateQuery.bind(this);
-               this.setQuery = this.setQuery.bind(this);
-           }
+                // explicit bind until es7
+                this.updateQuery = this.updateQuery.bind(this);
+                this.setQuery = this.setQuery.bind(this);
+            }
 
-           /**
-            * Gets the query object
-            * @param {Object} props Props to refer to.
-            */
+            /**
+             * Gets the query object
+             * @param {Object} props Props to refer to.
+             */
 
-           getQuery(props: Object) {
-               const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
+            getQuery(props: Object) {
+                const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
 
-               // ensures that all arrayParams are returned as arrays (not strings or blank)
-               return arrayParams
-                   .reduce((query, arrayParamKey) => {
-                       const param = query.get(arrayParamKey, List());
-                       const arrayParamValue = List.isList(param) ? param : List([param]);
-                       return query.set(arrayParamKey, arrayParamValue);
-                   }, query)
-                   .toJS();
-           }
+                // ensures that all arrayParams are returned as arrays (not strings or blank)
+                return arrayParams
+                    .reduce((query, arrayParamKey) => {
+                        const param = query.get(arrayParamKey, List());
+                        const arrayParamValue = List.isList(param) ? param : List([param]);
+                        return query.set(arrayParamKey, arrayParamValue);
+                    }, query)
+                    .toJS();
+            }
 
-           /**
-            * Partially updates the query. Any keys on the objects passed in will be modified on the query object.
-            * Keys set to empty strings or `null` will be removed from the query object.
-            * @param {Object} queryParamsToUpdate An object containing query params to update.
-            */
+            /**
+             * Partially updates the query. Any keys on the objects passed in will be modified on the query object.
+             * Keys set to empty strings or `null` will be removed from the query object.
+             * @param {Object} queryParamsToUpdate An object containing query params to update.
+             */
 
-           updateQuery(queryParamsToUpdate: Object) {
-               const query = fromJS(this.props.location.query)
-                   .merge(fromJS(queryParamsToUpdate))
-                   .toJS();
-               this.setQuery(query);
-           }
+            updateQuery(queryParamsToUpdate: Object) {
+                const query = fromJS(this.props.location.query)
+                    .merge(fromJS(queryParamsToUpdate))
+                    .toJS();
+                this.setQuery(query);
+            }
 
-           /**
-            * Replaces the current query string with the params defined in `query`.
-            * Keys set to empty strings or `null` will be removed from the query object.
-            * @param {Object} query An object containing query params.
-            */
+            /**
+             * Replaces the current query string with the params defined in `query`.
+             * Keys set to empty strings or `null` will be removed from the query object.
+             * @param {Object} query An object containing query params.
+             */
 
-           setQuery(query: Object) {
-               const routerMethod: string = replaceState ? "replace" : "push";
-               const newQuery: Object = fromJS(query)
-                   .filter(ii => ii !== "")
-                   .toJS();
+            setQuery(query: Object) {
+                const routerMethod: string = replaceState ? "replace" : "push";
+                const newQuery: Object = fromJS(query)
+                    .filter(ii => ii !== "")
+                    .toJS();
 
-               if(this.context.router) {
-                   // react router v2
-                   this.context.router[routerMethod]({
-                       pathname: this.props.location.pathname,
-                       query: newQuery
-                   });
-               } else {
-                   // react router v1
-                   this.props.history[`${routerMethod}State`](null, this.props.location.pathname, newQuery);
-               }
-           }
+                if(this.context.router) {
+                    // react router v2
+                    this.context.router[routerMethod]({
+                        pathname: this.props.location.pathname,
+                        query: newQuery
+                    });
+                } else {
+                    // react router v1
+                    this.props.history[`${routerMethod}State`](null, this.props.location.pathname, newQuery);
+                }
+            }
 
-           render() {
-               const newProps: Object = {
-                   [queryPropName]: this.getQuery(this.props),
-                   setQuery: this.setQuery,
-                   updateQuery: this.updateQuery
-               };
-               return <PreparedComposedComponent {...this.props} {...newProps} />;
-           }
-       }
+            render() {
+                const newProps: Object = {
+                    [queryPropName]: this.getQuery(this.props),
+                    setQuery: this.setQuery,
+                    updateQuery: this.updateQuery
+                };
+                return <PreparedComposedComponent {...this.props} {...newProps} />;
+            }
+        }
 
-       QueryStringHock.propTypes = {
-           location: PropTypes.object.isRequired, // must be react router location object, required for react-router v1 and v2
-           history: PropTypes.object // must be react router history object, required for react-router v1
-       };
+        QueryStringHock.propTypes = {
+            location: PropTypes.object.isRequired, // must be react router location object, required for react-router v1 and v2
+            history: PropTypes.object // must be react router history object, required for react-router v1
+        };
 
-       QueryStringHock.contextTypes = {
-           router: React.PropTypes.func // required for react-router v2
-       };
+        QueryStringHock.contextTypes = {
+            router: React.PropTypes.func // required for react-router v2
+        };
 
-       return QueryStringHock;
+        return QueryStringHock;
     }
 };
 

@@ -1,30 +1,19 @@
 // @flow
-
 import React, {Component, PropTypes} from 'react';
 import {fromJS, List, Map} from 'immutable';
 import {deepReduceOutwards} from 'immutable-recursive';
 import ComponentClassName from '../../util/ComponentClassName';
 
-type Schema = ListOrArray<SchemaItem>;
 
-type SchemaItem = {
-    filter: string | (row: Map<any>) => React.Element<any>,
-    heading: string,
-    render: (row: Map<any>) => React.Element<any>,
-    width: string | number
+/**
+ * Th
+ */
+
+type ThProps = {
+    schemaItem: Map<any,any>
 }
 
-type Props = {
-    className: ?string,
-    data: ListOrArray<any>,
-    modifier: ?string,
-    rowProps: (row: Object) => Object,
-    schema: Schema
-}
-
-
-
-function Th(props: Object): React.Element<any> {
+function Th(props: ThProps): React.Element<any> {
     var {width, heading = ''} = props.schemaItem.toObject();
     return <th
         style={{width}}
@@ -32,7 +21,17 @@ function Th(props: Object): React.Element<any> {
     />;
 }
 
-function Td(props: Object): React.Element<any> {
+
+/**
+ * Td
+ */
+
+type TdProps = {
+    row: Map<any,any>,
+    schemaItem: Map<any,any>
+}
+
+function Td(props: TdProps): React.Element<any> {
     const {row, schemaItem} = props;
     const {render, filter} = schemaItem.toObject();
 
@@ -44,22 +43,55 @@ function Td(props: Object): React.Element<any> {
         ? render(row)
         : (typeof filter === 'function')
             ? filter(row)
-            : props.row.get(filter)
+            : row.get(filter)
     ;
 
-    return <td>{content}</td>;
+    // Only return a td if the schema hasn't
+    // provided one
+    return (content && content.type === 'td')
+        ? content
+        : <td>{content}</td>;
 }
 
 
-function Table(props: Props): React.Element<any> {
-    const {modifier, className, rowProps} = props;
+
+/**
+ * Table
+ */
+
+type Schema = ListOrArray<SchemaItem>;
+
+type SchemaItem = {
+    filter: string | (row: Map<any>) => React.Element<any>,
+    heading: string,
+    render: (row: Map<any>) => React.Element<any>,
+    width: string | number
+}
+
+type TableProps = {
+    childNodeName: ?string,
+    className: ?string,
+    data: ListOrArray,
+    modifier: ?string,
+    rowProps: (row: Object) => Object,
+    schema: Schema
+}
+
+function Table(props: TableProps): React.Element<any> {
+    const {modifier, className, rowProps, childNodeName} = props;
     const schema = fromJS(props.schema);
+
+    // deepRecurse through the childNodes, pushing each leaf
+    // to the reduction. This will flatten the any deep children
+    // but retain their ordering
     const data = fromJS(props.data)
-        .update(ii => Map().set('children', ii))
+        // A fake parent node has to be created so that
+        // the deepReduce can start with a child
+        .update(ii => Map().set(childNodeName, ii))
         .update(deepReduceOutwards((reduction, item) => {
             return reduction.push(item);
-        }, List(), ['children']))
-        .skip(1); // The first node is the root node
+        }, List(), [childNodeName]))
+        .skip(1); // The first node is our fake root node.
 
 
     // Take the schema to create each heading
@@ -83,6 +115,7 @@ function Table(props: Props): React.Element<any> {
 
 Table.defaultProps = {
     className: '',
+    childNodeName: 'children',
     data: List(),
     modifier: '',
     schema: List(),

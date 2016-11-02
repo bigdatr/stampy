@@ -3,5 +3,5 @@ module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=..
 
 [libs]
-src/types/
+src/typedef/
 node_modules/immutable-js/dist/immutable.js.flow

@@ -6,7 +6,27 @@
 	"opts": {
      "destination": "./docs/",
      "recurse": true,
-     "template": "node_modules/minami"
+     "template": "node_modules/jsdonk",
+     "jsdonk": {
+        "output": {
+          "html": true,
+          "taffyjson": true,
+          "heirarchyjson": true
+        },
+        "sections": {
+          "module": {
+            "function": true,
+            "typedef": false
+          },
+          "typedef": true
+        },
+        "functions": {
+          "showParams": true,
+          "showTypes": true,
+          "expandTypes": true,
+          "showOptional": true
+        }
+     }
   },
   "plugins": [
      "plugins/markdown",

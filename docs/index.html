@@ -1,82 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Home - Documentation</title>
+<html><head><title>Test</title></head><body><div class="Wrapper"><section><h2>Modules</h2><div><div><h3>Hocks</h3><div><div><h4><span>PropChangeHock(<span>propKeys: <span><span>Array.&lt;string&gt;</span></span></span>, <span>onPropChangeFunction: <span><span>(<span>nextProps: <span><span>Object</span></span></span>)<span> =&gt; <span><span>*</span></span></span></span></span></span>)<span>: <span><span>HockApplier</span></span></span></span></h4><div><p><code>PropChangeHock</code> is designed to provide a way to call a function whenever a particular set of props change on a component.
+Whenever the <code>componentWillMount()</code> and <code>componentWillReceiveProps()</code> lifecycle methods are called, <code>PropChangeHock</code> will check if any of the props in <code>propKeys</code> have changed, and call <code>onPropChangeFunction</code> if so.
+It's often used to dispatch actions to request new data, when props affecting the query have changed.</p></div><div>function MyComponent(props) {
+  return &lt;span&gt;Extremely simple React component&lt;/span&gt;;
+}
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-<body>
+const withPropChange = PropChangeHock([&#x27;propA&#x27;], (props) =&gt; {
+  console.log(`Prop A has changed to ${props.propA}`);
+});
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Hocks.html">Hocks</a><ul class='methods'><li data-type='method'><a href="module-Hocks.html#~PropChangeHock">PropChangeHock</a></li><li data-type='method'><a href="module-Hocks.html#~QueryStringHock">QueryStringHock</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
-
-<div id="main">
-    
-
-    
-
-
-
-    
-
-
-
-
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>Stampy</h1><p>The new and improved stampy.</p>
-<h2>Hello there please re-write this or something</h2><p>When adding new components they must have:</p>
+export default withPropChange(MyComponent); // exports MyComponent with PropChangeHock as a higher order component</div></div><div><h4><span>QueryStringHock(<span>config<span>?</span>: <span><span>Object</span></span></span>, <span>config.defaultQuery<span>?</span>: <span><span>Object</span></span></span>, <span>config.queryPropName<span>?</span>: <span><span>string</span></span></span>, <span>config.replaceState<span>?</span>: <span><span>boolean</span></span></span>, <span>config.arrayParams<span>?</span>: <span><span>Array.&lt;string&gt;</span></span></span>, <span>onQueryChangeFunction<span>?</span>: <span><span>(<span>query: <span><span>Object</span></span></span>, <span>nextProps: <span><span>Object</span></span></span>)<span> =&gt; <span><span>*</span></span></span></span></span></span>)<span>: <span><span>HockApplier</span></span></span></span></h4><div><p><code>QueryStringHock</code> is a higher order component designed to greatly simplify getting and setting the query string, if your app is using any version of react-router (currently works with v1.x and v2.x).
+When used on a component, your component will receive some extra props.</p>
 <ul>
-<li>Full test coverage (using ava)</li>
-<li>Jsdoc documentation</li>
-<li>Flow types</li>
-<li>Strict semver versioning</li>
+<li>query - the object representing the query string. Change this props name using config.queryPropName.</li>
+<li>updateQuery - a function to updates only parts of the query at once. Good at not demolishing other query params not set by this component</li>
+<li>setQuery - a function to set the query</li>
 </ul>
-<h2>To do:</h2><ul>
-<li>Run babel and jsdoc on build</li>
-<li>Run tests including flow type checking to get a passing build</li>
-<li>Replace jsdoc minami theme with <a href="https://github.com/dxinteractive/jsdonk">jsdonk</a> when that's ready to use</li>
-<li>Set the <code>docs/</code> dir to output to <a href="https://bigdatr.github.io/stampy">this github page</a></li>
-</ul></article>
-    </section>
+<p>It also allows for array parameters, push state vs replace state, and firing a function whenever the query string changes.</p>
+<p>This component requires a <code>location</code> prop, which should be the location prop that react-router provides its route components.
+This prop will automatically be received if this HOC is used on any components that are passed straight to a <Route> object.
+If you're using react-router v1 then you'll also need to pass it a history prop that react-router provides.
+If using react-router v2 then QueryStringHock will automatically connect via context.</p></div><div>function MyComponent(props) {
+  // the current query string will be printed to the console
+  console.log(props.query);
 
+  const onClick = () =&gt; {
+    props.updateQuery({a: &quot;A&quot;});
+  };
 
+  return &lt;div&gt;
+    &lt;p&gt;Extremely simple React component&lt;/p&gt;
+    &lt;p onClick={onClick}&gt;Set a=&quot;A&quot; in query string&lt;/p&gt;
+  &lt;/div&gt;;
+}
 
+const withQueryString = QueryStringHock();
 
-
-
-</div>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Mon Oct 31 2016 11:47:06 GMT+1100 (AEDT) using the Minami theme.
-</footer>
-
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
-</body>
-</html>
+export default withQueryString(MyComponent); // exports MyComponent with QueryStringHock as a higher order component</div></div></div></div></div></section><section><h2>Typedefs</h2><div><div><h4><span>Iterable: <span></span></span></h4><div><p>Immutable.js Iterable</p></div><div></div></div><div><h4><span>List: <span></span></span></h4><div><p>Immutable.js List</p></div><div></div></div><div><h4><span>Map: <span></span></span></h4><div><p>Immutable.js Map</p></div><div></div></div><div><h4><span>OrderedMap: <span></span></span></h4><div><p>Immutable.js OrderedMap</p></div><div></div></div><div><h4><span>Record: <span></span></span></h4><div><p>Immutable.js Record</p></div><div></div></div><div><h4><span>Component: <span></span></span></h4><div><p>React Component</p></div><div></div></div></div></section></div></body></html>

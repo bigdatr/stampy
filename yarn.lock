@@ -2373,6 +2373,10 @@ ignore@^3.1.2:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.0.tgz#8d88f03c3002a0ac52114db25d2c673b0bf1e435"
 
+immutable-recursive:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/immutable-recursive/-/immutable-recursive-0.0.6.tgz#52c3bde54b3c9a299639db1316feb53b87a77e5b"
+
 immutable@^3.7.6:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"

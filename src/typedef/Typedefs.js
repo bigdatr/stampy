@@ -8,3 +8,10 @@
  */
 
 type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<any>;
+
+
+/**
+ * Either and Immutable List or a Javascript Array
+ */
+
+type ListOrArray = List | array;

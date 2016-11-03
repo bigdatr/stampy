@@ -8,6 +8,7 @@
      "recurse": true,
      "template": "node_modules/jsdonk",
      "jsdonk": {
+        "title": "Stampy",
         "output": {
           "html": true,
           "taffyjson": true,
@@ -18,13 +19,15 @@
             "function": true,
             "typedef": false
           },
-          "typedef": true
+          "typedef": false
         },
         "functions": {
+          "prefix": true,
           "showParams": true,
           "showTypes": true,
           "expandTypes": true,
-          "showOptional": true
+          "showOptional": true,
+          "multiline": true
         }
      }
   },

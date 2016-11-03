@@ -1,3 +1,4 @@
+import {List} from 'immutable';
 /**
  * A function that builds a higher order React component around another component.
  * These often have some amount of configuration already set by partial function application.
@@ -14,4 +15,4 @@ declare type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<an
  * Either and Immutable List or a Javascript Array
  */
 
-declare type ListOrArray = List | array;
+declare type ListOrArray = List | Array<any>;

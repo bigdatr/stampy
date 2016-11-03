@@ -58,6 +58,7 @@
   "dependencies": {
     "babel-runtime": "^6.5.0",
     "classnames": "^2.2.5",
+    "immutable": "^3.8.1",
     "immutable-recursive": "^0.0.6"
   },
   "main": "lib/index.js",

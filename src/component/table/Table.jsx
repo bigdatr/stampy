@@ -4,10 +4,12 @@ import {fromJS, List, Map} from 'immutable';
 import {deepReduceOutwards} from 'immutable-recursive';
 import ComponentClassName from '../../util/ComponentClassName';
 
-
 /**
- * Th
+ * @module Table
  */
+
+//
+// Th
 
 type ThProps = {
     schemaItem: Map<any,any>
@@ -22,9 +24,8 @@ function Th(props: ThProps): React.Element<any> {
 }
 
 
-/**
- * Td
- */
+//
+// Td
 
 type TdProps = {
     row: Map<any,any>,
@@ -55,9 +56,7 @@ function Td(props: TdProps): React.Element<any> {
 
 
 
-/**
- * Table
- */
+
 
 type Schema = ListOrArray<SchemaItem>;
 
@@ -68,6 +67,7 @@ type SchemaItem = {
     width: string | number
 }
 
+
 type TableProps = {
     childNodeName: ?string,
     className: ?string,
@@ -77,6 +77,48 @@ type TableProps = {
     schema: Schema
 }
 
+
+/**
+ *
+ * `Table` is a Controlled component that takes a collection of data and a schema. It iterates creating one row per item.
+ *  The schema is used to determine how to render each column.
+ *
+ * ### Content rendering priority order
+ * 1. render function
+ * 2. filter function
+ * 3. filter key accessor
+ *
+ * @param {Object}      [props]
+ * @param {String}      [props.childNodeName]    - name of the key that holds any children nodes to flatten
+ * @param {String}      [props.className]
+ * @param {Array|List}  [props.data]             - Collection of data to iterate over
+ * @param {String}      [props.modifier]         - Spruce modifiers
+ * @param {Function}    [props.rowProps]         - Gets called for each item in data. The return object will be destructured onto the `tr`
+ * @param {Array|List}  [props.schema]           - Collection describing how to render each column
+ *
+ * @example
+ * const schema = [
+ *      {
+ *          heading: 'Name',
+ *          filter: 'name'
+ *      },
+ *      {
+ *          heading: 'BMI',
+ *          filter: (row) => {
+ *              const {height, mass} = row.toObject();
+ *              return mass / height * height;
+ *          }
+ *      },
+ *      {
+ *          heading: 'Avatar',
+ *          render: row => <img src={row.get('avatarUrl')} />
+ *      }
+ * ];
+ *
+ * return <Table data={props.data} schema={schema} />
+ *
+ * @category ControlledComponent
+ */
 function Table(props: TableProps): React.Element<any> {
     const {modifier, className, rowProps, childNodeName} = props;
     const schema = fromJS(props.schema);

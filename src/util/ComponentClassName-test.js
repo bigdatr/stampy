@@ -1,6 +1,4 @@
 import test from 'ava';
-import React from 'react';
-import {shallow} from 'enzyme';
 import ComponentClassName from './ComponentClassName';
 
 test('modifier splitting', tt => {

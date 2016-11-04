@@ -33,24 +33,48 @@ const data = [
 ];
 
 function renderAt(wrapper, find, index) {
-    return wrapper.find(find).at(index).render();
+    return wrapper
+        .find(find)
+        .at(index)
+        .render();
 }
 
 test('th content rendering', tt => {
     const wrapper = shallow(<Table data={data} schema={schema} />);
     const ThList = wrapper.find('Th');
     tt.is(ThList.length, 3);
-    tt.is(ThList.at(2).render().text(), '');
-    tt.is(ThList.at(0).render().html(), '<th style="width:200px;">foo</th>');
+    tt.is(
+        ThList
+            .at(2)
+            .render()
+            .text()
+        ,
+        ''
+    );
+    tt.is(
+        ThList
+            .at(0)
+            .render()
+            .html(),
+        '<th style="width:200px;">foo</th>'
+    );
 });
 
 
 test('td content rendering', tt => {
     const wrapper = shallow(<Table data={data} schema={schema} />);
-    const firstRow = wrapper.find('tbody tr').at(0);
+
+    const firstRow = wrapper
+        .find('tbody tr')
+        .at(0);
+
+    const firstTd = renderAt(firstRow, 'Td', 0)
+        .children()
+        .first();
+
     tt.is(wrapper.find('tbody tr').length, 2);
-    tt.is(renderAt(firstRow, 'Td', 0).children().first().html(), '<strong>1</strong>');
-    tt.is(renderAt(firstRow, 'Td', 0).children().first().attr('class'), 'test');
+    tt.is(firstTd.html(), '<strong>1</strong>');
+    tt.is(firstTd.attr('class'), 'test');
     tt.is(renderAt(firstRow, 'Td', 1).text(), '2|1');
     tt.is(renderAt(firstRow, 'Td', 2).text(), '3');
 });

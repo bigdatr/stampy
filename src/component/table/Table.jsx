@@ -1,5 +1,5 @@
 // @flow
-import React, {Component, PropTypes} from 'react';
+import React from 'react';
 import {fromJS, List, Map} from 'immutable';
 import {deepReduceOutwards} from 'immutable-recursive';
 import ComponentClassName from '../../util/ComponentClassName';
@@ -40,7 +40,7 @@ function Td(props: TdProps): React.Element<any> {
     // 1. render function
     // 2. filter function
     // 3. filter key accessor
-    const content = (render)
+    const content: any = (render)
         ? render(row)
         : (typeof filter === 'function')
             ? filter(row)
@@ -126,7 +126,7 @@ function Table(props: TableProps): React.Element<any> {
     // deepRecurse through the childNodes, pushing each leaf
     // to the reduction. This will flatten the any deep children
     // but retain their ordering
-    const data = fromJS(props.data)
+    const data: List<any> = fromJS(props.data)
         // A fake parent node has to be created so that
         // the deepReduce can start with a child
         .update(ii => Map().set(childNodeName, ii))
@@ -137,17 +137,18 @@ function Table(props: TableProps): React.Element<any> {
 
 
     // Take the schema to create each heading
-    const tableHead: React.Element<any> = schema
-        .map((column, key: number) => <Th key={key} schemaItem={column} />)
+    const tableHead: React.Element<any>[] = schema
+        .map((column, key) => <Th key={key} schemaItem={column} />)
         .toJS();
 
     // use `data` then `schema` to make each `row` then `column`
-    const tableBody = data
-        .map((row, rowKey: number) => {
+    const tableBody: React.Element<any>[] = data
+        .map(row => {
             return <tr key={row.hashCode()} {...rowProps(row)}>
                 {schema.map((column, key: number) => <Td key={key} row={row} schemaItem={column} />)}
             </tr>;
-        });
+        })
+        .toJS();
 
     return <table className={ComponentClassName({name: 'Table', modifier, className})}>
         <thead><tr>{tableHead}</tr></thead>

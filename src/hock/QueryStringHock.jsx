@@ -28,6 +28,7 @@ import PropChangeHock from './PropChangeHock';
  *   // the current query string will be printed to the console
  *   console.log(props.query);
  *
+ *
  *   const onClick = () => {
  *     props.updateQuery({a: "A"});
  *   };

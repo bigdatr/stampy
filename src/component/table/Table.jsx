@@ -16,9 +16,14 @@ type ThProps = {
 
 function Th(props: ThProps): React.Element<any> {
     var {width, heading = ''} = props.schemaItem.toObject();
+
+    const content: any = (typeof heading === 'function')
+        ? heading()
+        : heading;
+
     return <th
         style={{width}}
-        children={heading}
+        children={content}
     />;
 }
 

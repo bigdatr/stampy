@@ -11,7 +11,7 @@ const schema = [
         render: row => <td className="test"><strong>{row.get('foo')}</strong></td>
     },
     {
-        heading: 'bar',
+        heading: () => 'bar',
         value: row => row.get('bar') + '|' + row.get('foo')
     },
     {
@@ -41,23 +41,17 @@ const renderAt = (wrapper, find, index) => {
 
 test('th content rendering', tt => {
     const wrapper = shallow(<Table data={data} schema={schema} />);
-    const ThList = wrapper.find('Th');
-    tt.is(ThList.length, 3);
-    tt.is(
-        ThList
-            .at(2)
-            .render()
-            .text()
-        ,
-        ''
-    );
-    tt.is(
-        ThList
-            .at(0)
-            .render()
-            .html(),
-        '<th style="width:200px;">foo</th>'
-    );
+    const ThList = (num) => {
+        return wrapper
+            .find('Th')
+            .at(num)
+            .render();
+    };
+
+    tt.is(wrapper.find('Th').length, 3);
+    tt.is(ThList(2).text(), '');
+    tt.is(ThList(1).text(), 'bar');
+    tt.is(ThList(0).html(), '<th style="width:200px;">foo</th>');
 });
 
 

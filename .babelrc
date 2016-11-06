@@ -1,6 +1,6 @@
 {
-  "presets": ["blueflag"],
-  "ignore": [
-      "**/*-test.js"
-  ]
+    "presets": ["blueflag"],
+    "ignore": [
+        "**/*-test.js"
+    ]
 }

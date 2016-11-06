@@ -884,7 +884,7 @@ babel-preset-react@^6.5.0:
     babel-plugin-transform-react-jsx-self "^6.11.0"
     babel-plugin-transform-react-jsx-source "^6.3.13"
 
-babel-preset-stage-2@^6.3.13, babel-preset-stage-2@^6.5.0:
+babel-preset-stage-2@^6.3.13:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-preset-stage-2/-/babel-preset-stage-2-6.18.0.tgz#9eb7bf9a8e91c68260d5ba7500493caaada4b5b5"
   dependencies:
@@ -1608,9 +1608,9 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-blueflag@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-blueflag/-/eslint-config-blueflag-0.1.0.tgz#f9801c21e3b98de66c55710f9e5eabcf539fd93a"
+eslint-config-blueflag@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-blueflag/-/eslint-config-blueflag-0.2.0.tgz#5605fc375a3d5b36d279865202317e64455dcc8e"
   dependencies:
     babel-eslint "^6.0.3"
     eslint "2.4.0"
@@ -2552,11 +2552,13 @@ jsdoc-babel@^0.2.1:
   dependencies:
     lodash "^4.13.1"
 
-jsdonk@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.1.0.tgz#32b073b2f90e7b155c23fce1ef32bae0dafb8d8d"
+jsdonk@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.1.4.tgz#af465047e3019b76857f61f1620d53bffd66a4d2"
   dependencies:
     prismjs "^1.5.1"
+    react "^15.3.2"
+    react-dom "^15.3.2"
 
 jsesc@^1.3.0:
   version "1.3.0"

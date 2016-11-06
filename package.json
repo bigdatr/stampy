@@ -46,8 +46,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "immutable": "^3.8.1",
-    "immutable-recursive": "^0.0.6"
+    "immutable": "^3.8.1"
   },
   "main": "lib/index.js",
   "engines": {
@@ -55,7 +54,9 @@
   },
   "ava": {
     "require": "babel-register",
-    "babel": "inherit",
+    "babel": {
+      "presets": ["blueflag"]
+    },
     "files": [
       "src/**/*-test.js"
     ]

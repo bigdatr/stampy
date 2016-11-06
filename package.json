@@ -1,6 +1,6 @@
 {
   "name": "stampy",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The new and improved stampy",
   "repository": {
     "type": "git",
@@ -55,7 +55,9 @@
   "ava": {
     "require": "babel-register",
     "babel": {
-      "presets": ["blueflag"]
+      "presets": [
+        "blueflag"
+      ]
     },
     "files": [
       "src/**/*-test.js"

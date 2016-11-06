@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import {fromJS, List, Map} from 'immutable';
-import {deepReduceOutwards} from 'immutable-recursive';
 import ComponentClassName from '../../util/ComponentClassName';
 
 /**
@@ -34,17 +33,17 @@ type TdProps = {
 
 function Td(props: TdProps): React.Element<any> {
     const {row, schemaItem} = props;
-    const {render, filter} = schemaItem.toObject();
+    const {render, value} = schemaItem.toObject();
 
     // Content rendering priority order
     // 1. render function
-    // 2. filter function
-    // 3. filter key accessor
+    // 2. value function
+    // 3. value key accessor
     const content: any = (render)
         ? render(row)
-        : (typeof filter === 'function')
-            ? filter(row)
-            : row.get(filter)
+        : (typeof value === 'function')
+            ? value(row)
+            : row.get(value)
     ;
 
     // Only return a td if the schema hasn't
@@ -56,20 +55,19 @@ function Td(props: TdProps): React.Element<any> {
 
 
 
-
+//
+// Table
 
 type Schema = ListOrArray<SchemaItem>;
 
 type SchemaItem = {
-    filter: string | (row: Map<any>) => React.Element<any>,
+    value: string | (row: Map<any>) => React.Element<any>,
     heading: string,
     render: (row: Map<any>) => React.Element<any>,
     width: string | number
 }
 
-
 type TableProps = {
-    childNodeName: ?string,
     className: ?string,
     data: ListOrArray,
     modifier: ?string,
@@ -85,26 +83,25 @@ type TableProps = {
  *
  * ### Content rendering priority order
  * 1. render function
- * 2. filter function
- * 3. filter key accessor
+ * 2. value function
+ * 3. value key accessor
  *
- * @param {Object}      [props]
- * @param {String}      [props.childNodeName]    - name of the key that holds any children nodes to flatten
- * @param {String}      [props.className]
- * @param {Array|List}  [props.data]             - Collection of data to iterate over
- * @param {String}      [props.modifier]         - Spruce modifiers
- * @param {Function}    [props.rowProps]         - Gets called for each item in data. The return object will be destructured onto the `tr`
- * @param {Array|List}  [props.schema]           - Collection describing how to render each column
+ * @param {Object}      props
+ * @param {String}      props.className
+ * @param {Array|List}  props.data             - Collection of data to iterate over
+ * @param {String}      props.modifier         - Spruce modifiers
+ * @param {Function}    props.rowProps         - Gets called for each item in data. The return object will be destructured onto the `tr`
+ * @param {Array|List}  props.schema           - Collection describing how to render each column
  *
  * @example
  * const schema = [
  *      {
  *          heading: 'Name',
- *          filter: 'name'
+ *          value: 'name'
  *      },
  *      {
  *          heading: 'BMI',
- *          filter: (row) => {
+ *          value: (row) => {
  *              const {height, mass} = row.toObject();
  *              return mass / height * height;
  *          }
@@ -120,21 +117,9 @@ type TableProps = {
  * @category ControlledComponent
  */
 function Table(props: TableProps): React.Element<any> {
-    const {modifier, className, rowProps, childNodeName} = props;
-    const schema = fromJS(props.schema);
-
-    // deepRecurse through the childNodes, pushing each leaf
-    // to the reduction. This will flatten the any deep children
-    // but retain their ordering
-    const data: List<any> = fromJS(props.data)
-        // A fake parent node has to be created so that
-        // the deepReduce can start with a child
-        .update(ii => Map().set(childNodeName, ii))
-        .update(deepReduceOutwards((reduction, item) => {
-            return reduction.push(item);
-        }, List(), [childNodeName]))
-        .skip(1); // The first node is our fake root node.
-
+    const {modifier, className, rowProps} = props;
+    const schema: List<any> = fromJS(props.schema);
+    const data: List<any> = fromJS(props.data);
 
     // Take the schema to create each heading
     const tableHead: React.Element<any>[] = schema
@@ -158,14 +143,10 @@ function Table(props: TableProps): React.Element<any> {
 
 Table.defaultProps = {
     className: '',
-    childNodeName: 'children',
     data: List(),
     modifier: '',
-    schema: List(),
     rowProps: () => ({}),
-    sortAscending: false,
-    sortBy: null
+    schema: List()
 }
 
 export default Table;
-

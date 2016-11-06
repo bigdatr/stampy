@@ -6,16 +6,16 @@ import Table from './Table';
 const schema = [
     {
         heading: 'foo',
-        filter: 'foo',
+        value: 'foo',
         width: 200,
         render: row => <td className="test"><strong>{row.get('foo')}</strong></td>
     },
     {
         heading: 'bar',
-        filter: row => row.get('bar') + '|' + row.get('foo')
+        value: row => row.get('bar') + '|' + row.get('foo')
     },
     {
-        filter: 'baz'
+        value: 'baz'
     }
 ];
 
@@ -32,7 +32,7 @@ const data = [
     }
 ];
 
-function renderAt(wrapper, find, index) {
+const renderAt = (wrapper, find, index) => {
     return wrapper
         .find(find)
         .at(index)
@@ -78,19 +78,3 @@ test('td content rendering', tt => {
     tt.is(renderAt(firstRow, 'Td', 1).text(), '2|1');
     tt.is(renderAt(firstRow, 'Td', 2).text(), '3');
 });
-
-test('child flattening', tt => {
-    const nestedData = [
-        {
-            foo: 'bar',
-            children: [
-                {
-                    foo: 'bar'
-                }
-            ]
-        }
-    ];
-    const wrapper = shallow(<Table data={nestedData} schema={schema} />);
-    tt.is(wrapper.find('tbody tr').length, 2);
-    tt.is(shallow(<Table data={nestedData} schema={schema} childNodeName="other"/>).find('tbody tr').length, 1);
-})

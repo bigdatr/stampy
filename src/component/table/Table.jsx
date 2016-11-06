@@ -67,7 +67,7 @@ type Schema = ListOrArray<SchemaItem>;
 
 type SchemaItem = {
     value: string | (row: Map<any>) => React.Element<any>,
-    heading: string,
+    heading: string | () => React.Element<any>,
     render: (row: Map<any>) => React.Element<any>,
     width: string | number
 }
@@ -91,12 +91,12 @@ type TableProps = {
  * 2. value function
  * 3. value key accessor
  *
- * @param {Object}      props
- * @param {String}      props.className
- * @param {Array|List}  props.data             - Collection of data to iterate over
- * @param {String}      props.modifier         - Spruce modifiers
- * @param {Function}    props.rowProps         - Gets called for each item in data. The return object will be destructured onto the `tr`
- * @param {Array|List}  props.schema           - Collection describing how to render each column
+ * @param {Object}          props
+ * @param {String}          props.className
+ * @param {Array|List}      props.data             - Collection of data to iterate over
+ * @param {String|Function} props.modifier         - Spruce modifiers
+ * @param {Function}        props.rowProps         - Gets called for each item in data. The return object will be destructured onto the `tr`
+ * @param {Array|List}      props.schema           - Collection describing how to render each column
  *
  * @example
  * const schema = [

@@ -30,6 +30,6 @@
 
 /**
  * React Component
- * @typedef Component
+ * @typedef ReactComponent
  * @see https://facebook.github.io/react/docs/react-component.html
  */

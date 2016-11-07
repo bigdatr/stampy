@@ -75,15 +75,14 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
 
         class QueryStringHock extends Component {
 
-            updateQuery: Function;
-            setQuery: Function;
-
             constructor(props) {
                 super(props);
 
+                const instance: any = this;
+
                 // explicit bind until es7
-                this.updateQuery = this.updateQuery.bind(this);
-                this.setQuery = this.setQuery.bind(this);
+                instance.updateQuery = instance.updateQuery.bind(instance);
+                instance.setQuery = instance.setQuery.bind(instance);
             }
 
             /**

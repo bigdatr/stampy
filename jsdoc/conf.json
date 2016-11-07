@@ -11,8 +11,8 @@
         "title": "Stampy",
         "output": {
           "html": true,
-          "taffyjson": true,
-          "heirarchyjson": true
+          "taffyjson": false,
+          "heirarchyjson": false
         },
         "sections": {
           "module": {
@@ -37,7 +37,7 @@
   ],
   "babel": {
     "extensions": ["js", "es6", "jsx"],
-    "presets": ["es2015", "stage-2", "react"],
+    "presets": ["es2015", "react"],
     "plugins": ["transform-flow-strip-types"]
   }
 }

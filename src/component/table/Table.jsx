@@ -86,17 +86,23 @@ type TableProps = {
  * `Table` is a Controlled component that takes a collection of data and a schema. It iterates creating one row per item.
  *  The schema is used to determine how to render each column.
  *
- * ### Content rendering priority order
+ * ##### Content rendering priority order
  * 1. render function
  * 2. value function
  * 3. value key accessor
  *
- * @param {Object}          props
- * @param {String}          props.className
- * @param {Array|List}      props.data             - Collection of data to iterate over
- * @param {String|Function} props.modifier         - Spruce modifiers
- * @param {Function}        props.rowProps         - Gets called for each item in data. The return object will be destructured onto the `tr`
- * @param {Array|List}      props.schema           - Collection describing how to render each column
+ * @param {Object}         props
+ * @param {String}         props.className
+ * @param {Array|List}     props.data
+ *     Collection of data to iterate over
+ * @param {String|Function}props.modifier
+ *     Spruce modifiers
+ * @param {Function}       props.rowProps
+ *     Gets called for each item in data.
+ *     The return object will be destructured onto the `tr`
+ * @param {Array|List}     props.schema
+ *     Collection describing how to render each column
+ * @return {ReactElement}
  *
  * @example
  * const schema = [

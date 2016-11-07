@@ -75,6 +75,9 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
 
         class QueryStringHock extends Component {
 
+            updateQuery: Function;
+            setQuery: Function;
+
             constructor(props) {
                 super(props);
 

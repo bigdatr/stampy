@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "babel src -d lib --watch",
     "build": "babel src --out-dir lib",
-    "prepublish" : "babel src --out-dir lib",
+    "prepublish": "babel src --out-dir lib",
     "lint": "eslint src",
     "lint-fix": "eslint src --fix",
     "ava": "ava",
@@ -26,6 +26,7 @@
     "babel-cli": "^6.5.0",
     "babel-core": "^6.5.0",
     "babel-eslint": "^6.0.2",
+    "babel-plugin-transform-class-properties": "^6.18.0",
     "babel-polyfill": "^6.5.0",
     "babel-preset-blueflag": "^0.0.1",
     "babel-register": "^6.18.0",

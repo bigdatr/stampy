@@ -16,6 +16,7 @@
     "test": "nyc --report-dir=./coverage ava && npm run check-coverage",
     "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
     "docs": "jsdoc -c jsdoc/conf.json",
+    "publish-docs": "jsdoc -c jsdoc/conf.json && gh-pages --dist docs --no-push",
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "eslint": "^2.7.0",
     "eslint-config-blueflag": "^0.2.0",
     "flow-bin": "^0.33.0",
+    "gh-pages": "^0.11.0",
     "git-url-parse": "^6.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.2.1",

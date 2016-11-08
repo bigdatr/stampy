@@ -1,6 +1,6 @@
 {
   "name": "stampy",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The new and improved stampy",
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "lint-fix": "eslint src/**/*.jsx src/**/*.js --fix",
     "ava": "ava",
     "test": "nyc --report-dir=./coverage ava && yarn run check-coverage",
-    "test-all" : "yarn run lint && yarn run flow && yarn run test",
+    "test-all": "yarn run lint && yarn run flow && yarn run test",
     "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
     "docs": "jsdoc -c jsdoc/conf.json",
     "publish-docs": "jsdoc -c jsdoc/conf.json && gh-pages --dist docs --no-push",

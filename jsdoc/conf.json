@@ -9,25 +9,11 @@
      "template": "node_modules/jsdonk",
      "jsdonk": {
         "title": "Stampy",
-        "output": {
-          "html": true,
-          "taffyjson": false,
-          "heirarchyjson": false
-        },
         "sections": {
           "module": {
-            "function": true,
             "typedef": false
           },
           "typedef": false
-        },
-        "functions": {
-          "prefix": true,
-          "showParams": true,
-          "showTypes": true,
-          "expandTypes": true,
-          "showOptional": true,
-          "multiline": true
         }
      }
   },

@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel src -d lib --watch",
-    "build": "babel src --out-dir lib",
+    "build": "mkdir -p lib && rm -r lib && babel src --out-dir lib && yarn run css",
     "prepublish": "babel src --out-dir lib",
     "lint": "eslint src/**/*.jsx src/**/*.js",
     "lint-fix": "eslint src/**/*.jsx src/**/*.js --fix",
@@ -19,10 +19,17 @@
     "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
     "docs": "jsdoc -c jsdoc-config.json",
     "publish-docs": "jsdoc -c jsdoc-config.json && gh-pages --dist docs --no-push",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2"
+    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "css-base-combined": "sh scripts/css-base-combined.sh",
+    "css-default-combined": "sh scripts/css-default-combined.sh",
+    "css-base": "sh scripts/css-base.sh",
+    "css-default": "sh scripts/css-default.sh",
+    "postcss": "postcss --use autoprefixer -r lib/**/*.css",
+    "css": "yarn run css-base-combined && yarn run css-default-combined && yarn run css-base && yarn run css-default && yarn run postcss"
   },
   "devDependencies": {
     "app-module-path": "^2.0.0",
+    "autoprefixer": "^6.5.2",
     "ava": "^0.16.0",
     "babel-cli": "^6.5.0",
     "babel-core": "^6.5.0",
@@ -40,8 +47,10 @@
     "git-url-parse": "^6.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.2.1",
-    "jsdonk": "0.2.1",
+    "jsdonk": "0.1.7",
+    "node-sass": "^3.11.2",
     "nyc": "^6.6.1",
+    "postcss-cli": "^2.6.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.3.2"

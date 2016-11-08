@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component, PropTypes} from 'react';
-import {fromJS, List, Map, is} from 'immutable';
+import {fromJS, List, Map} from 'immutable';
 import PropChangeHock from './PropChangeHock';
 
 /**
@@ -78,7 +78,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
             updateQuery: Function;
             setQuery: Function;
 
-            constructor(props) {
+            constructor(props: Object) {
                 super(props);
 
                 // explicit bind until es7
@@ -91,7 +91,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
              * @param {Object} props Props to refer to.
              */
 
-            getQuery(props: Object) {
+            getQuery(props: Object): Object {
                 const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
 
                 // ensures that all arrayParams are returned as arrays (not strings or blank)
@@ -141,7 +141,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
                 }
             }
 
-            render() {
+            render(): React.Element<any> {
                 const newProps: Object = {
                     [queryPropName]: this.getQuery(this.props),
                     setQuery: this.setQuery,

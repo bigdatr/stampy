@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 import {fromJS} from 'immutable';
 
 /**
@@ -52,7 +52,7 @@ const PropChangeHock = (propKeys: Array<string>, onPropChangeFunction: Function)
                     onPropChangeFunction(nextProps);
                 }
             }
-            render() {
+            render(): React.Element<any> {
                 return <ComposedComponent {...this.props} />;
             }
         }

@@ -17,8 +17,8 @@
     "test": "nyc --report-dir=./coverage ava && yarn run check-coverage",
     "test-all": "yarn run lint && yarn run flow && yarn run test",
     "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
-    "docs": "jsdoc -c jsdoc/conf.json",
-    "publish-docs": "jsdoc -c jsdoc/conf.json && gh-pages --dist docs --no-push",
+    "docs": "jsdoc -c jsdoc-config.json",
+    "publish-docs": "jsdoc -c jsdoc-config.json && gh-pages --dist docs --no-push",
     "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "devDependencies": {
@@ -40,7 +40,7 @@
     "git-url-parse": "^6.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.2.1",
-    "jsdonk": "0.1.7",
+    "jsdonk": "0.2.0",
     "nyc": "^6.6.1",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.0",

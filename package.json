@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel src -d lib --watch",
-    "build": "mkdir -p lib && rm -r lib && babel src --out-dir lib && yarn run css",
+    "build": "rm -rf lib && babel src --out-dir lib && yarn run css",
     "prepublish": "babel src --out-dir lib",
     "lint": "eslint src/**/*.jsx src/**/*.js",
     "lint-fix": "eslint src/**/*.jsx src/**/*.js --fix",

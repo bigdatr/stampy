@@ -2,7 +2,7 @@
 
 The new and improved stampy.
 
-## Hello there please re-write this or something
+## Development
 
 When adding new components they must have:
 - Full test coverage (using ava)
@@ -10,11 +10,30 @@ When adding new components they must have:
 - Flow types
 - Strict semver versioning
 
-## To do:
-- Run babel and jsdoc on build
-- Run tests including flow type checking to get a passing build
-- Replace jsdoc minami theme with [jsdonk](https://github.com/dxinteractive/jsdonk) when that's ready to use
-- Set the `docs/` dir to output to [this github page](https://bigdatr.github.io/stampy)
+## Inputs
+
+Inputs have a strict common interface to ensure predictable usage and compatibility with redux form. All components will be controlled.
+
+### Props
+#### Input props
+ - `value: string|boolean` - the value that the input will show as being selected, or a boolean if the input represents a single boolean value such as a checkbox
+ - `onChange: (newValue: string|array<string>, ???...) => void` - a callback function that will be called by the input component when the value must change. NewValue is a string, unless multi is true in which case it is an array of strings
+ - `disabled: boolean` - if true, the input should appear disabled and not accept user input
+ - `placeholder: string` - placeholder text where applicable
+ - `options: array<object>` - if input accepts multiple options these must be an array of {label: string, option: string, disabled: boolean} // what about immutable lists?
+ - `multi: boolean` - if input accepts options and multi={true}, more than one option may be chosen at once
+
+#### standard stampy props
+ - `modifier: string` - spruce class modifier
+
+#### other standard react / html props
+ - `className: string` - class attribute
+ - `onFocus: function`
+ - `onBlur: function`
+ - `onKeyUp: function`
+
+
+
 
 <!--
 

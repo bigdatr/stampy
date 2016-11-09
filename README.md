@@ -17,7 +17,7 @@ Inputs have a strict common interface to ensure predictable usage and compatibil
 ### Props
 #### Input props
  - `value: string|boolean` - the value that the input will show as being selected, or a boolean if the input represents a single boolean value such as a checkbox
- - `onChange: (newValue: string|array<string>, ???...) => void` - a callback function that will be called by the input component when the value must change. NewValue is a string, unless multi is true in which case it is an array of strings
+ - `onChange: (newValue: string|boolean|array<string>|array<boolean>, ???...) => void` - a callback function that will be called by the input component when the value must change. NewValue is a string, unless multi is true in which case it is an array of strings
  - `disabled: boolean = false` - if true, the input should appear disabled and not accept user input
  - `placeholder: string` - placeholder text where applicable
  - `options: array<object>` - if input accepts multiple options these must be an array of {label: string, option: string, disabled: boolean} // what about immutable lists?

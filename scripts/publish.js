@@ -2,7 +2,7 @@ const ghpages = require('gh-pages');
 const path = require('path');
 
 ghpages.publish(path.resolve(__dirname, '../'), {
-    src: ['index.html', 'docs/**/*', 'example/dist/**/*', 'example/index.html'],
+    src: ['index.html', 'docs/**/*', 'example/dist/**/*', 'example/index.html', 'circle.yaml'],
     logger: function(message) {
         console.log(message);
     }

@@ -1,4 +1,4 @@
 import React from 'react';
-export default (props) => {
+export default () => {
     return <div>404</div>
 }

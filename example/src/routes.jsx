@@ -3,15 +3,19 @@ import {Route, IndexRoute} from 'react-router';
 
 import AppHandler from 'components/AppHandler';
 import ErrorHandler from 'components/ErrorHandler';
-import IndexPage from 'components/IndexPage';
-import TableExample from 'components/TableExample';
+import ContentsPage from 'components/ContentsPage';
 
-var routes = (
-    <Route component={AppHandler} path="/">
-        <IndexRoute component={IndexPage} />
-        <Route path="/table" component={TableExample}/>
-        <Route path="*" component={ErrorHandler}/>
+import ButtonExample from 'component/button/ButtonExample';
+import TableExample from 'component/table/TableExample';
+
+const routes = <Route component={AppHandler} path="/">
+    <IndexRoute component={ContentsPage} />
+    <Route path="component">
+        <Route path="table" component={TableExample}/>
+        <Route path="button" component={ButtonExample}/>
     </Route>
-);
 
-module.exports = routes;
+    <Route path="*" component={ErrorHandler}/>
+</Route>;
+
+export default routes;

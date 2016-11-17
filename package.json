@@ -61,7 +61,10 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "immutable-recursive": "^0.0.6",
+    "jsdonk": "^0.2.1",
+    "sinon": "^1.17.6"
   },
   "main": "lib/index.js",
   "engines": {

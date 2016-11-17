@@ -1,23 +1,23 @@
 import React from 'react';
 import {Table} from 'stampy';
 
-export default (props) => {
+export default () => {
     const schema = [
-         {
-             heading: 'Name',
-             value: 'name'
-         },
-         {
-             heading: 'BMI',
-             value: (row) => {
-                 const {height, mass} = row.toObject();
-                 return mass / height * height;
-             }
-         },
-         {
-             heading: 'Avatar',
-             render: row => <img src={row.get('avatarUrl')} />
-         }
+        {
+            heading: 'Name',
+            value: 'name'
+        },
+        {
+            heading: 'BMI',
+            value: (row) => {
+                const {height, mass} = row.toObject();
+                return mass / height * height;
+            }
+        },
+        {
+            heading: 'Avatar',
+            render: row => <img src={row.get('avatarUrl')} />
+        }
     ];
 
     const data = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
-export default (props) => {
+export default () => {
     return <div>
         <ul>
             <li><Link to='/table'>Table</Link></li>

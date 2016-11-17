@@ -92,12 +92,12 @@ type TableProps = {
  * 3. value key accessor
  *
  * @param {Object}         props
- * @param {String}         props.className
+ * @param {String}         [props.className]
  * @param {Array|List}     props.data
  *     Collection of data to iterate over
  * @param {String|Function}props.modifier
  *     Spruce modifiers
- * @param {Function}       props.rowProps
+ * @param {Function}       [props.rowProps]
  *     Gets called for each item in data.
  *     The return object will be destructured onto the `tr`
  * @param {Array|List}     props.schema

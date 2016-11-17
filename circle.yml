@@ -1,3 +1,7 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
 machine:
     pre:
         - mkdir ~/.yarn-cache
@@ -18,3 +22,9 @@ dependencies:
 test:
     override:
         - yarn run test-all
+deployment:
+    master:
+        branch: master
+        owner: bigdatr
+        commands:
+            - yarn run deploy-to-gh-pages

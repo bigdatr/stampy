@@ -19,7 +19,7 @@
     "check-coverage": "nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
     "docs": "jsdoc -c jsdoc-config.json",
     "build-examples": "cd example && yarn install && yarn run build && cd -",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "flow": "flow check",
     "css-base-combined": "sh scripts/css-base-combined.sh",
     "css-default-combined": "sh scripts/css-default-combined.sh",
     "css-base": "sh scripts/css-base.sh",

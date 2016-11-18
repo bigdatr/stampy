@@ -1,10 +1,10 @@
 import test from 'ava';
-import ComponentClassName from './ComponentClassName';
+import SpruceClassName from './SpruceClassName';
 
 test('modifier splitting', tt => {
-    tt.is(ComponentClassName({name: 'Test', modifier:'rad cool'}), 'Test Test-rad Test-cool ');
+    tt.is(SpruceClassName({name: 'Test', modifier:'rad cool'}), 'Test Test-rad Test-cool ');
 });
 
 test('modifier splitting', tt => {
-    tt.is(ComponentClassName({name: 'Test'}, 'extra'), 'Test extra');
+    tt.is(SpruceClassName({name: 'Test'}, 'extra'), 'Test extra');
 });

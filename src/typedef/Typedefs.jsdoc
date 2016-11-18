@@ -6,3 +6,23 @@
  * @param {ReactComponent} ComposedComponent The component you wish to wrap in a hock.
  * @return {ReactComponent} The higher order component.
  */
+
+/**
+ * A callback that is called by input component to notify parents of changes to their values.
+ *
+ * @typedef OnChange
+ * @param {string|boolean} newValue The input's new value.
+ */
+
+ /**
+ * A callback that is called by input component to notify parents of changes to their values.
+ *
+ * @typedef OnClick
+ * @param {Function} event The elements HTML click event.
+ */
+
+/**
+ * Spruce modifiers. Pass a string to add modifiers (space-separated if multiple)
+ * or if you provide an object then only the names of the object's keys that evaluate to true will be added as modifiers.
+ * @typedef {(string|Object<string,boolean>)} Modifier
+ */

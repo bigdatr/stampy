@@ -75,7 +75,7 @@ type SchemaItem = {
 type TableProps = {
     className: ?string,
     data: ListOrArray,
-    modifier: ?string,
+    modifier: Modifier,
     rowProps: (row: Object) => Object,
     schema: Schema
 }
@@ -91,16 +91,15 @@ type TableProps = {
  * 2. value function
  * 3. value key accessor
  *
- * @param {Object}         props
- * @param {String}         [props.className]
- * @param {Array|List}     props.data
+ * @param {Object} props
+ * @param {String} [props.className]
+ * @param {Array|List} props.data
  *     Collection of data to iterate over
- * @param {String|Function}props.modifier
- *     Spruce modifiers
- * @param {Function}       [props.rowProps]
+ * @param {Modifier} modifier
+ * @param {Function} [props.rowProps]
  *     Gets called for each item in data.
  *     The return object will be destructured onto the `tr`
- * @param {Array|List}     props.schema
+ * @param {Array|List} props.schema
  *     Collection describing how to render each column
  * @return {ReactElement}
  *

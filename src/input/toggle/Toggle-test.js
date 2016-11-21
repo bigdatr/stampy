@@ -6,17 +6,75 @@ import Toggle from './Toggle';
 
 test('toggle', tt => {
 
-    const onChange = sinon.spy();
-    const trueToggle = shallow(<Toggle value={true}>Toggle</Toggle>);
-    const falseToggle = shallow(<Toggle onChange={onChange} value={false}>Toggle</Toggle>);
+    const trueToggleOnChange = sinon.spy();
+    const falseToggleOnChange = sinon.spy();
+    const trueToggle = shallow(<Toggle onChange={trueToggleOnChange} value={true}>Toggle</Toggle>);
+    const falseToggle = shallow(<Toggle onChange={falseToggleOnChange} value={false}>Toggle</Toggle>);
 
-    tt.truthy(
-        trueToggle.render().children().first().hasClass('Button-active'),
-        'toggle has a class of Button-active when value is true'
+    tt.is(
+        trueToggle.text(),
+        'Toggle',
+        'component text is rendered'
     );
 
-    tt.falsy(
-        falseToggle.render().children().first().hasClass('Button-active'),
-        'toggle has not a class of Button-active when value is false'
+    tt.true(
+        typeof trueToggle.prop('modifier') == 'undefined',
+        'modifier prop is not passed to HTML element'
+    );
+
+    tt.true(
+        typeof trueToggle.prop('value') == 'undefined',
+        'value prop is not passed to HTML element'
+    );
+
+    tt.true(
+        trueToggle.render().children().first().hasClass('Toggle'),
+        'toggle has a class of Toggle'
+    );
+
+    tt.true(
+        trueToggle.render().children().first().hasClass('Toggle-active'),
+        'toggle has a class of Toggle-active when value is true'
+    );
+
+    tt.false(
+        falseToggle.render().children().first().hasClass('Toggle-active'),
+        'toggle has not a class of Toggle-active when value is false'
+    );
+
+    trueToggle.find('button').simulate('click');
+    tt.true(
+        trueToggleOnChange.calledOnce,
+        'toggles call their onClick events when onClick is called'
+    );
+
+    tt.false(
+        trueToggleOnChange.getCall(0).args[0],
+        'toggles with a value of true will call onChange with a value of false'
+    );
+
+    falseToggle.find('button').simulate('click');
+    tt.true(
+        falseToggleOnChange.getCall(0).args[0],
+        'toggles with a value of false will call onChange with a value of true'
     );
 });
+
+
+test('disabled toggle', tt => {
+    const toggleOnChange = sinon.spy();
+    const wrapper = shallow(<Toggle disabled onChange={toggleOnChange}>Toggle</Toggle>);
+
+    tt.true(
+        wrapper.prop('disabled'),
+        'disabled toggles have a disabled attribute'
+    );
+
+    wrapper.find('button').simulate('click');
+    tt.false(
+        toggleOnChange.calledOnce,
+        'disabled toggles do not call their onChange events when clicked'
+    );
+});
+
+

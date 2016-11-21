@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import ComponentClassName from '../../util/ComponentClassName';
+import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 import Button from '../../component/button/Button';
 
@@ -9,8 +9,6 @@ type ToggleProps = {
     disabled: ?boolean,
     modifier: Modifier,
     onChange: OnChange,
-    onClick: OnClick,
-    type: ?string,
     value: ?boolean
 }
 
@@ -21,15 +19,13 @@ type ToggleProps = {
 /**
  *
  * `Toggle` is a simple input component that works like a checkbox.
- * Its value is a boolean.
+ * Its value is a boolean. It defaults to false.
  *
  * @param {Object} props
- * @param {String} [props.className] Class names to be directly applied to the toggle
+ * @param {ClassName} [props.className]
  * @param {boolean} [props.disabled] Set to true to disable the toggle, and onClick calls will no longer be called when clicked
  * @param {Modifier} [props.modifier]
  * @param {OnChange} [props.onChange]
- * @param {OnClick} [props.onClick]
- * @param {String} [props.type = toggle] HTML toggle type
  * @param {boolean} [props.value = false] Boolean indicating if the toggle should be active or not
  *
  * @example
@@ -43,15 +39,26 @@ type ToggleProps = {
 
 function Toggle(props: ToggleProps): React.Element<any> {
     const {
-        value,
-        onChange
+        className,
+        disabled,
+        modifier,
+        onChange,
+        value
     } = props;
 
-    return <Button
-        {...RemoveProps(['value'], props)}
+    const propsToRemove = [
+        'value',
+        'modifier',
+        'onClick'
+    ];
+
+    const filteredProps: Object = RemoveProps(propsToRemove, props);
+
+    return <button
+        {...filteredProps}
+        className={SpruceClassName({name: 'Toggle', modifier, className}, {'Toggle-active': !!value})}
+        onClick={ee => !disabled && onChange && onChange(!value)}
         type="button"
-        onClick={ii => onChange && onChange(!value)}
-        modifier={{active: !!value}}
     />;
 }
 

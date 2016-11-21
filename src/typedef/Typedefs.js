@@ -3,7 +3,7 @@
 
 type ListOrArray = List<*> | Array<any>;
 
-type Renderable = React.Element<any> | string | number | boolean | null
+type Renderable = React.Element<any> | string | number | boolean | null;
 
 type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<any>;
 

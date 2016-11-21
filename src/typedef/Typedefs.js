@@ -1,5 +1,7 @@
 /* @flow */
 /* eslint-disable no-unused-vars */
+import {List} from 'immutable';
+import React from 'react';
 
 type ListOrArray = List<*> | Array<any>;
 

@@ -92,7 +92,7 @@ type TableProps = {
  * 3. value key accessor
  *
  * @param {Object} props
- * @param {String} [props.className]
+ * @param {ClassName} [props.className]
  * @param {Array|List} props.data
  *     Collection of data to iterate over
  * @param {Modifier} modifier

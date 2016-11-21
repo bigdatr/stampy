@@ -1,0 +1,50 @@
+.Example_component,
+.Example_source {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.Example_component {
+    padding: 1rem;
+}
+
+
+.Example_source {
+    left: 50%;
+
+    pre {
+        background-color: #333;
+        color: #e6e6e6;
+        overflow: auto;
+        padding: 1rem;
+        margin: 0;
+        tab-size: 4;
+        font-family: Menlo, monospace;
+        font-size: 0.875em;
+        height: 100%;
+    }
+
+    code {
+        font-family: inherit;
+    }
+
+
+    /* Red */
+    .hljs-keyword {color: #C55B4E;}
+
+    /* Yellow */
+    .hljs-tag {color: #E1AE69;}
+
+    /* Green */
+    .hljs-string {color: #86C797;}
+
+    /* Blue */
+    .hljs-number {color: #6CA6CE;}
+    .hljs-literal {color: #6CA6CE;}
+
+
+    .hljs-comment {color: #6D6D6D;}
+}

@@ -36,7 +36,7 @@ import SpruceClassName from './SpruceClassName';
  */
 export default function SpruceComponent(name: string, Element: ReactClass<any>|string): Function {
     function spruceComonent(props: Object): React.Element<any> {
-        var {className, modifier, children, ...otherProps} = props;
+        const {className, modifier, children, ...otherProps} = props;
         return <Element
             className={SpruceClassName({className, modifier, name})}
             children={children}

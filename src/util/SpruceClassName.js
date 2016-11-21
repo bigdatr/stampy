@@ -7,7 +7,7 @@ type ClassNameProps = {
     className: ?string
 }
 
-export default function ComponentClassNames(props: ClassNameProps, ...args: Array<void>): string {
+export default function SpruceClassName(props: ClassNameProps, ...args: Array<void>): string {
     return classnames(
         props.name,
         (props.modifier)

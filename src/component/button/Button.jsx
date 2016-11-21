@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import ComponentClassName from '../../util/ComponentClassName';
+import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 
 /**
@@ -45,7 +45,7 @@ function Button(props: ButtonProps): React.Element<any> {
 
     return <button
         {...filteredProps}
-        className={ComponentClassName({name: 'Button', modifier, className})}
+        className={SpruceClassName({name: 'Button', modifier, className})}
     />;
 }
 

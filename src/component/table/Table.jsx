@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {fromJS, List, Map} from 'immutable';
-import ComponentClassName from '../../util/ComponentClassName';
+import SpruceClassName from '../../util/SpruceClassName';
 
 /**
  * @module Table
@@ -146,7 +146,7 @@ function Table(props: TableProps): React.Element<any> {
         })
         .toJS();
 
-    return <table className={ComponentClassName({name: 'Table', modifier, className})}>
+    return <table className={SpruceClassName({name: 'Table', modifier, className})}>
         <thead><tr>{tableHead}</tr></thead>
         <tbody>{tableBody}</tbody>
     </table>

@@ -23,7 +23,7 @@
   ],
   "babel": {
     "extensions": ["js", "es6", "jsx"],
-    "presets": ["es2015", "react"],
+    "presets": ["blueflag"],
     "plugins": ["transform-flow-strip-types"]
   }
 }

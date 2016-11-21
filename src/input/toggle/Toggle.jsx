@@ -13,7 +13,7 @@ type ToggleProps = {
 }
 
 /**
- * @module Input
+ * @module Inputs
  */
 
 /**

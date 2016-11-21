@@ -4,7 +4,7 @@ import {fromJS, List, Map} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
 
 /**
- * @module Table
+ * @module Components
  */
 
 //

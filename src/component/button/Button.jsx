@@ -12,7 +12,7 @@ type ButtonProps = {
 }
 
 /**
- * @module Component
+ * @module Components
  */
 
 /**

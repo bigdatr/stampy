@@ -20,7 +20,7 @@ type ButtonProps = {
  * It does not keep state.
  *
  * @param {Object} props
- * @param {String} [props.className] Class names to be directly applied to the button
+ * @param {ClassName} [props.className]
  * @param {boolean} [props.disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
  * @param {Modifier} [props.modifier]
  * @param {OnClick} [props.onClick]

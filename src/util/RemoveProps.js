@@ -3,7 +3,7 @@
 import {List, Map} from 'immutable';
 
 /**
- * @module Util
+ * @module Utils
  */
 
 /**

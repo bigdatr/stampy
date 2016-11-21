@@ -8,7 +8,7 @@ type ClassNameProps = {
 }
 
 /**
- * @module Util
+ * @module Utils
  */
 
 /**

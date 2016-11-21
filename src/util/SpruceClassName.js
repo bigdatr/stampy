@@ -22,7 +22,7 @@ type ClassNameProps = {
  *     modifier: "large small",
  *     className: "AnotherClass"
  * };
- * reutrn <div className={SpruceClassName(props, "ExtraClassName")} />
+ * return <div className={SpruceClassName(props, "ExtraClassName")} />
  * ^ // class name is "Button Button-large Button-small AnotherClass ExtraClassName"
  *
  * const props = {
@@ -32,7 +32,7 @@ type ClassNameProps = {
  *        no false
  *     }
  * };
- * reutrn <div className={SpruceClassName(props)} />
+ * return <div className={SpruceClassName(props)} />
  * ^ // class name is "Button Button-yes"
  *
  * @param {Object} props An component's props.

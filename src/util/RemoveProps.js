@@ -25,8 +25,8 @@ import {List, Map} from 'immutable';
  *
  * @param {List<string>|Array<string>|Map<string,boolean>|Object} propNames The props to remove. Passing an array or List of strings will remove props by name
  *    If you pass a Map or object then only props with the names of object keys that evaluate to true will be removed.
- * @param {Object} onPropChangeFunction The function to be called. It is passed a single argument, the updated props object.
- * @return {Object} The filtered set of props
+ * @param {Object} props The set of props to filter.
+ * @return {Object} The filtered set of props.
  */
 
 export default function RemoveProps(propNames: List<string>|Array<string>|Map<string,boolean>|Object, props: Object): Object {

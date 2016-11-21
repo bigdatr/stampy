@@ -3,27 +3,27 @@ import React from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 
-/**
- * @module Component
- */
-
 type ButtonProps = {
     className: ?string,
     disabled: ?boolean,
-    modifier: ?string,
+    modifier: Modifier,
     onClick: Function,
     type: ?string,
 }
+
+/**
+ * @module Components
+ */
 
 /**
  * `Button` is a simple component that displays a button.
  * It does not keep state.
  *
  * @param {Object} props
- * @param {String} [props.className] Class names to be directly applied to the button
+ * @param {ClassName} [props.className]
  * @param {boolean} [props.disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
- * @param {String} [props.modifier] Spruce modifers
- * @param {Function} [props.onClick] Function to be called when clicked
+ * @param {Modifier} [props.modifier]
+ * @param {OnClick} [props.onClick]
  * @param {String} [props.type = button] HTML button type
  *
  * @example

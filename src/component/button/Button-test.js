@@ -20,12 +20,12 @@ test('basic button', tt => {
     );
 
     tt.truthy(
-        wrapper.render().children().first().attr('class').match(/\bButton\b/),
+        wrapper.render().children().first().hasClass('Button'),
         'button has a class of button'
     );
 
     tt.truthy(
-        shallow(<Button modifier="large">Button</Button>).render().children().first().attr('class').match(/\bButton-large\b/),
+        shallow(<Button modifier="large">Button</Button>).render().children().first().hasClass('Button-large'),
         'buttons with modifiers are rendered with that modifier class'
     );
 

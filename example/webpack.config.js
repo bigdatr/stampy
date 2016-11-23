@@ -33,7 +33,8 @@ const development = {
     },
     resolve: {
         extensions: ['', '.jsx', '.js'],
-        modulesDirectories: ['src', 'node_modules'],
+        modulesDirectories: ['/fake-directory-dont-create-a-directory-here'],
+        root: [path.resolve(__dirname, './src'), path.resolve(__dirname, './node_modules')],
         alias: {
             stampy: path.resolve(__dirname, "../")
         }
@@ -55,6 +56,9 @@ const development = {
     },
     postcss : function() {
         return [autoprefixer({browsers : ['ie >= 9', 'last 2 versions']})]
+    },
+    sassLoader: {
+        includePaths: [path.resolve(__dirname, "node_modules")]
     },
     devServer : {
         host: '0.0.0.0',

@@ -2,7 +2,6 @@
 import React from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
-import Button from '../../component/button/Button';
 
 type ToggleProps = {
     className: ?string,

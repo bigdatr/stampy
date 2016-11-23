@@ -7,5 +7,5 @@ find src -name '*-default.scss' | while read -r FILE
         combined=$(cat $([ -r "$base" ] && echo "$base" ) $FILE)
 
         echo "$combined" > $(echo "$FILE" | sed -e 's/^src\//lib\//')
-        echo "$combined" | node-sass --output-style compact > $(echo "$FILE" | sed -e 's/^src\//lib\//' -e 's/\.scss$/\.css/')
+        echo "$combined" | node-sass --include-path node_modules --output-style compressed > $(echo "$FILE" | sed -e 's/^src\//lib\//' -e 's/\.scss$/\.css/')
     done

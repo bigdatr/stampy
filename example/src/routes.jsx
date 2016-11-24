@@ -10,6 +10,7 @@ import TableExample from 'component/table/TableExample';
 import ToggleExample from 'input/toggle/ToggleExample';
 import InputExample from 'input/input/InputExample';
 
+import ElementQueryHockExample from 'hock/ElementQueryHockExample';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
@@ -27,6 +28,10 @@ const routes = <Route component={AppHandler} path="/">
     <Route path="util">
         <Route path="SpruceClassName" component={SpruceClassNameExample}/>
         <Route path="SpruceComponent" component={SpruceComponentExample}/>
+    </Route>
+
+    <Route path="hock">
+        <Route path="ElementQueryHock" component={ElementQueryHockExample}/>
     </Route>
 
     <Route path="*" component={ErrorHandler}/>

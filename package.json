@@ -89,7 +89,7 @@
     ],
     "reporter": [
       "lcov",
-      "text-summary"
+      "text"
     ],
     "extension": [
       ".js",

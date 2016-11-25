@@ -11,6 +11,7 @@ import ToggleExample from 'input/toggle/ToggleExample';
 import InputExample from 'input/input/InputExample';
 
 import ElementQueryHockExample from 'hock/ElementQueryHockExample';
+import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
@@ -32,6 +33,7 @@ const routes = <Route component={AppHandler} path="/">
 
     <Route path="hock">
         <Route path="ElementQueryHock" component={ElementQueryHockExample}/>
+        <Route path="ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
     </Route>
 
     <Route path="*" component={ErrorHandler}/>

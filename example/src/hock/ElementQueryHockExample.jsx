@@ -2,18 +2,27 @@ import React from 'react';
 import {ElementQueryHock} from 'stampy';
 
 const example = (props) => {
-    if(!props.eq) return <div>No height yet</div>;
+    if(!props.eqReady) return <div>No data yet</div>;
     return <div>
-        <div>width: {props.eq.get('width')}</div>
-        <div>height: {props.eq.get('height')}</div>
-        <div>active queries: {props.eq.get('active').join(', ')}</div>
-        <div>inactive queries: {props.eq.get('inactive').join(', ')}</div>
+        <div>width: {props.eqWidth}</div>
+        <div>height: {props.eqHeight}</div>
+        <div>active queries: {props.eqActive.join(', ')}</div>
+        <div>inactive queries: {props.eqInactive.join(', ')}</div>
     </div>
 }
 
-const ElementQueryHockExample = ElementQueryHock({
-    'medium': [[300, 400], [200,600]] 
-})(example);
+const ElementQueryHockExample = ElementQueryHock([
+    {
+        name: 'medium',
+        widthBounds: [300, 600],
+        heightBounds: [200, 400]
+    },
+    {
+        name: 'large',
+        widthBounds: [600, 1200],
+        heightBounds: [400, 1800]
+    }
+])(example);
 
 export default () => {
     return <div style={{

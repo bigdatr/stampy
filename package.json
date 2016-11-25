@@ -48,6 +48,7 @@
     "git-url-parse": "^6.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.2.1",
+    "jsdom": "^9.8.3",
     "jsdonk": "0.2.2",
     "node-sass": "^3.11.2",
     "nyc": "^6.6.1",
@@ -74,7 +75,8 @@
     "babel": {
       "presets": [
         "blueflag"
-      ]
+      ],
+      "sourceMaps": "inline"
     },
     "files": [
       "src/**/*-test.js"

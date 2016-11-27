@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import sinon from 'sinon';
 import jsdom from 'jsdom';
 
+
+
 const doc = jsdom.jsdom('<html><body><div id="container"></div></body></html>');
 global.window = doc.defaultView;
 global.document = window.document;
@@ -18,7 +20,7 @@ container.clientWidth = 1280;
 container.clientHeight = 720;
 
 const example = sinon.spy(() => {
-    return <div></div>;
+    return <div>Example Component</div>;
 });
 
 const ElementQueryHockExample = ElementQueryHock([
@@ -30,18 +32,20 @@ const ElementQueryHockExample = ElementQueryHock([
     {
         name: 'large',
         widthBounds: [1600]
+    },
+    {
+        name: 'default'
     }
 ])(example);
 
 const component = <ElementQueryHockExample/>;
 ReactDOM.render(component, container);
 
-
 test('ElementQueryHock', tt => {
     tt.is(
         example.callCount,
         2,
-        'component render is called twice'
+        'component render is called twice' // Once for initial render, then again once dimensions are available
     );
 
     tt.false(
@@ -68,7 +72,7 @@ test('ElementQueryHock', tt => {
 
     tt.deepEqual(
         example.secondCall.args[0].eqActive,
-        ['medium'],
+        ['medium', 'default'],
         'hock gets correct active queries'
     );
 
@@ -78,7 +82,6 @@ test('ElementQueryHock', tt => {
         'hock gets correct inactive queries'
     );
 
-  
 
     ReactDOM.unmountComponentAtNode(container);
 
@@ -96,7 +99,7 @@ test('ElementQueryHock', tt => {
     const HockInstance = new ElementQueryHockExample();
     HockInstance.setState = sinon.spy(function() {});
 
-    HockInstance.state = {width: 300, height: 600};
+    HockInstance.state = {width: 300, height: 600}; // manually set state cos react won't do it without a mounted component
     HockInstance.handleResize({clientWidth: 300, clientHeight: 600});
     HockInstance.state = {width: 300, height: 600};
     HockInstance.handleResize({clientWidth: 600, clientHeight: 600});

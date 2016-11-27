@@ -14,7 +14,7 @@ type ElementQueryHockProps = {
     eqWidth: number,
     eqHeight: number,
     eqActive: string[],
-    eqActive: string[],
+    eqInactive: string[],
     eqReady: boolean
 }
 
@@ -124,7 +124,7 @@ const ElementQueryHock = (eqs: ElementQuery[]): HockApplier => {
                 var height = element.clientHeight;
 
                 if(width === this.state.width && height === this.state.height) return;
-                
+
                 var active = [];
                 var inactive = [];
 

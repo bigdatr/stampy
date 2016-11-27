@@ -1,6 +1,7 @@
 import test from 'ava';
 import React from 'react';
-import {shallow} from 'enzyme';
+import {renderToString} from 'react-dom/server'
+
 import ElementQueryHock from './ElementQueryHock';
 
 const example = () => {
@@ -20,13 +21,18 @@ const ElementQueryHockExample = ElementQueryHock([
 ])(example);
 
 
+
 test('ElementQueryHockServerSide', tt => {
-    const eqHock = shallow(<ElementQueryHockExample/>);
+    const str = renderToString(<ElementQueryHockExample/>);
 
     tt.is(
-        eqHock.html(),
-        '<div>Hello World</div>',
+        str,
+        '<div data-reactroot="" data-reactid="1" data-react-checksum="999625590">Hello World</div>',
         'component can still be rendered without browser'
     );
 
+    const HockInstance = new ElementQueryHockExample();
+
+    tt.notThrows(HockInstance.componentDidMount, 'Doesn\'t throw errors when mounting without window global');
+    tt.notThrows(HockInstance.componentWillUnmount, 'Doesn\'t throw errors when unmounting without window global');
 });

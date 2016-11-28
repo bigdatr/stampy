@@ -56,7 +56,7 @@ function Toggle(props: ToggleProps): React.Element<any> {
     return <button
         {...filteredProps}
         className={SpruceClassName({name: 'Toggle', modifier, className}, {'Toggle-active': !!value})}
-        onClick={ee => !disabled && onChange && onChange(!value, {event: ee, elem: ee.target})}
+        onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
         type="button"
     />;
 }

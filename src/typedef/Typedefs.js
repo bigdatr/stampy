@@ -11,7 +11,7 @@ type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<any>;
 
 type onChangeMeta = {
     event: Object,
-    elem: Object
+    element: Object
 }
 
 type OnChange = (newValue: string|boolean, meta: onChangeMeta) => void;

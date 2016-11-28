@@ -24,7 +24,7 @@ test('input', tt => {
     );
 
     tt.true(
-        inputOnChange.calledWith('bar', {event: {target: {value: 'bar'}}, elem: {value: 'bar'}}),
+        inputOnChange.calledWith('bar', {event: {target: {value: 'bar'}}, element: {value: 'bar'}}),
         'input on change called with correct params'
     );
 

@@ -6,7 +6,7 @@ import RemoveProps from '../../util/RemoveProps';
 type InputProps = {
     className: ?string,
     modifier: Modifier,
-    onChange: Function,
+    onChange: OnChange,
     type: ?string
 }
 
@@ -41,7 +41,7 @@ function Input(props: InputProps): React.Element<any> {
 
     return <input
         {...filteredProps}
-        onChange={(ee) => props.onChange && props.onChange(ee.target.value, {event: ee, elem: ee.target})}
+        onChange={(ee) => props.onChange && props.onChange(ee.target.value, {event: ee, element: ee.target})}
         className={SpruceClassName({name: 'Input', modifier, className})}
     />;
 }

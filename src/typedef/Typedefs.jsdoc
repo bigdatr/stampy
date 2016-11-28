@@ -14,7 +14,7 @@
  * @param {string|boolean|array} newValue The input's new value.
  * @param {Object} meta Meta information about the change
  * @param {Object} meta.event The event that triggered the change
- * @param {Object} meta.elem The HTML element that triggered the change
+ * @param {Object} meta.element The HTML element that triggered the change
  */
 
  /**

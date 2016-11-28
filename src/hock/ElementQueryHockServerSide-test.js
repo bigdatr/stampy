@@ -1,7 +1,7 @@
 import test from 'ava';
 import React from 'react';
 import {renderToString} from 'react-dom/server'
-
+import cheerio from 'cheerio';
 import ElementQueryHock from './ElementQueryHock';
 
 const example = () => {
@@ -24,10 +24,11 @@ const ElementQueryHockExample = ElementQueryHock([
 
 test('ElementQueryHockServerSide', tt => {
     const str = renderToString(<ElementQueryHockExample/>);
+    const html = cheerio.load(str);
 
     tt.is(
-        str,
-        '<div data-reactroot="" data-reactid="1" data-react-checksum="999625590">Hello World</div>',
+        html.text(),
+        'Hello World',
         'component can still be rendered without browser'
     );
 

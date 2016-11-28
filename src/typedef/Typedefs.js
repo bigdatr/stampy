@@ -9,7 +9,12 @@ type Renderable = React.Element<any> | string | number | boolean | null;
 
 type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<any>;
 
-type OnChange = (newValue: string|boolean) => void;
+type onChangeMeta = {
+    event: Object,
+    element: Object
+}
+
+type OnChange = (newValue: string|boolean, meta: onChangeMeta) => void;
 
 type OnClick = (event: Object) => void;
 

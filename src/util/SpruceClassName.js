@@ -55,5 +55,5 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
         modifiers,
         args,
         props.className
-    );
+    ).replace(/\s+/g, ' ');
 }

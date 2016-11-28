@@ -18,6 +18,7 @@
     "babel-preset-blueflag": "^0.0.1",
     "babel-register": "^6.18.0",
     "css-loader": "^0.25.0",
+    "dotenv": "^2.0.0",
     "eslint": "^3.10.2",
     "eslint-config-blueflag": "^0.2.0",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -29,10 +30,10 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.3",
-    "webpack-dev-server": "^1.16.2",
-    "dotenv": "^2.0.0"
+    "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "immutable": "^3.8.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

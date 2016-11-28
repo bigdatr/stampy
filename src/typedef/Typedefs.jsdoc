@@ -11,7 +11,10 @@
  * A callback that is called by input component to notify parents of changes to their values.
  *
  * @typedef OnChange
- * @param {string|boolean} newValue The input's new value.
+ * @param {string|boolean|array} newValue The input's new value.
+ * @param {Object} meta Meta information about the change
+ * @param {Object} meta.event The event that triggered the change
+ * @param {Object} meta.element The HTML element that triggered the change
  */
 
  /**

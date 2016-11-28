@@ -42,7 +42,7 @@ test('toggle', tt => {
         'toggle has not a class of Toggle-active when value is false'
     );
 
-    trueToggle.find('button').simulate('click');
+    trueToggle.find('button').simulate('click', {target: {}});
     tt.true(
         trueToggleOnChange.calledOnce,
         'toggles call their onClick events when onClick is called'
@@ -53,7 +53,7 @@ test('toggle', tt => {
         'toggles with a value of true will call onChange with a value of false'
     );
 
-    falseToggle.find('button').simulate('click');
+    falseToggle.find('button').simulate('click', {target: {}});
     tt.true(
         falseToggleOnChange.getCall(0).args[0],
         'toggles with a value of false will call onChange with a value of true'

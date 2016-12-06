@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import FieldMessage from './FieldMessage';
 import {List, Map} from 'immutable';
 
-test('input', tt => {
+test('FieldMessage', tt => {
 
     tt.is(
         shallow(<FieldMessage/>).html(),

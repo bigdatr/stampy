@@ -157,7 +157,7 @@ const QueryStringHock = (config: ?Object = null, onQueryChangeFunction: ?Functio
         };
 
         QueryStringHock.contextTypes = {
-            router: React.PropTypes.func // required for react-router v2
+            router: React.PropTypes.object // required for react-router v2
         };
 
         return QueryStringHock;

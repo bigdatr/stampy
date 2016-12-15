@@ -64,9 +64,12 @@
     "react": "^15.3.2"
   },
   "dependencies": {
+    "bruce": "^0.6.0",
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.9",
     "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "react-select": "^1.0.0-rc.2"
   },
   "main": "lib/index.js",
   "engines": {

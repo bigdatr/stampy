@@ -1,0 +1,196 @@
+@import 'bruce/bruce';
+
+$border-color: #666;
+
+.Select {
+    position: relative;
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.Select-control {
+    border: 1px solid $border-color;
+    border-bottom-color: darken($border-color, 10);
+    border-left-color: darken($border-color, 5);
+    border-right-color: darken($border-color, 5);
+    position: relative;
+    overflow: hidden;
+    background-color: #FFF;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: .125rem .5rem;
+    padding-right: 1.9rem;
+}
+
+.Select-value {
+    display: inline;
+    width: 100%;
+}
+
+.Select-value-label {
+    width: 100%;
+}
+
+.Select-input {
+    padding: 0 .5rem;
+    display: inline;
+
+    > input {
+        cursor: default;
+        background: none transparent;
+        border: 0 none;
+        font-family: inherit;
+        font-size: inherit;
+        margin: 0;
+        padding: 0;
+        outline: none;
+        display: inline-block;
+        -webkit-appearance: none;
+    }
+}
+
+.Select-placeholder {
+    color: grey(80);
+    position: absolute;
+    right: 1rem;
+    left: .75rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+
+.Select--multi {
+
+    .Select-control {
+        padding: .125rem .25rem;
+        white-space: normal;
+    }
+
+    .Select-value {
+        background-color: #600;
+        color: #FFF;
+        display: inline-block;
+        margin: .125rem;
+        padding: 0 .5rem;
+        font-weight: 700;
+        width: auto;
+    }
+
+
+    .Select-value-label {
+        width: auto;
+    }
+}
+
+.Select-value-icon {
+    color: transparent;
+    @include bruce-size(12px);
+    float: right;
+    margin-left: 8px;
+
+    &:before {
+        color: #FFF;
+        font-size: 12px;
+        content: '\E014';
+        font-family: 'GlyphiconsHalflings';
+    }
+}
+
+%Select_button {
+    $size: 32px;
+    cursor: pointer;
+    @include bruce-size($size);
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    color: transparent;
+
+    &:before {
+        color: grey(40);
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        font-family: 'GlyphiconsHalflings';
+        line-height: $size;
+        pointer-events: none;
+    }
+}
+
+.Select-arrow {
+    @extend %Select_button;
+
+    &:before {
+        content: '\E114';
+    }
+}
+
+.Select-clear {
+    @extend %Select_button;
+    right: 24px;
+
+    &:before {
+        content: '\E014';
+    }
+}
+
+// States
+.has-value {
+    .Select-placeholder {
+        color: grey(40);
+    }
+}
+
+.is-focused:not(.is-open) {
+    > .Select-control {
+        border-color: #600;
+    }
+}
+
+.is-open {
+    .Select-control {
+        // border-radius: .25rem .25rem 0 0;
+    }
+
+    .Select-arrow:before {
+        content: '\E113';
+    }
+}
+
+
+
+
+// Dropdown
+
+.Select-menu-outer {
+    @include bruce-ios(scroll);
+    background-color: #FFF;
+    border: 1px solid grey(80);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
+    box-sizing: border-box;
+    margin-top: -1px;
+    max-height: 200px;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 1000;
+}
+
+.Select-menu {
+    max-height: 198px;
+    overflow-y: auto;
+}
+
+.Select-noresults,
+.Select-option {
+    cursor: pointer;
+    display: block;
+    padding: .25rem .5rem;
+
+    &.is-focused {
+        background-color: grey(94);
+    }
+}

@@ -6,6 +6,7 @@ import ErrorHandler from 'components/ErrorHandler';
 import ContentsPage from 'components/ContentsPage';
 
 import ButtonExample from 'component/button/ButtonExample';
+import LabelExample from 'component/field/LabelExample';
 import TableExample from 'component/table/TableExample';
 import FieldMessageExample from 'component/field/FieldMessageExample';
 import ToggleExample from 'input/toggle/ToggleExample';
@@ -23,6 +24,7 @@ const routes = <Route component={AppHandler} path="/">
         <Route path="Table" component={TableExample}/>
         <Route path="Button" component={ButtonExample}/>
         <Route path="FieldMessage" component={FieldMessageExample}/>
+        <Route path="Label" component={LabelExample}/>
     </Route>
     <Route path="input">
         <Route path="Toggle" component={ToggleExample}/>

@@ -16,6 +16,15 @@ const schema = [
     },
     {
         value: 'baz'
+    },
+    {
+        heading: () => <th>Heading</th>,
+        value: 'wop'
+    },
+    {
+        heading: 'nok',
+        value: 'tol',
+        className: 'azt'
     }
 ];
 
@@ -23,12 +32,16 @@ const data = [
     {
         foo: 1,
         bar: 2,
-        baz: 3
+        baz: 3,
+        wop: 7,
+        tol: 9
     },
     {
         foo: 4,
         bar: 5,
-        baz: 6
+        baz: 6,
+        wop: 8,
+        tol: 10
     }
 ];
 
@@ -48,7 +61,9 @@ test('th content rendering', tt => {
             .render();
     };
 
-    tt.is(wrapper.find('Th').length, 3);
+    tt.is(wrapper.find('Th').length, 5);
+    tt.is(ThList(4).html(), '<th class="azt">nok</th>');
+    tt.is(ThList(3).text(), 'Heading');
     tt.is(ThList(2).text(), '');
     tt.is(ThList(1).text(), 'bar');
     tt.is(ThList(0).html(), '<th style="width:200px;">foo</th>');
@@ -71,4 +86,5 @@ test('td content rendering', tt => {
     tt.is(firstTd.attr('class'), 'test');
     tt.is(renderAt(firstRow, 'Td', 1).text(), '2|1');
     tt.is(renderAt(firstRow, 'Td', 2).text(), '3');
+    tt.is(renderAt(firstRow, 'Td', 4).html(), '<td class="azt">9</td>');
 });

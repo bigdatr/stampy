@@ -15,16 +15,21 @@ type ThProps = {
 }
 
 function Th(props: ThProps): React.Element<any> {
-    var {width, heading = ''} = props.schemaItem.toObject();
+    const {
+        width,
+        heading = '',
+        className
+    } = props.schemaItem.toObject();
 
     const content: any = (typeof heading === 'function')
         ? heading()
         : heading;
 
-    return <th
-        style={{width}}
-        children={content}
-    />;
+    // Only return a th if the schema hasn't
+    // provided one
+    return (content && content.type === 'th')
+        ? content
+        : <th className={className} style={{width}}>{content}</th>;
 }
 
 
@@ -38,7 +43,7 @@ type TdProps = {
 
 function Td(props: TdProps): React.Element<any> {
     const {row, schemaItem} = props;
-    const {render, value} = schemaItem.toObject();
+    const {render, value, className} = schemaItem.toObject();
 
     // Content rendering priority order
     // 1. render function
@@ -55,7 +60,7 @@ function Td(props: TdProps): React.Element<any> {
     // provided one
     return (content && content.type === 'td')
         ? content
-        : <td>{content}</td>;
+        : <td className={className}>{content}</td>;
 }
 
 
@@ -69,7 +74,7 @@ type SchemaItem = {
     value: string | (row: Map<any>) => React.Element<any>,
     heading: string | () => React.Element<any>,
     render: (row: Map<any>) => React.Element<any>,
-    width: string | number
+    width: string
 }
 
 type TableProps = {
@@ -107,7 +112,9 @@ type TableProps = {
  * const schema = [
  *      {
  *          heading: 'Name',
- *          value: 'name'
+ *          value: 'name',
+ *          width: '100px',
+ *          className: 'Name'
  *      },
  *      {
  *          heading: 'BMI',
@@ -117,7 +124,7 @@ type TableProps = {
  *          }
  *      },
  *      {
- *          heading: 'Avatar',
+ *          heading: () => <th>Avatar</th>,
  *          render: row => <img src={row.get('avatarUrl')} />
  *      }
  * ];

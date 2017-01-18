@@ -88,3 +88,27 @@ test('td content rendering', tt => {
     tt.is(renderAt(firstRow, 'Td', 2).text(), '3');
     tt.is(renderAt(firstRow, 'Td', 4).html(), '<td class="azt">9</td>');
 });
+
+const functionSchema = (row) => {
+    return [
+        {
+            heading: 'Col 1',
+            value: 'foo'
+        },
+        {
+            heading: 'Col 2',
+            value: 'bar'
+        }
+    ];
+};
+
+test('rendering with schema as a function', tt => {
+    const wrapper = shallow(<Table data={data} schema={functionSchema} />);
+
+    const firstRow = wrapper
+        .find('tbody tr')
+        .at(0);
+
+    tt.is(renderAt(firstRow, 'Td', 0).text(), '1');
+    tt.is(renderAt(firstRow, 'Td', 1).text(), '2');
+});

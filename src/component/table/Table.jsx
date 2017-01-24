@@ -43,7 +43,12 @@ type TdProps = {
 
 function Td(props: TdProps): React.Element<any> {
     const {row, schemaItem} = props;
-    const {render, value, className} = schemaItem.toObject();
+    const {
+        width,
+        render,
+        value,
+        className
+    } = schemaItem.toObject();
 
     // Content rendering priority order
     // 1. render function
@@ -60,7 +65,7 @@ function Td(props: TdProps): React.Element<any> {
     // provided one
     return (content && content.type === 'td')
         ? content
-        : <td className={className}>{content}</td>;
+        : <td className={className} style={{width}}>{content}</td>;
 }
 
 
@@ -68,7 +73,7 @@ function Td(props: TdProps): React.Element<any> {
 //
 // Table
 
-type Schema = ListOrArray<SchemaItem>;
+type Schema = List<any> | Array<any> | Function;
 
 type SchemaItem = {
     value: string | (row: Map<any>) => React.Element<any>,
@@ -104,8 +109,9 @@ type TableProps = {
  * @param {Function} [props.rowProps]
  *     Gets called for each item in data.
  *     The return object will be destructured onto the `tr`
- * @param {Array|List} props.schema
- *     Collection describing how to render each column
+ * @param {Array|List|Function} props.schema
+ *     Collection describing how to render each column. Can be passed a function which will be
+ *     called for each row.
  * @return {ReactElement}
  *
  * @example
@@ -134,12 +140,12 @@ type TableProps = {
  * @category ControlledComponent
  */
 function Table(props: TableProps): React.Element<any> {
-    const {modifier, className, rowProps} = props;
-    const schema: List<any> = fromJS(props.schema);
+    const {modifier, className, rowProps, schema} = props;
     const data: List<any> = fromJS(props.data);
 
+
     // Take the schema to create each heading
-    const tableHead: React.Element<any>[] = schema
+    const tableHead: React.Element<any>[] = formatSchema(null, schema)
         .map((column, key) => <Th key={key} schemaItem={column} />)
         .toJS();
 
@@ -147,7 +153,7 @@ function Table(props: TableProps): React.Element<any> {
     const tableBody: React.Element<any>[] = data
         .map(row => {
             return <tr key={row.hashCode()} {...rowProps(row)}>
-                {schema.map((column, key: number) => <Td key={key} row={row} schemaItem={column} />)}
+                {formatSchema(row, schema).map((column, key: number) => <Td key={key} row={row} schemaItem={column} />)}
             </tr>;
         })
         .toJS();
@@ -156,6 +162,11 @@ function Table(props: TableProps): React.Element<any> {
         <thead><tr>{tableHead}</tr></thead>
         <tbody>{tableBody}</tbody>
     </table>
+}
+
+function formatSchema(row:?any, schema:Schema): List<Map<string,any>> {
+    const appliedSchema = typeof schema === 'function' ? schema(row) : schema;
+    return fromJS(appliedSchema);
 }
 
 Table.defaultProps = {

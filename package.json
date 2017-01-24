@@ -50,7 +50,6 @@
     "git-url-parse": "^6.0.1",
     "jsdoc": "^3.4.2",
     "jsdoc-babel": "^0.2.1",
-    "jsdoc-react-proptypes": "^0.1.0",
     "jsdom": "^9.8.3",
     "jsdonk": "0.4.7",
     "node-sass": "^3.11.2",

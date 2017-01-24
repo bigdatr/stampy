@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 
@@ -49,6 +49,17 @@ function Button(props: ButtonProps): React.Element<any> {
         className={SpruceClassName({name: 'Button', modifier, className})}
     />;
 }
+
+Button.propTypes = {
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
+    modifier: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ]),
+    onClick: PropTypes.func,
+    type: PropTypes.string
+};
 
 Button.defaultProps = {
     className: '',

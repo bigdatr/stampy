@@ -38,6 +38,14 @@ function Label(props: LabelProps): React.Element<any> {
     >{props.children}</label>;
 }
 
+Label.propTypes = {
+    className: PropTypes.string,
+    modifier: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ])
+};
+
 Label.defaultProps = {
     className: '',
     modifier: ''

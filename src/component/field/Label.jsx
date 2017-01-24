@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 

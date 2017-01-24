@@ -2,7 +2,7 @@
  * A function that builds a higher order React component around another component.
  * These often have some amount of configuration already set by partial function application.
  *
- * @typedef HockApplier
+ * @callback HockApplier
  * @param {ReactComponent} ComposedComponent The component you wish to wrap in a hock.
  * @return {ReactComponent} The higher order component.
  */
@@ -10,7 +10,7 @@
 /**
  * A callback that is called by input component to notify parents of changes to their values.
  *
- * @typedef OnChange
+ * @callback OnChange
  * @param {string|boolean|array} newValue The input's new value.
  * @param {Object} meta Meta information about the change
  * @param {Object} meta.event The event that triggered the change
@@ -20,7 +20,7 @@
  /**
  * A callback that is called by input component to notify parents of changes to their values.
  *
- * @typedef OnClick
+ * @callback OnClick
  * @param {Function} event The element's HTML click event.
  */
 
@@ -31,6 +31,6 @@
  */
 
 /**
- * HTML class names to be added to the rendered component
+ * HTML class names to be added to the rendered component.
  * @typedef {string} ClassName
  */

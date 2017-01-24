@@ -8,7 +8,7 @@ type ButtonProps = {
     disabled: ?boolean,
     modifier: Modifier,
     onClick: Function,
-    type: ?string,
+    type: ?string
 }
 
 /**
@@ -16,15 +16,16 @@ type ButtonProps = {
  */
 
 /**
+ * @component
+ *
  * `Button` is a simple component that displays a button.
  * It does not keep state.
  *
- * @param {Object} props
- * @param {ClassName} [props.className]
- * @param {boolean} [props.disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
- * @param {Modifier} [props.modifier]
- * @param {OnClick} [props.onClick]
- * @param {String} [props.type = button] HTML button type
+ * @prop {ClassName} [className]
+ * @prop {boolean} [disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
+ * @prop {Modifier} [modifier]
+ * @prop {OnClick} [onClick]
+ * @prop {String} [type = "button"] HTML button type
  *
  * @example
  * return <Button>Button text</Button>

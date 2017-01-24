@@ -16,14 +16,15 @@ type InputProps = {
 
 
 /**
+ * @component
+ *
  * `Input` is a simple component that displays an input.
  * It does not keep state.
  *
- * @param {Object} props
- * @param {ClassName} [props.className]
- * @param {Modifier} [props.modifier]
- * @param {OnChange} [props.onChange]
- * @param {String} [props.type = button] Input type
+ * @prop {OnChange} [onChange]
+ * @prop {ClassName} [className]
+ * @prop {Modifier} [modifier]
+ * @prop {String} [type = "button"] Input type
  *
  * @example
  * return <Input type='text' onChange={(val)=>doStuff(val)}/>

@@ -90,8 +90,27 @@ type TableProps = {
     schema: Schema
 }
 
+/**
+ * An `Object` or `Map` that defines a column.
+ *
+ * @typedef {Object|Map} TableSchemaColumn
+ * @property {string} heading The heading rendered at the top of the column
+ * @property {string|Function} [value] A string indicating which data object key to fetch from each row, or a function that receives the current data row and should return the value.
+ * @property {string} [className] Class names to apply to each cell in this column.
+ * @property {TableSchemaRenderFunction} [render] A function that receives the current data row and should return a `ReactElement` to render.
+ */
 
 /**
+ * Props to add to the `<tr>` element on each row.
+ *
+ * @callback TableRowProps
+ * @param {Map} row The current data row.
+ * @return {Object<string, string>} An object with string values, which will be destructured onto the `<tr>` element of each row.
+ */
+
+/**
+ *
+ * @component
  *
  * `Table` is a Controlled component that takes a collection of data and a schema. It iterates creating one row per item.
  *  The schema is used to determine how to render each column.
@@ -101,18 +120,15 @@ type TableProps = {
  * 2. value function
  * 3. value key accessor
  *
- * @param {Object} props
- * @param {ClassName} [props.className]
- * @param {Array|List} props.data
- *     Collection of data to iterate over
- * @param {Modifier} modifier
- * @param {Function} [props.rowProps]
- *     Gets called for each item in data.
- *     The return object will be destructured onto the `tr`
- * @param {Array|List|Function} props.schema
- *     Collection describing how to render each column. Can be passed a function which will be
- *     called for each row.
- * @return {ReactElement}
+ * @prop {Array|List} data
+ *     Collection of data to display in the table.
+ * @prop {Array<TableSchemaColumn>|List<TableSchemaColumn>|Function} schema
+ *     A collection that describes how to process and render each column,
+ *     or a function that receives the current data row and should return a schema.
+ *
+ * @prop {ClassName} [className]
+ * @prop {Modifier} [modifier]
+ * @prop {TableRowProps} [TableRowProps]
  *
  * @example
  * const schema = [

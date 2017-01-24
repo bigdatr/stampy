@@ -14,12 +14,12 @@ type LabelProps = {
  */
 
 /**
+ * @component
+ *
  * `Label` is a simple component that displays a label.
  *
- * @param {Object} props
- * @param {ClassName} [props.className]
- * @param {Modifier} [props.modifier]
- * @param {ReactElement} [props.children]
+ * @prop {ClassName} [className]
+ * @prop {Modifier} [modifier]
  *
  * @example
  * return <Label for='something'>Label for thing</Label>

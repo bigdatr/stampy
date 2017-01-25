@@ -25,7 +25,7 @@ type ButtonProps = {
  * @prop {boolean} [disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
  * @prop {Modifier} [modifier]
  * @prop {OnClick} [onClick]
- * @prop {String} [type = "button"] HTML button type
+ * @prop {string} [type = "button"] HTML button type
  *
  * @example
  * return <Button>Button text</Button>

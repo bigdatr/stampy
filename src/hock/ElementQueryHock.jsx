@@ -30,7 +30,7 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
 /**
  * ElementQueryHock is designed to allow components to respond to the size of their containing
  * element rather than to the size of the window. It provides the following props to your component:
- * 
+ *
  * - `eqWidth`: The current width of the parent element
  * - `eqHeight`: The current height of the parent element
  * - `eqActive`: An array of currently active queries
@@ -48,7 +48,7 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  *         <div>inactive queries: {props.eqInactive.join(', ')}</div>
  *     </div>
  * }
- * 
+ *
  * const ElementQueryHockExample = ElementQueryHock([
  *     {
  *         name: 'medium',
@@ -61,8 +61,8 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  *         heightBounds: [400, 1800]
  *     }
  * ])(example);
- * 
- * @param {Object[]} eqs - An array of element queries to check for 
+ *
+ * @param {Object[]} eqs - An array of element queries to check for
  * @param {String} eqs[].name                           - The name of the element query
  * @param {Number[]} [eqs[].widthBounds=[0, Infinity]]  - An array containing two values for the
  *                                                        minimum (inclusive) and maximum (exclusive)
@@ -78,7 +78,7 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  */
 
 const ElementQueryHock = (eqs: ElementQuery[]): HockApplier => {
-    return (ComposedComponent: ReactClass<any>): ReactClass<ElementQueryHock> => {    
+    return (ComposedComponent: ReactClass<any>): ReactClass<ElementQueryHock> => {
         return class ElementQueryHock extends Component {
             handleResize: Function;
             state: Object;

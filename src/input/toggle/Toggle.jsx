@@ -16,16 +16,16 @@ type ToggleProps = {
  */
 
 /**
+ * @component
  *
  * `Toggle` is a simple input component that works like a checkbox.
  * Its value is a boolean. It defaults to false.
  *
- * @param {Object} props
- * @param {ClassName} [props.className]
- * @param {boolean} [props.disabled] Set to true to disable the toggle, and onClick calls will no longer be called when clicked
- * @param {Modifier} [props.modifier]
- * @param {OnChange} [props.onChange]
- * @param {boolean} [props.value = false] Boolean indicating if the toggle should be active or not
+ * @prop {boolean} [value = false] Boolean indicating if the toggle should be active or not
+ * @prop {OnChange} [onChange]
+ * @prop {boolean} [disabled] Set to true to disable the toggle, and onClick calls will no longer be called when clicked
+ * @prop {ClassName} [className]
+ * @prop {Modifier} [modifier]
  *
  * @example
  * return <Toggle

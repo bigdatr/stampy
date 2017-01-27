@@ -14,7 +14,12 @@
             "typedef": false
           },
           "typedef": false
-        }
+        },
+        "output": {
+          "taffyjson": true,
+          "heirarchyjson": true
+        },
+        "debug": true
      }
   },
   "plugins": [

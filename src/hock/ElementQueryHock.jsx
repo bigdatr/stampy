@@ -157,17 +157,23 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
 
 /**
  * @typedef ElementQueryObject
- * @param {String} name The name of the element query.
- * @param {Number[]} [widthBounds=[0, Infinity]] An array containing two values for the
- *                                                        minimum (inclusive) and maximum (exclusive)
- *                                                        widths allowed by this element query. If
- *                                                        the second array item is excluded it is
- *                                                        assumed that there is no maximum.
- * @param {Number[]} [heightBounds=[0, Infinity]] An array containing two values for the
- *                                                        minimum (inclusive) and maximum (exclusive)
- *                                                        heights allowed by this element query. If
- *                                                        the second array item is excluded it is
- *                                                        assumed that there is no maximum.
+ *
+ * @param {String} name
+ * The name of the element query.
+ *
+ * @param {Number[]} [widthBounds=[0, Infinity]]
+ * An array containing two values for the
+ * minimum (inclusive) and maximum (exclusive)
+ * widths allowed by this element query. If
+ * the second array item is excluded it is
+ * assumed that there is no maximum.
+ *
+ * @param {Number[]} [heightBounds=[0, Infinity]]
+ * An array containing two values for the
+ * minimum (inclusive) and maximum (exclusive)
+ * heights allowed by this element query. If
+ * the second array item is excluded it is
+ * assumed that there is no maximum.
  */
 
 /**

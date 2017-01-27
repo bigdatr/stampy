@@ -83,7 +83,7 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
          * An array of currently inactive queries.
          *
          * @childprop {boolean} eqReady
-         * A boolean that can be used to determine whether the ElementQueryHock has been able.
+         * A boolean that can be used to determine whether the ElementQueryHock has been able
          * to read the parent node's height and width yet.
          *
          * @memberof module:Hocks

@@ -28,58 +28,56 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  */
 
 /**
- * ElementQueryHock is designed to allow components to respond to the size of their containing
- * element rather than to the size of the window. It provides the following props to your component:
+ * `ElementQueryDecorator` is a function that is used to decorate a component with a `ElementQueryHock`, while also passing configuration to it.
  *
- * - `eqWidth`: The current width of the parent element
- * - `eqHeight`: The current height of the parent element
- * - `eqActive`: An array of currently active queries
- * - `eqInactive`: An array of currently inactive queries
- * - `eqReady`: An boolean that can be used to determine whether the ElementQueryHock has been able
- *   to read the parent node's height and width yet.
- *
- * @example
- * const example = (props) => {
- *     if(!props.eqReady) return <div>No data yet</div>;
- *     return <div>
- *         <div>width: {props.eqWidth}</div>
- *         <div>height: {props.eqHeight}</div>
- *         <div>active queries: {props.eqActive.join(', ')}</div>
- *         <div>inactive queries: {props.eqInactive.join(', ')}</div>
- *     </div>
- * }
- *
- * const ElementQueryHockExample = ElementQueryHock([
- *     {
- *         name: 'medium',
- *         widthBounds: [300, 600],
- *         heightBounds: [200, 400]
- *     },
- *     {
- *         name: 'large',
- *         widthBounds: [600, 1200],
- *         heightBounds: [400, 1800]
- *     }
- * ])(example);
- *
- * @param {Object[]} eqs - An array of element queries to check for
- * @param {String} eqs[].name                           - The name of the element query
- * @param {Number[]} [eqs[].widthBounds=[0, Infinity]]  - An array containing two values for the
- *                                                        minimum (inclusive) and maximum (exclusive)
- *                                                        widths allowed by this element query. If
- *                                                        the second array item is excluded it is
- *                                                        assumed that there is no maximum.
- * @param {Number[]} [eqs[].heightBounds=[0, Infinity]] - An array containing two values for the
- *                                                        minimum (inclusive) and maximum (exclusive)
- *                                                        heights allowed by this element query. If
- *                                                        the second array item is excluded it is
- *                                                        assumed that there is no maximum.
- * @return {HockApplier}
+ * @param {Array<ElementQueryObject>} eqs An array of element queries to check for
+ * @return {ElementQueryApplier}
  */
 
-const ElementQueryHock = (eqs: ElementQuery[]): HockApplier => {
-    return (ComposedComponent: ReactClass<any>): ReactClass<ElementQueryHock> => {
-        return class ElementQueryHock extends Component {
+const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
+    return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
+
+        /**
+         * @component
+         *
+         * ElementQueryHock is designed to allow components to respond to the size of their containing
+         * element rather than to the size of the window. When used on a component, your component will receive some extra props.
+         *
+         * @example
+         * const example = (props) => {
+         *     if(!props.eqReady) return <div>No data yet</div>;
+         *     return <div>
+         *         <div>width: {props.eqWidth}</div>
+         *         <div>height: {props.eqHeight}</div>
+         *         <div>active queries: {props.eqActive.join(', ')}</div>
+         *         <div>inactive queries: {props.eqInactive.join(', ')}</div>
+         *     </div>
+         * }
+         *
+         * const ElementQueryHockExample = ElementQueryHock([
+         *     {
+         *         name: 'medium',
+         *         widthBounds: [300, 600],
+         *         heightBounds: [200, 400]
+         *     },
+         *     {
+         *         name: 'large',
+         *         widthBounds: [600, 1200],
+         *         heightBounds: [400, 1800]
+         *     }
+         * ])(example);
+         *
+         * @childprop {number} eqWidth The current width of the parent element.
+         * @childprop {number} eqHeight The current height of the parent element.
+         * @childprop {Array<string>} eqActive An array of currently active queries.
+         * @childprop {Array<string>} eqInactive An array of currently inactive queries.
+         * @childprop {boolean} eqReady An boolean that can be used to determine whether the ElementQueryHock has been able.
+         *   to read the parent node's height and width yet.
+         *
+         * @memberof module:Hocks
+         */
+
+        class ElementQueryHock extends Component {
             handleResize: Function;
             state: Object;
 
@@ -152,8 +150,32 @@ const ElementQueryHock = (eqs: ElementQuery[]): HockApplier => {
                 />;
             }
         }
+
+        return ElementQueryHock;
     }
 }
 
-export default ElementQueryHock;
+/**
+ * @typedef ElementQueryObject
+ * @param {String} name The name of the element query.
+ * @param {Number[]} [widthBounds=[0, Infinity]] An array containing two values for the
+ *                                                        minimum (inclusive) and maximum (exclusive)
+ *                                                        widths allowed by this element query. If
+ *                                                        the second array item is excluded it is
+ *                                                        assumed that there is no maximum.
+ * @param {Number[]} [heightBounds=[0, Infinity]] An array containing two values for the
+ *                                                        minimum (inclusive) and maximum (exclusive)
+ *                                                        heights allowed by this element query. If
+ *                                                        the second array item is excluded it is
+ *                                                        assumed that there is no maximum.
+ */
+
+/**
+ * A decorator function that accepts a component to decorate, and returns that decorated component.
+ * @callback ElementQueryApplier
+ * @param {ReactComponent} ComponentToDecorate The component you wish to wrap in an `ElementQueryHock`.
+ * @return {ReactComponent} The decorated component.
+ */
+
+export default ElementQueryDecorator;
 

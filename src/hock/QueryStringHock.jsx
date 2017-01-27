@@ -9,11 +9,17 @@ import PropChangeHock from './PropChangeHock';
  */
 
 /**
- * `PropChangeDecorator` is a function that is used to decorate a component with a `QueryStringHock`, while also passing configuration to it.
+ * `PropChangeDecorator` is a function that is used to decorate a component with a `QueryStringHock`
+ * while also passing configuration to it.
  *
  * @param {QueryStringDecoratorConfig} [config]
+ *
  * @param {QueryChangeFunction} [onQueryChangeFunction]
- * @param {Array<string>} [onChangeParams] An optional array of query parameters that, once changed, will cause `onQueryChangeFunction` to be fired.
+ *
+ * @param {Array<string>} [onChangeParams]
+ * An optional array of query parameters that, once changed,
+ * will cause `onQueryChangeFunction` to be fired.
+ *
  * @return {QueryStringApplier}
  */
 
@@ -40,15 +46,21 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
         /**
          * @component
          *
-         * `QueryStringHock` is a higher order component designed to greatly simplify getting and setting the query string, if your app is using `react-router` (currently works with v1.x and v2.x).
-         * When used on a component, your component will receive some extra props.
+         * `QueryStringHock` is a higher order component designed to greatly simplify getting
+         * and setting the query string, if your app is using `react-router`
+         * (currently works with v1.x and v2.x).  When used on a component, your component will
+         * receive some extra props.
          *
-         * It also allows for array parameters, push state vs replace state, and firing a function whenever the query string changes.
+         * It also allows for array parameters, push state vs replace state,
+         * and firing a function whenever the query string changes.
          *
-         * This component requires a `location` prop, which should be the location prop that react-router provides its route components.
-         * This prop will automatically be received if this HOC is used on any components that are passed straight to a <Route> object.
-         * If you're using react-router v1 then you'll also need to pass it a history prop that react-router provides.
-         * If using react-router v2 then QueryStringHock will automatically connect via context.
+         * This component requires a `location` prop, which should be the location prop that
+         * `react-router` provides its route components.
+         * This prop will automatically be received if this HOC is used on any components that
+         * are passed straight to a <Route> object.
+         * If you're using `react-router` v1 then you'll also need to pass it a history prop
+         * that `react-router` provides.
+         * If using `react-router` v2 then QueryStringHock will automatically connect via context.
          *
          * @example
          * function MyComponent(props) {
@@ -71,13 +83,20 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
          * export default withQueryString(MyComponent);
          * // exports MyComponent with QueryStringHock as a higher order component
          *
-         * @prop {Object} location Required for react-router v1 and v2. Must be react router location object.
-         * @prop {Object} history Required only for react-router v1. Must be react router history object.
+         * @prop {Object} location
+         * Required for `react-router` v1 and v2. Must be react router location object.
          *
-         * @context {Object} router Required for react-router v2, where it should be provided automatically.
+         * @prop {Object} history
+         * Required only for `react-router` v1. Must be react router history object.
          *
-         * @childprop {Object} query The object representing the query string. Change this prop's name using `config.queryPropName`.
+         * @context {Object} router Required for `react-router` v2,
+         * where it should be provided automatically.
+         *
+         * @childprop {Object} query The object representing the query string.
+         * Change this prop's name using `config.queryPropName`.
+         *
          * @childprop {QueryStringUpdateQuery} updateQuery
+         *
          * @childprop {QueryStringSetQuery} setQuery
          *
          * @memberof module:Hocks
@@ -115,11 +134,14 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
             }
 
             /**
-             * Partially updates the query. Any keys on the objects passed in will be modified on the query object.
+             * Partially updates the query.
+             * Any keys on the objects passed in will be modified on the query object.
              * Keys set to empty strings or `null` will be removed from the query object.
              *
              * @typedef QueryStringUpdateQuery
-             * @param {Object} queryParamsToUpdate An object containing query params to update.
+             *
+             * @param {Object} queryParamsToUpdate
+             * An object containing query params to update.
              */
 
             updateQuery(queryParamsToUpdate: Object) {
@@ -134,7 +156,9 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
              * Keys set to empty strings or `null` will be removed from the query object.
              *
              * @typedef QueryStringSetQuery
-             * @param {Object} query An object containing query params.
+             *
+             * @param {Object} query
+             * An object containing query params.
              */
 
             setQuery(query: Object) {
@@ -151,7 +175,11 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
                     });
                 } else {
                     // react router v1
-                    this.props.history[`${routerMethod}State`](null, this.props.location.pathname, newQuery);
+                    this.props.history[`${routerMethod}State`](
+                        null,
+                        this.props.location.pathname,
+                        newQuery
+                    );
                 }
             }
 
@@ -185,10 +213,24 @@ export default QueryStringDecorator;
  * Configuration object for the QueryStringDecorator.
  *
  * @typedef QueryStringDecoratorConfig
- * @property {Object} [defaultQuery] These defaults will be passed down in the query prop whenever they aren't present in the actual query string.
- * @property {string} [queryPropName = "query"] Sets the name of the query prop.
- * @property {boolean} [replaceState = false] Optional boolean, setting this to true will make query changes use replaceState instead of pushState
- * @property {Array<string>} [arrayParams] If you have particular query parameters that you always want to return as arrays, name them in here. All arrayParams will also be an empty array if they are not present in the query string. By default react-router only passes an array of query param values back if there are more than one value in them.
+ *
+ * @property {Object} [defaultQuery]
+ * These defaults will be passed down in the query prop
+ * whenever they aren't present in the actual query string.
+ *
+ * @property {string} [queryPropName = "query"]
+ * Sets the name of the query prop.
+ *
+ * @property {boolean} [replaceState = false]
+ * Optional boolean, setting this to true will make query changes use replaceState
+ * instead of pushState.
+ *
+ * @property {Array<string>} [arrayParams]
+ * If you have particular query parameters that you always want to return as arrays,
+ * name them in here. All arrayParams will also be an empty array
+ * if they are not present in the query string.
+ * By default `react-router` only passes an array of query param values back
+ * if there are more than one value in them.
  */
 
 /**
@@ -199,10 +241,18 @@ export default QueryStringDecorator;
  */
 
 /**
- * A function to be called when the query string changes. By default this function is called on initial `componentDidMount` and every time any query param changes after this - to limit this use the third argument `onChangeParams`
+ * A function to be called when the query string changes.
+ * By default this function is called on initial `componentDidMount`
+ * and every time any query param changes after this
+ * - to limit this use the third argument `onChangeParams`
  *
  * @callback QueryChangeFunction
- * @param {Object} query The updated query object.
- * @param {Object} nextProps The updated props object.
+ *
+ * @param {Object} query
+ * The updated query object.
+ *
+ * @param {Object} nextProps
+ * The updated props object.
+ *
  * @return The returned value is not used.
  */

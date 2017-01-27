@@ -28,9 +28,11 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  */
 
 /**
- * `ElementQueryDecorator` is a function that is used to decorate a component with a `ElementQueryHock`, while also passing configuration to it.
+ * `ElementQueryDecorator` is a function that is used to decorate a component
+ * with a `ElementQueryHock`, while also passing configuration to it.
  *
- * @param {Array<ElementQueryObject>} eqs An array of element queries to check for
+ * @param {Array<ElementQueryObject>} eqs An array of element queries to check for.
+ *
  * @return {ElementQueryApplier}
  */
 
@@ -40,8 +42,9 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
         /**
          * @component
          *
-         * ElementQueryHock is designed to allow components to respond to the size of their containing
-         * element rather than to the size of the window. When used on a component, your component will receive some extra props.
+         * ElementQueryHock is designed to allow components to respond to the size of their
+         * containing element rather than to the size of the window. When used on a component,
+         * your component will receive some extra props.
          *
          * @example
          * const example = (props) => {
@@ -67,12 +70,21 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
          *     }
          * ])(example);
          *
-         * @childprop {number} eqWidth The current width of the parent element.
-         * @childprop {number} eqHeight The current height of the parent element.
-         * @childprop {Array<string>} eqActive An array of currently active queries.
-         * @childprop {Array<string>} eqInactive An array of currently inactive queries.
-         * @childprop {boolean} eqReady An boolean that can be used to determine whether the ElementQueryHock has been able.
-         *   to read the parent node's height and width yet.
+         * @childprop {number}
+         * eqWidth The current width of the parent element.
+         *
+         * @childprop {number} eqHeight
+         * The current height of the parent element.
+         *
+         * @childprop {Array<string>} eqActive
+         * An array of currently active queries.
+         *
+         * @childprop {Array<string>} eqInactive
+         * An array of currently inactive queries.
+         *
+         * @childprop {boolean} eqReady
+         * A boolean that can be used to determine whether the ElementQueryHock has been able.
+         * to read the parent node's height and width yet.
          *
          * @memberof module:Hocks
          */
@@ -162,25 +174,25 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
  * The name of the element query.
  *
  * @param {Number[]} [widthBounds=[0, Infinity]]
- * An array containing two values for the
- * minimum (inclusive) and maximum (exclusive)
- * widths allowed by this element query. If
- * the second array item is excluded it is
+ * An array containing two values for the minimum (inclusive) and maximum (exclusive)
+ * widths allowed by this element query. If the second array item is excluded it is
  * assumed that there is no maximum.
  *
  * @param {Number[]} [heightBounds=[0, Infinity]]
- * An array containing two values for the
- * minimum (inclusive) and maximum (exclusive)
- * heights allowed by this element query. If
- * the second array item is excluded it is
+ * An array containing two values for the minimum (inclusive) and maximum (exclusive)
+ * heights allowed by this element query. If the second array item is excluded it is
  * assumed that there is no maximum.
  */
 
 /**
  * A decorator function that accepts a component to decorate, and returns that decorated component.
+ *
  * @callback ElementQueryApplier
- * @param {ReactComponent} ComponentToDecorate The component you wish to wrap in an `ElementQueryHock`.
- * @return {ReactComponent} The decorated component.
+ * @param {ReactComponent} ComponentToDecorate
+ * The component you wish to wrap in an `ElementQueryHock`.
+ *
+ * @return {ReactComponent}
+ * The decorated component.
  */
 
 export default ElementQueryDecorator;

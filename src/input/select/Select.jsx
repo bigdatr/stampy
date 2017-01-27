@@ -5,7 +5,7 @@ import SpruceClassName from '../../util/SpruceClassName';
 
 type SelectProps = {
     multi: ?boolean,
-    onChange: OnChange,
+    onChange: OnChange|OnChangeMulti,
     options: Object[],
     value: any
 }
@@ -24,7 +24,7 @@ type SelectProps = {
  * Toggles the between single and multi select mode.
  * Multiselect onChange will return an array to `newValue`
  *
- * @prop {OnChange} [onChange]
+ * @prop {OnChange|OnChangeMulti} [onChange]
  * @prop {Object[]} [options]
  * @prop {any} [value]
  *
@@ -49,8 +49,8 @@ function Select(props: SelectProps): React.Element<any> {
     } = props;
 
     const modifiedOnChange: Function = multi
-        ? (options) => onChange(options.map(ii => ii.value))
-        : (option) => onChange(option && option.value);
+        ? (options, meta) => onChange(options.map(ii => ii.value), meta)
+        : (option, meta) => onChange(option && option.value, meta);
 
     return <ReactSelect
         {...props}

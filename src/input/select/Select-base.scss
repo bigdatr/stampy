@@ -1,196 +1,181 @@
-@import 'bruce/bruce';
-
-$border-color: #666;
-
-.Select {
-    position: relative;
-    margin-bottom: 1rem;
-    color: #666;
-}
-
-.Select-control {
-    border: 1px solid $border-color;
-    border-bottom-color: darken($border-color, 10);
-    border-left-color: darken($border-color, 5);
-    border-right-color: darken($border-color, 5);
-    position: relative;
-    overflow: hidden;
-    background-color: #FFF;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: .125rem .5rem;
-    padding-right: 1.9rem;
-}
-
-.Select-value {
-    display: inline;
-    width: 100%;
-}
-
-.Select-value-label {
-    width: 100%;
-}
-
-.Select-input {
-    padding: 0 .5rem;
-    display: inline;
-
-    > input {
-        cursor: default;
-        background: none transparent;
-        border: 0 none;
-        font-family: inherit;
-        font-size: inherit;
-        margin: 0;
-        padding: 0;
-        outline: none;
-        display: inline-block;
-        -webkit-appearance: none;
-    }
-}
-
-.Select-placeholder {
-    color: grey(80);
-    position: absolute;
-    right: 1rem;
-    left: .75rem;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 
 
-.Select--multi {
+@mixin SelectBase {
+    .Select {
+        box-sizing: border-box;
+        position: relative;
 
-    .Select-control {
-        padding: .125rem .25rem;
-        white-space: normal;
-    }
+        div,
+        input,
+        span {
+            box-sizing: border-box;
+        }
 
-    .Select-value {
-        background-color: #600;
-        color: #FFF;
-        display: inline-block;
-        margin: .125rem;
-        padding: 0 .5rem;
-        font-weight: 700;
-        width: auto;
-    }
+        &-value {
+            display: inline;
+            width: 100%;
+        }
 
 
-    .Select-value-label {
-        width: auto;
-    }
-}
+        &-control {
 
-.Select-value-icon {
-    color: transparent;
-    @include bruce-size(12px);
-    float: right;
-    margin-left: 8px;
+            display: table;
+            position: relative;
+            width: 100%;
+        }
 
-    &:before {
-        color: #FFF;
-        font-size: 12px;
-        content: '\E014';
-        font-family: 'GlyphiconsHalflings';
-    }
-}
 
-%Select_button {
-    $size: 32px;
-    cursor: pointer;
-    @include bruce-size($size);
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: inline-block;
-    color: transparent;
+        //
+        // States
 
-    &:before {
-        color: grey(40);
-        display: block;
-        text-align: center;
-        font-size: 12px;
-        font-family: 'GlyphiconsHalflings';
-        line-height: $size;
-        pointer-events: none;
-    }
-}
+        .is-disabled {
+            .Select-arrow-zone {
+                cursor: default;
+                pointer-events: none;
+            }
+        }
 
-.Select-arrow {
-    @extend %Select_button;
+        .is-open {
+            &.is-searchable {
+                > .Select-control {
+                    cursor: text;
+                }
+            }
+        }
 
-    &:before {
-        content: '\E114';
-    }
-}
+        .is-searchable.is-focused:not(.is-open) > .Select-control {
+            cursor: text;
+        }
 
-.Select-clear {
-    @extend %Select_button;
-    right: 24px;
 
-    &:before {
-        content: '\E014';
-    }
-}
+        .Select-placeholder,
+        .Select--single > .Select-control .Select-value {
+            bottom: 0;
+            color: #aaa;
+            left: 0;
+            max-width: 100%;
+            position: absolute;
+            right: 0;
+            text-overflow: ellipsis;
+            top: 0;
+            white-space: nowrap;
+        }
 
-// States
-.has-value {
-    .Select-placeholder {
-        color: grey(40);
-    }
-}
+        .Select-input {
+            vertical-align: middle;
 
-.is-focused:not(.is-open) {
-    > .Select-control {
-        border-color: #600;
-    }
-}
+            > input {
+                background: none transparent;
+                border: 0 none;
+                box-shadow: none;
+                cursor: default;
+                display: inline-block;
+                font-family: inherit;
+                font-size: inherit;
+                margin: 0;
+                outline: none;
+                overflow: visible;
+                width: 100%;
+            }
+        }
 
-.is-open {
-    .Select-control {
-        // border-radius: .25rem .25rem 0 0;
-    }
+        &-clear {
+            display: inline-block;
+        }
 
-    .Select-arrow:before {
-        content: '\E113';
+        &-arrow-zone {
+            cursor: pointer;
+            display: table-cell;
+            position: relative;
+            text-align: center;
+            width: 1px;
+        }
+
+        &--multi {
+            .Select-multi-value-wrapper {
+                display: inline-block;
+            }
+        }
+
+        & .Select-aria-only {
+            clip: rect(0, 0, 0, 0);
+            display: inline-block;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            width: 1px;
+        }
+
+        &-menu-outer {
+            -webkit-overflow-scrolling: touch;
+            background-color: #fff;
+            box-sizing: border-box;
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            z-index: 1;
+        }
+
+        &-menu {
+            overflow-y: auto;
+        }
+
+        &-option {
+            cursor: pointer;
+            display: block;
+
+            &.is-disabled {
+                cursor: default;
+            }
+        }
+
+        &-noresults {
+            cursor: default;
+            display: block;
+        }
+
+        &--multi {
+            .Select-value-icon {
+                cursor: pointer;
+            }
+        }
+
+        @content;
     }
 }
 
 
+@mixin Select() {
+    @include SelectBase {
+        & {
+            // background-color: red;
+        }
 
+        &-control,
+        &-menu-outer {
+            // border: 1px solid grey(80);
+            // padding: .5rem;
+        }
 
-// Dropdown
+        &-menu-outer {
+            margin-top: -1px;
+        }
 
-.Select-menu-outer {
-    @include bruce-ios(scroll);
-    background-color: #FFF;
-    border: 1px solid grey(80);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .06);
-    box-sizing: border-box;
-    margin-top: -1px;
-    max-height: 200px;
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    z-index: 1000;
-}
-
-.Select-menu {
-    max-height: 198px;
-    overflow-y: auto;
-}
-
-.Select-noresults,
-.Select-option {
-    cursor: pointer;
-    display: block;
-    padding: .25rem .5rem;
-
-    &.is-focused {
-        background-color: grey(94);
+        &-placeholder {
+            // padding: .5rem;
+        }
     }
+
+
+
 }
+
+
+
+
+
+
+
+
+

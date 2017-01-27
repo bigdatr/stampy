@@ -31,6 +31,14 @@ class SelectExample extends Component {
                 onChange={multiSelectValue => this.setState({multiSelectValue})}
                 multi={true}
             />
+            <p>Disabled select</p>
+            <Select
+                disabled
+                value={this.state.multiSelectValue}
+                options={options}
+                onChange={multiSelectValue => this.setState({multiSelectValue})}
+                multi={true}
+            />
         </div>
     }
 }

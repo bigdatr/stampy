@@ -27,7 +27,7 @@ type InputProps = {
  * @prop {String} [type = "button"] Input type
  *
  * @example
- * return <Input type='text' onChange={(val)=>doStuff(val)}/>
+ * return <Input type='text' onChange={(val) => doStuff(val)}/>
  */
 
 function Input(props: InputProps): React.Element<any> {

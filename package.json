@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "ava": "NODE_ENV=test ava",
-    "build": "rm -rf lib && babel src --out-dir lib && yarn run css",
+    "build": "rm -rf lib && yarn run css && babel src --out-dir lib --copy-files",
     "build-examples": "cd example && yarn install && yarn run build && cd -",
     "check-coverage": "NODE_ENV=test nyc check-coverage --branches 0.0  --functions 0.0 --lines 0",
     "css": "yarn run css-base-combined && yarn run css-default-combined && yarn run css-base && yarn run css-default && yarn run postcss",
@@ -68,6 +68,7 @@
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.9",
     "immutable": "^3.8.1",
+    "proxyquire": "^1.7.11",
     "react-select": "^1.0.0-rc.2"
   },
   "main": "lib/index.js",

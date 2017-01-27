@@ -164,7 +164,7 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
             setQuery(query: Object) {
                 const routerMethod: string = replaceState ? "replace" : "push";
                 const newQuery: Object = fromJS(query)
-                    .filter(ii => ii !== "")
+                    .filter(ii => ii !== "" && ii != null) // non strict null comparison to catch undefined & null
                     .toJS();
 
                 if(this.context.router) {

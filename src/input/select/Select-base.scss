@@ -1,0 +1,181 @@
+
+
+
+@mixin SelectBase {
+    .Select {
+        box-sizing: border-box;
+        position: relative;
+
+        div,
+        input,
+        span {
+            box-sizing: border-box;
+        }
+
+        &-value {
+            display: inline;
+            width: 100%;
+        }
+
+
+        &-control {
+
+            display: table;
+            position: relative;
+            width: 100%;
+        }
+
+
+        //
+        // States
+
+        .is-disabled {
+            .Select-arrow-zone {
+                cursor: default;
+                pointer-events: none;
+            }
+        }
+
+        .is-open {
+            &.is-searchable {
+                > .Select-control {
+                    cursor: text;
+                }
+            }
+        }
+
+        .is-searchable.is-focused:not(.is-open) > .Select-control {
+            cursor: text;
+        }
+
+
+        .Select-placeholder,
+        .Select--single > .Select-control .Select-value {
+            bottom: 0;
+            color: #aaa;
+            left: 0;
+            max-width: 100%;
+            position: absolute;
+            right: 0;
+            text-overflow: ellipsis;
+            top: 0;
+            white-space: nowrap;
+        }
+
+        .Select-input {
+            vertical-align: middle;
+
+            > input {
+                background: none transparent;
+                border: 0 none;
+                box-shadow: none;
+                cursor: default;
+                display: inline-block;
+                font-family: inherit;
+                font-size: inherit;
+                margin: 0;
+                outline: none;
+                overflow: visible;
+                width: 100%;
+            }
+        }
+
+        &-clear {
+            display: inline-block;
+        }
+
+        &-arrow-zone {
+            cursor: pointer;
+            display: table-cell;
+            position: relative;
+            text-align: center;
+            width: 1px;
+        }
+
+        &--multi {
+            .Select-multi-value-wrapper {
+                display: inline-block;
+            }
+        }
+
+        & .Select-aria-only {
+            clip: rect(0, 0, 0, 0);
+            display: inline-block;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            width: 1px;
+        }
+
+        &-menu-outer {
+            -webkit-overflow-scrolling: touch;
+            background-color: #fff;
+            box-sizing: border-box;
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            z-index: 1;
+        }
+
+        &-menu {
+            overflow-y: auto;
+        }
+
+        &-option {
+            cursor: pointer;
+            display: block;
+
+            &.is-disabled {
+                cursor: default;
+            }
+        }
+
+        &-noresults {
+            cursor: default;
+            display: block;
+        }
+
+        &--multi {
+            .Select-value-icon {
+                cursor: pointer;
+            }
+        }
+
+        @content;
+    }
+}
+
+
+@mixin Select() {
+    @include SelectBase {
+        & {
+            // background-color: red;
+        }
+
+        &-control,
+        &-menu-outer {
+            // border: 1px solid grey(80);
+            // padding: .5rem;
+        }
+
+        &-menu-outer {
+            margin-top: -1px;
+        }
+
+        &-placeholder {
+            // padding: .5rem;
+        }
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+

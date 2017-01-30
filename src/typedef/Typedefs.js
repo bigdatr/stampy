@@ -15,6 +15,7 @@ type onChangeMeta = {
 }
 
 type OnChange = (newValue: string|boolean, meta: onChangeMeta) => void;
+type OnChangeMulti = (newValue: Array<string|boolean>, meta: onChangeMeta) => void;
 
 type OnClick = (event: Object) => void;
 

@@ -8,10 +8,20 @@
  */
 
 /**
- * A callback that is called by input component to notify parents of changes to their values.
+ * A callback that is called by input components to notify parents of changes in their values.
  *
  * @callback OnChange
- * @param {string|boolean|array} newValue The input's new value.
+ * @param {string|boolean} newValue The input's new value.
+ * @param {Object} meta Meta information about the change
+ * @param {Object} meta.event The event that triggered the change
+ * @param {Object} meta.element The HTML element that triggered the change
+ */
+
+/**
+ * A callback that is called by input components to notify parents of changes in their values.
+ *
+ * @callback OnChangeMulti
+ * @param {Array<string|boolean>} newValue The input's new value.
  * @param {Object} meta Meta information about the change
  * @param {Object} meta.event The event that triggered the change
  * @param {Object} meta.element The HTML element that triggered the change

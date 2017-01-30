@@ -8,6 +8,7 @@ import ContentsPage from 'components/ContentsPage';
 import ButtonExample from 'component/button/ButtonExample';
 import LabelExample from 'component/field/LabelExample';
 import TableExample from 'component/table/TableExample';
+import SelectExample from 'input/select/SelectExample';
 import ToggleExample from 'input/toggle/ToggleExample';
 import InputExample from 'input/input/InputExample';
 
@@ -27,6 +28,7 @@ const routes = <Route component={AppHandler} path="/">
     <Route path="input">
         <Route path="Toggle" component={ToggleExample}/>
         <Route path="Input" component={InputExample}/>
+        <Route path="Select" component={SelectExample}/>
     </Route>
     <Route path="util">
         <Route path="SpruceClassName" component={SpruceClassNameExample}/>

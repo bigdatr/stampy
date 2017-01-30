@@ -1,13 +1,13 @@
 // @flow
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Element} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 
 type ShowHideProps = {
-    children: React.Element<any>,
-    className: ?string,
-    modifier: Modifier,
+    children: Element<any>,
+    className?: string,
+    modifier?: Modifier,
     onClick: (value: boolean) => void,
-    show: ?boolean,
+    show?: boolean,
     toggle: ReactClass<any>
 }
 
@@ -27,7 +27,7 @@ type ShowHideProps = {
  * </ShowHide>
  */
 
-function ShowHide(props: ShowHideProps): React.Element<any> {
+function ShowHide(props: ShowHideProps): Element<any> {
     const {
         children,
         className,
@@ -48,7 +48,7 @@ function ShowHide(props: ShowHideProps): React.Element<any> {
 ShowHide.propTypes = {
     className: PropTypes.string,
     modifier: PropTypes.string,
-    onChange: PropTypes.func,
+    onClick: PropTypes.func,
     show: PropTypes.bool,
     toggle: PropTypes.func.isRequired
 };
@@ -58,8 +58,6 @@ ShowHide.defaultProps = {
     show: false
 }
 
-export default ShowHide;
-
 
 /**
  * @component
@@ -68,16 +66,28 @@ export default ShowHide;
  *
  *
  * @example
- * return <ShowHide show={false} onChange={props.onChange} toggle={() => <div>Toggle Me!</div>}>
+ * return <ShowHide show={false} onClick={props.onClick} toggle={() => <div>Toggle Me!</div>}>
  *     <h1>Hello!</h1>
  * </ShowHide>
  */
 
-export class ShowHideStateful extends React.Component {
-    state: Object;
-    toggle: Function;
+type ShowHideStatefulProps = {
+    children: Element<any>,
+    className?: string,
+    defaultShow: boolean,
+    modifier?: Modifier,
+    onClick: (value: boolean) => void,
+    toggle: ReactClass<any>
+}
 
-    constructor(props: Object) {
+export class ShowHideStateful extends React.Component {
+    props: ShowHideStatefulProps;
+    state: {
+        show: boolean
+    };
+    toggle: (newState: boolean) => void;
+
+    constructor(props: ShowHideStatefulProps) {
         super(props);
         this.state = {
             show: props.defaultShow || false
@@ -92,15 +102,25 @@ export class ShowHideStateful extends React.Component {
             this.props.onClick(newState);
         }
     }
-    render(): React.Element<ShowHide> {
+    render(): Element<any> {
         const {show} = this.state;
-        return <ShowHide {...this.props} show={show} onClick={this.toggle}/>;
+
+        return <ShowHide
+            {...this.props}
+            show={show}
+            onClick={this.toggle}
+        />;
     }
 }
 
-ShowHideStateful.propTypes = Object.assign({}, ShowHide.propTypes, {
+ShowHideStateful.propTypes = {
+    className: PropTypes.string,
+    modifier: PropTypes.string,
+    onClick: PropTypes.func,
+    toggle: PropTypes.func.isRequired,
     // Default choice to show or hide the content
     defaultShow: PropTypes.bool
-});
+};
 
+export default ShowHide;
 

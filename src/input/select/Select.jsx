@@ -4,9 +4,12 @@ import ReactSelect from 'react-select';
 import SpruceClassName from '../../util/SpruceClassName';
 
 type SelectProps = {
+    clearable: ?boolean,
+    disabled: ?boolean,
     multi: ?boolean,
     onChange: OnChange|OnChangeMulti,
     options: Object[],
+    placeholder: ?string,
     value: any
 }
 
@@ -24,8 +27,12 @@ type SelectProps = {
  * Toggles the between single and multi select mode.
  * Multiselect onChange will return an array to `newValue`
  *
+ * @prop {boolean} [clearable]
+ * @prop {boolean} [disabled]
+ * @prop {boolean} [multi]
  * @prop {OnChange|OnChangeMulti} [onChange]
  * @prop {Object[]} [options]
+ * @prop {string} [placeholder]
  * @prop {any} [value]
  *
  * @example
@@ -59,9 +66,17 @@ function Select(props: SelectProps): React.Element<any> {
 }
 
 Select.propTypes = {
+    clearable: React.PropTypes.string,
+    disabled: React.PropTypes.string,
     multi: React.PropTypes.bool,
     onChange: React.PropTypes.func,
-    options: React.PropTypes.array.isRequired,
+    options: React.PropTypes.arrayOf(
+        React.PropTypes.shape({
+            value: React.PropTypes.string,
+            label: React.PropTypes.string
+        })
+    ),
+    placeholder: React.PropTypes.string,
     value: React.PropTypes.any
 }
 

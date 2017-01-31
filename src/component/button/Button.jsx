@@ -4,10 +4,11 @@ import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 
 type ButtonProps = {
-    className: ?string,
-    disabled: ?boolean,
-    modifier: Modifier,
+    className?: string,
+    disabled?: boolean,
+    modifier?: Modifier,
     onClick: Function,
+    spruceName: string,
     type: ?string
 }
 
@@ -25,6 +26,7 @@ type ButtonProps = {
  * @prop {boolean} [disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
  * @prop {Modifier} [modifier]
  * @prop {OnClick} [onClick]
+ * @prop {string} [spruceName = "Button"]
  * @prop {string} [type = "button"] HTML button type
  *
  * @example
@@ -35,18 +37,20 @@ function Button(props: ButtonProps): React.Element<any> {
     const {
         modifier,
         className,
-        disabled
+        disabled,
+        spruceName
     } = props;
 
     const propsToRemove = {
         modifier: true,
+        spruceName,
         onClick: !!disabled // explicity removs onClick when disabled in case underlying elements change from using a <button>
     };
     const filteredProps: Object = RemoveProps(propsToRemove, props);
 
     return <button
         {...filteredProps}
-        className={SpruceClassName({name: 'Button', modifier, className})}
+        className={SpruceClassName({name: spruceName, modifier, className})}
     />;
 }
 
@@ -58,12 +62,14 @@ Button.propTypes = {
         PropTypes.object
     ]),
     onClick: PropTypes.func,
+    spruceName: PropTypes.string,
     type: PropTypes.string
 };
 
 Button.defaultProps = {
     className: '',
     modifier: '',
+    spruceName: 'Button',
     type: 'button'
 }
 

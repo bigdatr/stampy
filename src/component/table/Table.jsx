@@ -87,7 +87,8 @@ type TableProps = {
     data: ListOrArray,
     modifier: Modifier,
     rowProps: (row: Object) => Object,
-    schema: Schema
+    schema: Schema,
+    spruceName: string
 }
 
 /**
@@ -128,6 +129,7 @@ type TableProps = {
  *
  * @prop {ClassName} [className]
  * @prop {Modifier} [modifier]
+ * @prop {string} [spruceName = "Table"]
  * @prop {TableRowProps} [TableRowProps]
  *
  * @example
@@ -156,7 +158,7 @@ type TableProps = {
  * @category ControlledComponent
  */
 function Table(props: TableProps): React.Element<any> {
-    const {modifier, className, rowProps, schema} = props;
+    const {modifier, className, rowProps, schema, spruceName} = props;
     const data: List<any> = fromJS(props.data);
 
 
@@ -174,7 +176,7 @@ function Table(props: TableProps): React.Element<any> {
         })
         .toJS();
 
-    return <table className={SpruceClassName({name: 'Table', modifier, className})}>
+    return <table className={SpruceClassName({name: spruceName, modifier, className})}>
         <thead><tr>{tableHead}</tr></thead>
         <tbody>{tableBody}</tbody>
     </table>
@@ -190,7 +192,8 @@ Table.defaultProps = {
     data: List(),
     modifier: '',
     rowProps: () => ({}),
-    schema: List()
+    schema: List(),
+    spruceName: 'Table'
 }
 
 export default Table;

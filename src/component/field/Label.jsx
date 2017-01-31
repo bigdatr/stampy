@@ -4,9 +4,10 @@ import SpruceClassName from '../../util/SpruceClassName';
 import RemoveProps from '../../util/RemoveProps';
 
 type LabelProps = {
+    children: React.Element<any>,
     className: ?string,
     modifier: Modifier,
-    children: React.Element<any>
+    spruceName: string
 }
 
 /**
@@ -20,21 +21,23 @@ type LabelProps = {
  *
  * @prop {ClassName} [className]
  * @prop {Modifier} [modifier]
+ * @prop {string} [spruceName = "Label"]
  *
  * @example
  * return <Label for='something'>Label for thing</Label>
  */
 
 function Label(props: LabelProps): React.Element<any> {
-    const {modifier, className} = props;
+    const {modifier, className, spruceName} = props;
 
     const propsToRemove = {
-        modifier: true
+        modifier: true,
+        spruceName
     };
 
     return <label
         {...RemoveProps(propsToRemove, props)}
-        className={SpruceClassName({name: 'Label', modifier, className})}
+        className={SpruceClassName({name: spruceName, modifier, className})}
     >{props.children}</label>;
 }
 
@@ -43,12 +46,14 @@ Label.propTypes = {
     modifier: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object
-    ])
+    ]),
+    spruceName: PropTypes.string
 };
 
 Label.defaultProps = {
     className: '',
-    modifier: ''
+    modifier: '',
+    spruceName: 'Label'
 }
 
 export default Label;

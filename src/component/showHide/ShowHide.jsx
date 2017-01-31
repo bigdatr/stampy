@@ -8,6 +8,7 @@ type ShowHideProps = {
     modifier?: Modifier,
     onClick: (value: boolean) => void,
     show?: boolean,
+    spruceName: string,
     toggle: ReactClass<any>
 }
 
@@ -34,14 +35,15 @@ function ShowHide(props: ShowHideProps): Element<any> {
         modifier,
         onClick,
         show,
+        spruceName: name,
         toggle: Toggle
     } = props;
 
-    return <div className={SpruceClassName({name: 'ShowHide', modifier, className})}>
-        <div className="ShowHide_toggle" onClick={() => onClick(!show)}>
+    return <div className={SpruceClassName({name, modifier, className})}>
+        <div className={`${name}_toggle`} onClick={() => onClick(!show)}>
             <Toggle value={show} show={show} />
         </div>
-        {show && <div className="ShowHide_children">{children}</div>}
+        {show && <div className={`${name}_children`}>{children}</div>}
     </div>;
 }
 
@@ -50,12 +52,14 @@ ShowHide.propTypes = {
     modifier: PropTypes.string,
     onClick: PropTypes.func,
     show: PropTypes.bool,
+    spruceName: PropTypes.string,
     toggle: PropTypes.func.isRequired
 };
 
 ShowHide.defaultProps = {
     onClick: (data) => data,
-    show: false
+    show: false,
+    spruceName: 'ShowHide'
 }
 
 
@@ -77,6 +81,7 @@ type ShowHideStatefulProps = {
     defaultShow: boolean,
     modifier?: Modifier,
     onClick: (value: boolean) => void,
+    spruceName?: string,
     toggle: ReactClass<any>
 }
 
@@ -115,11 +120,11 @@ export class ShowHideStateful extends React.Component {
 
 ShowHideStateful.propTypes = {
     className: PropTypes.string,
+    defaultShow: PropTypes.bool,
     modifier: PropTypes.string,
     onClick: PropTypes.func,
-    toggle: PropTypes.func.isRequired,
-    // Default choice to show or hide the content
-    defaultShow: PropTypes.bool
+    spruceName: PropTypes.string,
+    toggle: PropTypes.func.isRequired
 };
 
 export default ShowHide;

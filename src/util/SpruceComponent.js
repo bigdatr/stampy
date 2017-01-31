@@ -36,16 +36,17 @@ import SpruceClassName from './SpruceClassName';
  */
 export default function SpruceComponent(name: string, Element: ReactClass<any>|string): Function {
     function spruceComonent(props: Object): React.Element<any> {
-        const {className, modifier, children, ...otherProps} = props;
+        const {spruceName, className, modifier, children, ...otherProps} = props;
         return <Element
-            className={SpruceClassName({className, modifier, name})}
+            className={SpruceClassName({className, modifier, name: spruceName || name})}
             children={children}
             {...otherProps}
         />;
     }
     spruceComonent.proptypes = {
         className: React.PropTypes.string,
-        modifier: React.PropTypes.string
+        modifier: React.PropTypes.string,
+        spruceName: React.PropTypes.string
     }
     spruceComonent.displayName = name;
 

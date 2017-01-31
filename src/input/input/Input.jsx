@@ -7,6 +7,7 @@ type InputProps = {
     className: ?string,
     modifier: Modifier,
     onChange: OnChange,
+    spruceName: string,
     type: ?string
 }
 
@@ -24,6 +25,7 @@ type InputProps = {
  * @prop {OnChange} [onChange]
  * @prop {ClassName} [className]
  * @prop {Modifier} [modifier]
+ * @prop {string} [spruceName = "Input"]
  * @prop {String} [type = "button"] Input type
  *
  * @example
@@ -33,23 +35,25 @@ type InputProps = {
 function Input(props: InputProps): React.Element<any> {
     const {
         modifier,
-        className
+        className,
+        spruceName
     } = props;
 
-    const propsToRemove = ['modifier'];
+    const propsToRemove = ['modifier', 'spruceName'];
 
     const filteredProps: Object = RemoveProps(propsToRemove, props);
 
     return <input
         {...filteredProps}
         onChange={(ee) => props.onChange && props.onChange(ee.target.value, {event: ee, element: ee.target})}
-        className={SpruceClassName({name: 'Input', modifier, className})}
+        className={SpruceClassName({name: spruceName, modifier, className})}
     />;
 }
 
 Input.defaultProps = {
     className: '',
     modifier: '',
+    spruceName: 'Input',
     type: 'text'
 }
 

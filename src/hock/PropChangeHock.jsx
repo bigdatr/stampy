@@ -7,21 +7,7 @@ import {fromJS} from 'immutable';
  * @module Hocks
  */
 
-/**
- * `PropChangeDecorator` is a function that is used to decorate a component with a `PropChangeHock`
- * while also passing configuration to it.
- *
- * @param {Array<string>} propKeys
- * The props that you want to check for changes on.
- * Nested objects or values can be passed in using dot notation inside strings
- * e.g. `['page', query.name', 'query.age']`.
- *
- * @param {PropChangeFunction} onPropChangeFunction
- *
- * @return {PropChangeApplier}
- */
-
-const PropChangeDecorator = (propKeys: Array<string>, onPropChangeFunction: Function): HockApplier => {
+export default (propKeys: Array<string>, onPropChangeFunction: Function): HockApplier => {
     return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
 
         /**
@@ -47,6 +33,9 @@ const PropChangeDecorator = (propKeys: Array<string>, onPropChangeFunction: Func
          *
          * export default withPropChange(MyComponent);
          * // exports MyComponent with PropChangeHock as a higher order component
+         *
+         *
+         * @decorator {PropChangeHock}
          *
          * @memberof module:Hocks
          */
@@ -80,14 +69,28 @@ const PropChangeDecorator = (propKeys: Array<string>, onPropChangeFunction: Func
     }
 }
 
-export default PropChangeDecorator;
+/**
+ * Provides configuration for `PropChangeHock`.
+ *
+ * @callback PropChangeHock
+ *
+ * @param {Array<string>} propKeys
+ * The props that you want to check for changes on.
+ * Nested objects or values can be passed in using dot notation inside strings
+ * e.g. `['page', query.name', 'query.age']`.
+ *
+ * @param {PropChangeFunction} onPropChangeFunction
+ *
+ * @return {PropChangeWrapper}
+ */
 
 /**
- * A decorator function that accepts a component to decorate, and returns that decorated component.
- * @callback PropChangeApplier
+ * A function that accepts the component you want to wrap in a `PropChangeHock`.
+ *
+ * @callback PropChangeWrapper
  *
  * @param {ReactComponent} ComponentToDecorate
- * The component you wish to wrap in a `PropChangeHock`.
+ * The component you wish to wrap in an `PropChangeHock`.
  *
  * @return {ReactComponent}
  * The decorated component.

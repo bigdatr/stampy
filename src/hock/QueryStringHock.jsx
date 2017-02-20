@@ -8,22 +8,7 @@ import PropChangeHock from './PropChangeHock';
  * @module Hocks
  */
 
-/**
- * `PropChangeDecorator` is a function that is used to decorate a component with a `QueryStringHock`
- * while also passing configuration to it.
- *
- * @param {QueryStringDecoratorConfig} [config]
- *
- * @param {QueryChangeFunction} [onQueryChangeFunction]
- *
- * @param {Array<string>} [onChangeParams]
- * An optional array of query parameters that, once changed,
- * will cause `onQueryChangeFunction` to be fired.
- *
- * @return {QueryStringApplier}
- */
-
-const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
+export default (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
 
         const replaceState: boolean = !!(config && config.replaceState);
@@ -82,6 +67,8 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
          *
          * export default withQueryString(MyComponent);
          * // exports MyComponent with QueryStringHock as a higher order component
+         *
+         * @decorator {QueryStringHock}
          *
          * @prop {Object} location
          * Required for `react-router` v1 and v2. Must be react router location object.
@@ -206,13 +193,38 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
     }
 };
 
-export default QueryStringDecorator;
-
+/**
+ * Provides configuration for `QueryStringHock`.
+ *
+ * @callback QueryStringHock
+ *
+ * @param {QueryStringHockConfig} [config]
+ *
+ * @param {QueryChangeFunction} [onQueryChangeFunction]
+ *
+ * @param {Array<string>} [onChangeParams]
+ * An optional array of query parameters that, once changed,
+ * will cause `onQueryChangeFunction` to be fired.
+ *
+ * @return {QueryStringWrapper}
+ */
 
 /**
- * Configuration object for the QueryStringDecorator.
+ * A function that accepts the component you want to wrap in a `QueryStringHock`.
  *
- * @typedef QueryStringDecoratorConfig
+ * @callback QueryStringWrapper
+ *
+ * @param {ReactComponent} ComponentToDecorate
+ * The component you wish to wrap in an `QueryStringHock`.
+ *
+ * @return {ReactComponent}
+ * The decorated component.
+ */
+
+/**
+ * Configuration object for the QueryStringHock.
+ *
+ * @typedef QueryStringHockConfig
  *
  * @property {Object} [defaultQuery]
  * These defaults will be passed down in the query prop
@@ -231,13 +243,6 @@ export default QueryStringDecorator;
  * if they are not present in the query string.
  * By default `react-router` only passes an array of query param values back
  * if there are more than one value in them.
- */
-
-/**
- * A decorator function that accepts a component to decorate, and returns that decorated component.
- * @callback QueryStringApplier
- * @param {ReactComponent} ComponentToDecorate The component you wish to wrap in a `QueryStringHock`.
- * @return {ReactComponent} The decorated component.
  */
 
 /**

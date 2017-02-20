@@ -12,3 +12,4 @@ export {default as SpruceClassName} from './util/SpruceClassName';
 export {default as SpruceComponent} from './util/SpruceComponent';
 
 export {default as ElementQueryHock} from './hock/ElementQueryHock';
+export {default as PropChangeHock} from './hock/PropChangeHock';

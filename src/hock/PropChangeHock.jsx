@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS} from 'immutable';
+import {fromJS, is} from 'immutable';
 
 /**
  * @module Hocks
@@ -51,9 +51,10 @@ export default (propKeys: Array<string>, onPropChangeFunction: Function): HockAp
                 const propsHaveChanged = fromJS(propKeys)
                     .some(ii => {
                         const keyPath = ii.split('.');
-                        return !thisPropsImmutable
-                            .getIn(keyPath)
-                            .equals(nextPropsImmutable.getIn(keyPath));
+                        return !is(
+                            thisPropsImmutable.getIn(keyPath),
+                            nextPropsImmutable.getIn(keyPath)
+                        );
                     });
 
                 if(propsHaveChanged) {

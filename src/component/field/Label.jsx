@@ -6,7 +6,7 @@ import RemoveProps from '../../util/RemoveProps';
 type LabelProps = {
     children: React.Element<any>,
     className: ?string,
-    modifier: Modifier,
+    modifier: SpruceModifier,
     spruceName: string
 }
 
@@ -20,7 +20,7 @@ type LabelProps = {
  * `Label` is a simple component that displays a label.
  *
  * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
+ * @prop {SpruceModifier} [modifier]
  * @prop {string} [spruceName = "Label"]
  *
  * @example

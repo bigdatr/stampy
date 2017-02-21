@@ -6,7 +6,7 @@ import RemoveProps from '../../util/RemoveProps';
 type ButtonProps = {
     className?: string,
     disabled?: boolean,
-    modifier?: Modifier,
+    modifier?: SpruceModifier,
     onClick: Function,
     spruceName: string,
     type: ?string
@@ -24,7 +24,7 @@ type ButtonProps = {
  *
  * @prop {ClassName} [className]
  * @prop {boolean} [disabled] Set to true to disable the button, and onClick calls will no longer be called when clicked
- * @prop {Modifier} [modifier]
+ * @prop {SpruceModifier} [modifier]
  * @prop {OnClick} [onClick]
  * @prop {string} [spruceName = "Button"]
  * @prop {string} [type = "button"] HTML button type
@@ -44,7 +44,7 @@ function Button(props: ButtonProps): React.Element<any> {
     const propsToRemove = {
         modifier: true,
         spruceName,
-        onClick: !!disabled // explicity removs onClick when disabled in case underlying elements change from using a <button>
+        onClick: !!disabled // explicity removes onClick when disabled in case underlying elements change from using a <button>
     };
     const filteredProps: Object = RemoveProps(propsToRemove, props);
 

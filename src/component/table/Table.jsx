@@ -85,7 +85,7 @@ type SchemaItem = {
 type TableProps = {
     className: ?string,
     data: ListOrArray,
-    modifier: Modifier,
+    modifier: SpruceModifier,
     rowProps: (row: Object) => Object,
     schema: Schema,
     spruceName: string
@@ -128,7 +128,7 @@ type TableProps = {
  *     or a function that receives the current data row and should return a schema.
  *
  * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
+ * @prop {SpruceModifier} [modifier]
  * @prop {string} [spruceName = "Table"]
  * @prop {TableRowProps} [TableRowProps]
  *

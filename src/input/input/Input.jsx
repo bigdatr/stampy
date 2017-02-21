@@ -5,7 +5,7 @@ import RemoveProps from '../../util/RemoveProps';
 
 type InputProps = {
     className: ?string,
-    modifier: Modifier,
+    modifier: SpruceModifier,
     onChange: OnChange,
     spruceName: string,
     type: ?string
@@ -24,7 +24,7 @@ type InputProps = {
  *
  * @prop {OnChange} [onChange]
  * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
+ * @prop {SpruceModifier} [modifier]
  * @prop {string} [spruceName = "Input"]
  * @prop {String} [type = "button"] Input type
  *

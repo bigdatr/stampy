@@ -2,31 +2,18 @@
 
 import React, {Component, PropTypes} from 'react';
 import {fromJS, List, Map} from 'immutable';
-import PropChangeHock from './PropChangeHock';
 
 /**
  * @module Hocks
  */
 
-export default (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
+export default (config: ?Object = null): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
 
         const replaceState: boolean = !!(config && config.replaceState);
         const queryPropName: string = (config && config.queryPropName) || "query";
         const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
         const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
-
-        const propsToListenTo: Array<string> = !onChangeParams
-            ? [queryPropName]
-            : fromJS(onChangeParams)
-                .map(param => `${queryPropName}.${param}`)
-                .toJS();
-
-        const PreparedComposedComponent: ReactClass<any> = !onQueryChangeFunction
-            ? ComposedComponent
-            : PropChangeHock([queryPropName], (props) => {
-                onQueryChangeFunction && onQueryChangeFunction(propsToListenTo, props);
-            })(ComposedComponent);
 
         /**
          * @component
@@ -108,7 +95,10 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
              */
 
             getQuery(props: Object): Object {
-                const existingQuery: Object = (props.location && props.location.query) || {};
+                if(!props.location || !props.location.query) {
+                    return {};
+                }
+                const existingQuery: Object = props.location.query;
                 const query: Map<string,any> = defaultQuery.merge(
                     fromJS(existingQuery).filter(ii => ii != "")
                 );
@@ -135,7 +125,11 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
              */
 
             updateQuery(queryParamsToUpdate: Object) {
-                const existingQuery: Object = (this.props.location && this.props.location.query) || {};
+                if(!this.props.location || !this.props.location.query) {
+                    console.warn("Cannot call updateQuery, QueryStringHock has not been given a react-router location.query prop");
+                    return;
+                }
+                const existingQuery: Object = this.props.location.query;
                 const query = fromJS(existingQuery)
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
@@ -153,6 +147,10 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
              */
 
             setQuery(query: Object) {
+                if(!this.props.location || !this.props.location.query) {
+                    console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.query prop");
+                    return;
+                }
                 const routerMethod: string = replaceState ? "replace" : "push";
                 const newQuery: Object = fromJS(query)
                     .filter(ii => ii !== "" && ii != null) // non strict null comparison to catch undefined & null
@@ -180,7 +178,7 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
                     setQuery: this.setQuery,
                     updateQuery: this.updateQuery
                 };
-                return <PreparedComposedComponent {...this.props} {...newProps} />;
+                return <ComposedComponent {...this.props} {...newProps} />;
             }
         }
 
@@ -203,12 +201,6 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
  * @callback QueryStringHock
  *
  * @param {QueryStringHockConfig} [config]
- *
- * @param {QueryChangeFunction} [onQueryChangeFunction]
- *
- * @param {Array<string>} [onChangeParams]
- * An optional array of query parameters that, once changed,
- * will cause `onQueryChangeFunction` to be fired.
  *
  * @return {QueryStringWrapper}
  */

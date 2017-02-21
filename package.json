@@ -68,6 +68,7 @@
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.9",
     "immutable": "^3.8.1",
+    "jsdoc-react-proptypes": "^1.0.1",
     "proxyquire": "^1.7.11",
     "react-select": "^1.0.0-rc.2"
   },

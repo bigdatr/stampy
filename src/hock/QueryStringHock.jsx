@@ -108,7 +108,10 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
              */
 
             getQuery(props: Object): Object {
-                const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
+                const existingQuery: Object = (props.location && props.location.query) || {};
+                const query: Map<string,any> = defaultQuery.merge(
+                    fromJS(existingQuery).filter(ii => ii != "")
+                );
 
                 // ensures that all arrayParams are returned as arrays (not strings or blank)
                 return arrayParams
@@ -132,7 +135,8 @@ export default (config: ?Object = null, onQueryChangeFunction: ?Function = null,
              */
 
             updateQuery(queryParamsToUpdate: Object) {
-                const query = fromJS(this.props.location.query)
+                const existingQuery: Object = (this.props.location && this.props.location.query) || {};
+                const query = fromJS(existingQuery)
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
                 this.setQuery(query);

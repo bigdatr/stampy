@@ -1,16 +1,7 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import RemoveProps from '../../util/RemoveProps';
-
-type ToggleProps = {
-    className: ?string,
-    disabled: ?boolean,
-    modifier: Modifier,
-    onChange: OnChange,
-    spruceName: string,
-    value: ?boolean
-}
+import {StampyPropTypes} from '../../types/Types';
 
 /**
  * @module Inputs
@@ -20,19 +11,12 @@ type ToggleProps = {
  * @component
  *
  * `Toggle` is a simple input component that works like a checkbox.
- * Its value is a boolean. It defaults to false.
- *
- * @prop {boolean} [value = false] Boolean indicating if the toggle should be active or not
- * @prop {OnChange} [onChange]
- * @prop {boolean} [disabled] Set to true to disable the toggle, and onClick calls will no longer be called when clicked
- * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
- * @prop {string} [spruceName = "Toggle"]
+ * Its value is a boolean. It defaults to `false`.
  *
  * @example
  * return <Toggle
  *    value={yourBoolean}
- *    onChange={onChangeFunction}
+ *    onChange={(value) => doSomething(value)}
  * >Toggle text</Toggle>
  *
  * @category ControlledComponent
@@ -40,36 +24,59 @@ type ToggleProps = {
 
 function Toggle(props: ToggleProps): React.Element<any> {
     const {
+        children,
         className,
         disabled,
+        htmlProps,
         modifier,
         onChange,
         spruceName,
         value
     } = props;
 
-    const propsToRemove = [
-        'modifier',
-        'onClick',
-        'spruceName',
-        'value'
-    ];
-
-    const filteredProps: Object = RemoveProps(propsToRemove, props);
-
     return <button
-        {...filteredProps}
-        className={SpruceClassName({name: spruceName, modifier, className}, {'Toggle-active': !!value})}
+        {...htmlProps}
+        className={SpruceClassName({name: spruceName, modifier, className}, {[`${spruceName}-active`]: !!value})}
         onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
         type="button"
+        children={children}
     />;
 }
 
+Toggle.propTypes = {
+    /** {ClassName} */
+    className: PropTypes.string,
+    /** Set to true to disable the toggle. When disabled `onClick` will no longer be called when clicked */
+    disabled: PropTypes.bool,
+    /** {HtmlProps} */
+    htmlProps: PropTypes.object,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.modifier,
+    /** {OnChangeMulti} */
+    onChange: PropTypes.func,
+    /** {SpruceName} */
+    spruceName: PropTypes.string,
+    /** Boolean indicating if the toggle should be active or not */
+    value: PropTypes.bool
+};
+
 Toggle.defaultProps = {
     className: '',
+    disabled: false,
     modifier: '',
     spruceName: 'Toggle',
     value: false
+}
+
+type ToggleProps = {
+    children: ?React.Element<*>,
+    className: ?string,
+    disabled: ?boolean,
+    htmlProps: ?Object,
+    modifier: SpruceModifier,
+    onChange: OnChange,
+    spruceName: string,
+    value: ?boolean
 }
 
 export default Toggle;

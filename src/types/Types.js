@@ -5,10 +5,23 @@ import React, {PropTypes} from 'react';
 import {List} from 'immutable';
 
 export const StampyPropTypes = {
-    modifier: PropTypes.oneOfType([
+
+    className: PropTypes.string,
+
+    htmlProps: PropTypes.object,
+
+    onChange: PropTypes.func,
+
+    onChangeMulti: PropTypes.func,
+
+    onClick: PropTypes.func,
+
+    spruceModifier: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.object
-    ])
+    ]),
+
+    spruceName: PropTypes.string
 };
 
 type ClassName = string;

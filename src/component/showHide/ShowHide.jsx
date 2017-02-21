@@ -79,7 +79,7 @@ type ShowHideStatefulProps = {
     children: Element<any>,
     className?: string,
     defaultShow: boolean,
-    modifier?: Modifier,
+    modifier?: SpruceModifier,
     onClick: (value: boolean) => void,
     spruceName?: string,
     toggle: ReactClass<any>

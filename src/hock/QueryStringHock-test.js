@@ -42,6 +42,18 @@ test('QueryStringHock passes query from react router location prop', tt => {
 
 });
 
+test('QueryStringHock passes empty object as query if location prop not provided', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    myWrappedComponent.props = {};
+
+    tt.deepEqual(myWrappedComponent.render().props.query, {});
+
+});
+
 test('QueryStringHock should change the name of the query prop if given queryPropName in config', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
@@ -80,10 +92,14 @@ test('QueryStringHock should convert missing or singular params to array when co
         location: {query}
     };
 
-    tt.deepEqual(myWrappedComponent.render().props.query.a, ["A"], "single query param should now be an array");
-    tt.deepEqual(myWrappedComponent.render().props.query.b, ["B", "B2"], "multiple query param should still array");
-    tt.deepEqual(myWrappedComponent.render().props.query.c, [], "missing query param should be an empty array");
-    tt.deepEqual(myWrappedComponent.render().props.query.d, "D", "other params should remain as they are");
+    const expectedQuery = {
+        a: ["A"], // single query param should now be an array
+        b: ["B", "B2"], // multiple query param should still array
+        c: [], // missing query param should be an empty array
+        d: "D" // other params should remain as they are
+    };
+
+    tt.deepEqual(myWrappedComponent.render().props.query, expectedQuery);
 
 });
 
@@ -108,9 +124,13 @@ test('QueryStringHock should use defaultQuery params when not present in query',
         location: {query}
     };
 
-    tt.deepEqual(myWrappedComponent.render().props.query.a, "A", "Params not in query should use default query");
-    tt.deepEqual(myWrappedComponent.render().props.query.b, "B!", "Params in query string should appear as specified");
-    tt.deepEqual(myWrappedComponent.render().props.query.c, "", "Params in query string as empty strings should not override defaults");
+    const expectedQuery = {
+        a: "A", // Params not in query should use default query
+        b: "B!", // Params in query string should appear as specified
+        c: "C" // Params in query string as empty strings should not override defaults
+    };
+
+    tt.deepEqual(myWrappedComponent.render().props.query, expectedQuery);
 
 });
 
@@ -272,9 +292,7 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
     const myWrappedComponent = new WrappedComponent();
 
     const push = sinon.spy();
-    const replace = sinon.spy();
 
-    const pathname = "PATH";
     const query = {
         c: "C",
         d: "D"
@@ -282,14 +300,12 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
 
     myWrappedComponent.context = {
         router: {
-            push,
-            replace
+            push
         }
     };
     myWrappedComponent.props = {
         location: {
-            query,
-            pathname
+            query
         }
     };
 
@@ -300,7 +316,32 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
 
     myWrappedComponent.render().props.setQuery(newQuery);
 
-    tt.deepEqual(push.firstCall.args[0], {pathname, query: newQuery});
+    tt.deepEqual(push.firstCall.args[0].query, newQuery);
+});
+
+test('QueryStringHock setQuery should noop on missing location prop', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {};
+
+    const newQuery = {
+        a: "A",
+        b: "B"
+    };
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    tt.false(push.called);
 });
 
 test('QueryStringHock setQuery should filter out empty strings and nulls', tt => {
@@ -310,21 +351,17 @@ test('QueryStringHock setQuery should filter out empty strings and nulls', tt =>
     const myWrappedComponent = new WrappedComponent();
 
     const push = sinon.spy();
-    const replace = sinon.spy();
 
-    const pathname = "PATH";
     const query = {};
 
     myWrappedComponent.context = {
         router: {
-            push,
-            replace
+            push
         }
     };
     myWrappedComponent.props = {
         location: {
-            query,
-            pathname
+            query
         }
     };
 
@@ -342,7 +379,7 @@ test('QueryStringHock setQuery should filter out empty strings and nulls', tt =>
 
     myWrappedComponent.render().props.setQuery(newQuery);
 
-    tt.deepEqual(push.firstCall.args[0], {pathname, query: expectedQuery});
+    tt.deepEqual(push.firstCall.args[0].query, expectedQuery);
 });
 
 test('QueryStringHock updateQuery should merge with existing query', tt => {
@@ -352,7 +389,6 @@ test('QueryStringHock updateQuery should merge with existing query', tt => {
     const myWrappedComponent = new WrappedComponent();
 
     const push = sinon.spy();
-    const replace = sinon.spy();
 
     const pathname = "PATH";
     const query = {
@@ -362,8 +398,7 @@ test('QueryStringHock updateQuery should merge with existing query', tt => {
 
     myWrappedComponent.context = {
         router: {
-            push,
-            replace
+            push
         }
     };
     myWrappedComponent.props = {
@@ -390,6 +425,33 @@ test('QueryStringHock updateQuery should merge with existing query', tt => {
     tt.deepEqual(push.firstCall.args[0], {pathname, query: expectedQuery});
 });
 
+
+test('QueryStringHock updateQuery should noop on missing location prop', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {};
+
+    const newQuery = {
+        a: "A",
+        b: "B"
+    };
+
+    myWrappedComponent.render().props.updateQuery(newQuery);
+
+    tt.false(push.called);
+});
+
+
 test('QueryStringHock updateQuery should filter out empty strings and nulls', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
@@ -397,9 +459,7 @@ test('QueryStringHock updateQuery should filter out empty strings and nulls', tt
     const myWrappedComponent = new WrappedComponent();
 
     const push = sinon.spy();
-    const replace = sinon.spy();
 
-    const pathname = "PATH";
     const query = {
         b: "B",
         c: "C"
@@ -407,14 +467,12 @@ test('QueryStringHock updateQuery should filter out empty strings and nulls', tt
 
     myWrappedComponent.context = {
         router: {
-            push,
-            replace
+            push
         }
     };
     myWrappedComponent.props = {
         location: {
-            query,
-            pathname
+            query
         }
     };
 
@@ -432,5 +490,72 @@ test('QueryStringHock updateQuery should filter out empty strings and nulls', tt
 
     myWrappedComponent.render().props.updateQuery(newQuery);
 
-    tt.deepEqual(push.firstCall.args[0], {pathname, query: expectedQuery});
+    tt.deepEqual(push.firstCall.args[0].query, expectedQuery);
 });
+
+test('QueryStringHock updateQuery can cope with merging and not merging array params', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock({
+        arrayParams: [
+            "noneToNone",
+            "noneToOne",
+            "noneToTwo",
+            "oneToNone",
+            "oneToOne",
+            "oneToTwo",
+            "twoToNone",
+            "twoToOne",
+            "twoToTwo"
+        ]
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+
+    const query = {
+        oneToNone: "one",
+        oneToOne: "one",
+        oneToTwo: "one",
+        twoToNone: ["1", "2"],
+        twoToOne: ["1", "2"],
+        twoToTwo: ["1", "2"]
+    };
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            query
+        }
+    };
+
+    const newQuery = {
+        noneToNone: "",
+        noneToOne: "one!",
+        noneToTwo: ["1!", "2!"],
+        oneToNone: "",
+        oneToOne: "one!",
+        oneToTwo: ["1!", "2!"],
+        twoToNone: null,
+        twoToOne: "one!",
+        twoToTwo: ["1!", "2!"]
+    };
+
+    const expectedQuery = {
+        noneToOne: "one!",
+        noneToTwo: ["1!", "2!"],
+        oneToOne: "one!",
+        oneToTwo: ["1!", "2!"],
+        twoToOne: "one!",
+        twoToTwo: ["1!", "2!"]
+    };
+
+    myWrappedComponent.render().props.updateQuery(newQuery);
+
+    tt.deepEqual(push.firstCall.args[0].query, expectedQuery);
+});
+

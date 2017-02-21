@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import ReactSelect from 'react-select';
-import SpruceClassName from '../../util/SpruceClassName';
 
 type SelectProps = {
     clearable: ?boolean,

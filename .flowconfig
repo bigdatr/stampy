@@ -4,4 +4,4 @@ module.system.node.resolve_dirname=..
 module.system.node.resolve_dirname=src
 
 [libs]
-src/typedef/
+src/types/

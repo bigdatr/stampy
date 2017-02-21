@@ -1106,9 +1106,9 @@ browserslist@~1.4.0:
   dependencies:
     caniuse-db "^1.0.30000539"
 
-bruce@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/bruce/-/bruce-0.6.0.tgz#a3ff27b5621ada8972f24f9f368595eadfc9b03b"
+bruce@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/bruce/-/bruce-0.9.0.tgz#bec3d4a2a13eaddc8c72be6ca398e0b0043d1f9f"
   dependencies:
     exports-loader "^0.6.2"
 
@@ -2880,9 +2880,9 @@ jsdom@^9.8.3:
     whatwg-url "^3.0.0"
     xml-name-validator ">= 2.0.1 < 3.0.0"
 
-jsdonk@0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.7.tgz#a20d093244c84fec4e55a2b277ec398cd1533b6f"
+jsdonk@0.4.11:
+  version "0.4.11"
+  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.11.tgz#700f00d846db6380b412f25bd900ba4d7d4278b1"
   dependencies:
     immutable "^3.8.1"
     prismjs "^1.5.1"
@@ -4103,11 +4103,7 @@ resolve-from@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-2.0.0.tgz#9480ab20e94ffa1d9e80a804c7ea147611966b57"
 
-resolve@^1.1.6:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.2.0.tgz#9589c3f2f6149d1417a40becc1663db6ec6bc26c"
-
-resolve@~1.1.7:
+resolve@^1.1.6, resolve@~1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 

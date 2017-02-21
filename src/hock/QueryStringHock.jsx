@@ -2,46 +2,18 @@
 
 import React, {Component, PropTypes} from 'react';
 import {fromJS, List, Map} from 'immutable';
-import PropChangeHock from './PropChangeHock';
 
 /**
  * @module Hocks
  */
 
-/**
- * `PropChangeDecorator` is a function that is used to decorate a component with a `QueryStringHock`
- * while also passing configuration to it.
- *
- * @param {QueryStringDecoratorConfig} [config]
- *
- * @param {QueryChangeFunction} [onQueryChangeFunction]
- *
- * @param {Array<string>} [onChangeParams]
- * An optional array of query parameters that, once changed,
- * will cause `onQueryChangeFunction` to be fired.
- *
- * @return {QueryStringApplier}
- */
-
-const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Function = null, onChangeParams: ?Array<string> = null): HockApplier => {
+export default (config: ?Object = null): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
 
         const replaceState: boolean = !!(config && config.replaceState);
         const queryPropName: string = (config && config.queryPropName) || "query";
         const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
         const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
-
-        const propsToListenTo: Array<string> = !onChangeParams
-            ? [queryPropName]
-            : fromJS(onChangeParams)
-                .map(param => `${queryPropName}.${param}`)
-                .toJS();
-
-        const PreparedComposedComponent: ReactClass<any> = !onQueryChangeFunction
-            ? ComposedComponent
-            : PropChangeHock([queryPropName], (props) => {
-                onQueryChangeFunction && onQueryChangeFunction(propsToListenTo, props);
-            })(ComposedComponent);
 
         /**
          * @component
@@ -83,6 +55,8 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
          * export default withQueryString(MyComponent);
          * // exports MyComponent with QueryStringHock as a higher order component
          *
+         * @decorator {QueryStringHock}
+         *
          * @prop {Object} location
          * Required for `react-router` v1 and v2. Must be react router location object.
          *
@@ -121,7 +95,13 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
              */
 
             getQuery(props: Object): Object {
-                const query: Map<string,any> = defaultQuery.merge(fromJS(props.location.query));
+                if(!props.location || !props.location.query) {
+                    return {};
+                }
+                const existingQuery: Object = props.location.query;
+                const query: Map<string,any> = defaultQuery.merge(
+                    fromJS(existingQuery).filter(ii => ii != "")
+                );
 
                 // ensures that all arrayParams are returned as arrays (not strings or blank)
                 return arrayParams
@@ -145,7 +125,12 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
              */
 
             updateQuery(queryParamsToUpdate: Object) {
-                const query = fromJS(this.props.location.query)
+                if(!this.props.location || !this.props.location.query) {
+                    console.warn("Cannot call updateQuery, QueryStringHock has not been given a react-router location.query prop");
+                    return;
+                }
+                const existingQuery: Object = this.props.location.query;
+                const query = fromJS(existingQuery)
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
                 this.setQuery(query);
@@ -162,6 +147,10 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
              */
 
             setQuery(query: Object) {
+                if(!this.props.location || !this.props.location.query) {
+                    console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.query prop");
+                    return;
+                }
                 const routerMethod: string = replaceState ? "replace" : "push";
                 const newQuery: Object = fromJS(query)
                     .filter(ii => ii !== "" && ii != null) // non strict null comparison to catch undefined & null
@@ -189,7 +178,7 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
                     setQuery: this.setQuery,
                     updateQuery: this.updateQuery
                 };
-                return <PreparedComposedComponent {...this.props} {...newProps} />;
+                return <ComposedComponent {...this.props} {...newProps} />;
             }
         }
 
@@ -206,13 +195,32 @@ const QueryStringDecorator = (config: ?Object = null, onQueryChangeFunction: ?Fu
     }
 };
 
-export default QueryStringDecorator;
-
+/**
+ * Provides configuration for `QueryStringHock`.
+ *
+ * @callback QueryStringHock
+ *
+ * @param {QueryStringHockConfig} [config]
+ *
+ * @return {QueryStringWrapper}
+ */
 
 /**
- * Configuration object for the QueryStringDecorator.
+ * A function that accepts the component you want to wrap in a `QueryStringHock`.
  *
- * @typedef QueryStringDecoratorConfig
+ * @callback QueryStringWrapper
+ *
+ * @param {ReactComponent} ComponentToDecorate
+ * The component you wish to wrap in an `QueryStringHock`.
+ *
+ * @return {ReactComponent}
+ * The decorated component.
+ */
+
+/**
+ * Configuration object for the QueryStringHock.
+ *
+ * @typedef QueryStringHockConfig
  *
  * @property {Object} [defaultQuery]
  * These defaults will be passed down in the query prop
@@ -231,13 +239,6 @@ export default QueryStringDecorator;
  * if they are not present in the query string.
  * By default `react-router` only passes an array of query param values back
  * if there are more than one value in them.
- */
-
-/**
- * A decorator function that accepts a component to decorate, and returns that decorated component.
- * @callback QueryStringApplier
- * @param {ReactComponent} ComponentToDecorate The component you wish to wrap in a `QueryStringHock`.
- * @return {ReactComponent} The decorated component.
  */
 
 /**

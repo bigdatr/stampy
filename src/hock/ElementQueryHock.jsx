@@ -27,15 +27,6 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  * @module Hocks
  */
 
-/**
- * `ElementQueryDecorator` is a function that is used to decorate a component
- * with a `ElementQueryHock`, while also passing configuration to it.
- *
- * @param {Array<ElementQueryObject>} eqs An array of element queries to check for.
- *
- * @return {ElementQueryApplier}
- */
-
 const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
     return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
 
@@ -69,6 +60,8 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
          *         heightBounds: [400, 1800]
          *     }
          * ])(example);
+         *
+         * @decorator {ElementQueryHock}
          *
          * @childprop {number}
          * eqWidth The current width of the parent element.
@@ -168,31 +161,42 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
 }
 
 /**
- * @typedef ElementQueryObject
+ * Provides configuration for `ElementQueryHock`.
  *
- * @param {String} name
- * The name of the element query.
+ * @callback ElementQueryHock
  *
- * @param {Number[]} [widthBounds=[0, Infinity]]
- * An array containing two values for the minimum (inclusive) and maximum (exclusive)
- * widths allowed by this element query. If the second array item is excluded it is
- * assumed that there is no maximum.
+ * @param {Array<ElementQueryObject>} eqs An array of element queries to check for.
  *
- * @param {Number[]} [heightBounds=[0, Infinity]]
- * An array containing two values for the minimum (inclusive) and maximum (exclusive)
- * heights allowed by this element query. If the second array item is excluded it is
- * assumed that there is no maximum.
+ * @return {ElementQueryWrapper}
  */
 
 /**
- * A decorator function that accepts a component to decorate, and returns that decorated component.
+ * A function that accepts the component you want to wrap in a `ElementQueryHock`.
  *
- * @callback ElementQueryApplier
+ * @callback ElementQueryWrapper
+ *
  * @param {ReactComponent} ComponentToDecorate
  * The component you wish to wrap in an `ElementQueryHock`.
  *
  * @return {ReactComponent}
  * The decorated component.
+ */
+
+/**
+ * @typedef ElementQueryObject
+ *
+ * @property {String} name
+ * The name of the element query.
+ *
+ * @property {Number[]} [widthBounds=[0, Infinity]]
+ * An array containing two values for the minimum (inclusive) and maximum (exclusive)
+ * widths allowed by this element query. If the second array item is excluded it is
+ * assumed that there is no maximum.
+ *
+ * @property {Number[]} [heightBounds=[0, Infinity]]
+ * An array containing two values for the minimum (inclusive) and maximum (exclusive)
+ * heights allowed by this element query. If the second array item is excluded it is
+ * assumed that there is no maximum.
  */
 
 export default ElementQueryDecorator;

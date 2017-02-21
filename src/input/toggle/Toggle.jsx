@@ -1,7 +1,7 @@
 // @flow
 import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import {StampyPropTypes} from '../../types/Types';
+import {StampyPropTypes} from '../../types/PropTypes';
 
 /**
  * @module Inputs

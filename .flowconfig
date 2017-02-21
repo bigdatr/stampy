@@ -4,4 +4,7 @@ module.system.node.resolve_dirname=..
 module.system.node.resolve_dirname=src
 
 [libs]
-src/types/
+src/types/FlowTypes.js
+
+[ignore]
+.*/node_modules/fbjs/.*

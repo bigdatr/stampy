@@ -3,7 +3,7 @@
 
 import {PropTypes} from 'react';
 
-export const StampyPropTypes = {
+const StampyPropTypes = {
 
     className: PropTypes.string,
 
@@ -24,3 +24,5 @@ export const StampyPropTypes = {
 
     spruceName: PropTypes.string
 };
+
+export default StampyPropTypes;

@@ -2,7 +2,7 @@
 import React, {PropTypes} from 'react';
 import {List, Set} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
-import {StampyPropTypes} from '../../types/PropTypes';
+import StampyPropTypes from '../../types/PropTypes';
 import Toggle from '../toggle/Toggle';
 
 /**
@@ -135,6 +135,13 @@ ToggleSet.propTypes = {
     ])
 }
 
+ToggleSet.defaultProps = {
+    className: '',
+    htmlProps: {},
+    modifier: '',
+    spruceName: 'ToggleSet'
+}
+
 type ToggleSetProps = {
     className?: string,
     clearable?: boolean,
@@ -146,12 +153,6 @@ type ToggleSetProps = {
     options: Object[],
     spruceName?: string,
     value?: string|Array<string>
-}
-
-ToggleSet.defaultProps = {
-    className: '',
-    modifier: '',
-    spruceName: 'ToggleSet'
 }
 
 export default ToggleSet;

@@ -1,7 +1,7 @@
 // @flow
 import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import {StampyPropTypes} from '../../types/PropTypes';
+import StampyPropTypes from '../../types/PropTypes';
 
 /**
  * @module Inputs
@@ -61,6 +61,15 @@ Toggle.propTypes = {
     value: PropTypes.bool
 };
 
+Toggle.defaultProps = {
+    className: '',
+    disabled: false,
+    htmlProps: {},
+    modifier: '',
+    spruceName: 'Toggle',
+    value: false
+};
+
 type ToggleProps = {
     children?: React.Element<*>,
     className?: string,
@@ -70,14 +79,6 @@ type ToggleProps = {
     onChange?: OnChangeBoolean,
     spruceName?: string,
     value?: boolean
-};
-
-Toggle.defaultProps = {
-    className: '',
-    disabled: false,
-    modifier: '',
-    spruceName: 'Toggle',
-    value: false
 };
 
 export default Toggle;

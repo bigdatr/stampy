@@ -12,10 +12,6 @@ import StampyPropTypes from '../../types/PropTypes';
  *
  * `Label` is a simple component that displays a label.
  *
- * @prop {ClassName} [className]
- * @prop {SpruceModifier} [modifier]
- * @prop {string} [spruceName = "Label"]
- *
  * @example
  * return <Label for='something'>Label for thing</Label>
  */

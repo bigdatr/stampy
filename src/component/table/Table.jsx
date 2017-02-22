@@ -1,7 +1,9 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {fromJS, List, Map} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
+import StampyPropTypes from '../../types/PropTypes';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 /**
  * @module Components
@@ -73,24 +75,6 @@ function Td(props: TdProps): React.Element<any> {
 //
 // Table
 
-type Schema = List<any> | Array<any> | Function;
-
-type SchemaItem = {
-    value: string | (row: Map<any>) => React.Element<any>,
-    heading: string | () => React.Element<any>,
-    render: (row: Map<any>) => React.Element<any>,
-    width: string
-}
-
-type TableProps = {
-    className: ?string,
-    data: ListOrArray,
-    modifier: SpruceModifier,
-    rowProps: (row: Object) => Object,
-    schema: Schema,
-    spruceName: string
-}
-
 /**
  * An `Object` or `Map` that defines a column.
  *
@@ -121,17 +105,6 @@ type TableProps = {
  * 2. value function
  * 3. value key accessor
  *
- * @prop {Array|List} data
- *     Collection of data to display in the table.
- * @prop {Array<TableSchemaColumn>|List<TableSchemaColumn>|Function} schema
- *     A collection that describes how to process and render each column,
- *     or a function that receives the current data row and should return a schema.
- *
- * @prop {ClassName} [className]
- * @prop {SpruceModifier} [modifier]
- * @prop {string} [spruceName = "Table"]
- * @prop {TableRowProps} [TableRowProps]
- *
  * @example
  * const schema = [
  *      {
@@ -157,10 +130,18 @@ type TableProps = {
  *
  * @category ControlledComponent
  */
-function Table(props: TableProps): React.Element<any> {
-    const {modifier, className, rowProps, schema, spruceName} = props;
-    const data: List<any> = fromJS(props.data);
 
+function Table(props: TableProps): React.Element<any> {
+    const {
+        className,
+        htmlProps,
+        modifier,
+        rowProps = () => ({}),
+        schema,
+        spruceName
+    } = props;
+
+    const data: List<any> = fromJS(props.data);
 
     // Take the schema to create each heading
     const tableHead: React.Element<any>[] = formatSchema(null, schema)
@@ -174,26 +155,72 @@ function Table(props: TableProps): React.Element<any> {
                 {formatSchema(row, schema).map((column, key: number) => <Td key={key} row={row} schemaItem={column} />)}
             </tr>;
         })
-        .toJS();
+        .toArray();
 
-    return <table className={SpruceClassName({name: spruceName, modifier, className})}>
+    return <table {...htmlProps} className={SpruceClassName({name: spruceName, modifier, className})}>
         <thead><tr>{tableHead}</tr></thead>
         <tbody>{tableBody}</tbody>
     </table>
 }
 
-function formatSchema(row:?any, schema:Schema): List<Map<string,any>> {
+function formatSchema(row: ?any, schema: Schema): List<Map<string,any>> {
     const appliedSchema = typeof schema === 'function' ? schema(row) : schema;
     return fromJS(appliedSchema);
 }
+
+Table.propTypes = {
+    /** {ClassName} */
+    className: PropTypes.string,
+    /** {Array|List} Collection of data to display in the table. */
+    data: PropTypes.oneOfType([
+        PropTypes.array,
+        ImmutablePropTypes.list
+    ]),
+    /** {HtmlProps} */
+    htmlProps: StampyPropTypes.htmlProps,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.spruceModifier,
+    /** {TableRowProps} */
+    rowProps: PropTypes.func,
+    /**
+     * {Array<TableSchemaColumn>|List<TableSchemaColumn>|Function}
+     * A collection that describes how to process and render each column,
+     * or a function that receives the current data row and should return a schema.
+     */
+    schema: PropTypes.oneOfType([
+        PropTypes.array,
+        ImmutablePropTypes.list,
+        PropTypes.func
+    ]),
+    /** {SpruceName} */
+    spruceName: PropTypes.string
+};
 
 Table.defaultProps = {
     className: '',
     data: List(),
     modifier: '',
-    rowProps: () => ({}),
     schema: List(),
     spruceName: 'Table'
+};
+
+type Schema = List<SchemaItem> | Array<SchemaItem> | Function;
+
+type SchemaItem = {
+    value: string | (row: Map<any>) => React.Element<any>,
+    heading: string | () => React.Element<any>,
+    render: (row: Map<any>) => React.Element<any>,
+    width: string
+}
+
+type TableProps = {
+    className?: string,
+    htmlProps?: Object,
+    data: ListOrArray,
+    modifier?: SpruceModifier,
+    rowProps?: (row: Object) => Object,
+    schema: Schema,
+    spruceName?: string
 }
 
 export default Table;

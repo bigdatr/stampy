@@ -19,6 +19,7 @@ import StampyPropTypes from '../../types/PropTypes';
 
 function Button(props: ButtonProps): React.Element<any> {
     const {
+        children,
         className,
         disabled,
         htmlProps,
@@ -30,6 +31,7 @@ function Button(props: ButtonProps): React.Element<any> {
 
     return <button
         {...htmlProps}
+        children={children}
         className={SpruceClassName({name: spruceName, modifier, className})}
         disabled={disabled}
         onClick={!disabled && onClick}
@@ -45,10 +47,7 @@ Button.propTypes = {
     /** {HtmlProps} */
     htmlProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
-    modifier: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-    ]),
+    modifier: StampyPropTypes.spruceModifier,
     /** OnClick */
     onClick: PropTypes.func,
     /** {SpruceName} */
@@ -64,7 +63,7 @@ Button.defaultProps = {
     modifier: '',
     spruceName: 'Button',
     type: 'button'
-}
+};
 
 type ButtonProps = {
     children?: React.Element<*>,

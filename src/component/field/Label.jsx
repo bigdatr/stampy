@@ -1,14 +1,7 @@
 // @flow
 import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import RemoveProps from '../../util/RemoveProps';
-
-type LabelProps = {
-    children: React.Element<any>,
-    className: ?string,
-    modifier: SpruceModifier,
-    spruceName: string
-}
+import StampyPropTypes from '../../types/PropTypes';
 
 /**
  * @module Components
@@ -28,32 +21,50 @@ type LabelProps = {
  */
 
 function Label(props: LabelProps): React.Element<any> {
-    const {modifier, className, spruceName} = props;
-
-    const propsToRemove = {
-        modifier: true,
+    const {
+        children,
+        className,
+        htmlFor,
+        htmlProps,
+        modifier,
         spruceName
-    };
+    } = props;
 
     return <label
-        {...RemoveProps(propsToRemove, props)}
+        {...htmlProps}
+        htmlFor={htmlFor}
         className={SpruceClassName({name: spruceName, modifier, className})}
-    >{props.children}</label>;
+        children={children}
+    />;
 }
 
 Label.propTypes = {
-    className: PropTypes.string,
-    modifier: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-    ]),
-    spruceName: PropTypes.string
+    /** {ClassName} */
+    className: StampyPropTypes.className,
+    /** The id of the input HTML element this label corresponds to. */
+    htmlFor: PropTypes.string,
+    /** {HtmlProps} */
+    htmlProps: StampyPropTypes.htmlProps,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.spruceModifier,
+    /** {SpruceName} */
+    spruceName: StampyPropTypes.spruceName
 };
 
 Label.defaultProps = {
     className: '',
+    htmlProps: {},
     modifier: '',
     spruceName: 'Label'
-}
+};
+
+type LabelProps = {
+    children?: React.Element<*>,
+    className?: string,
+    htmlFor?: string,
+    htmlProps?: Object,
+    modifier?: SpruceModifier,
+    spruceName?: string
+};
 
 export default Label;

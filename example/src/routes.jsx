@@ -13,6 +13,7 @@ import TableExample from 'component/table/TableExample';
 import InputExample from 'input/input/InputExample';
 import SelectExample from 'input/select/SelectExample';
 import ToggleExample from 'input/toggle/ToggleExample';
+import ToggleSetExample from 'input/toggleSet/ToggleSetExample';
 
 import ElementQueryHockExample from 'hock/ElementQueryHockExample';
 import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
@@ -32,6 +33,7 @@ const routes = <Route component={AppHandler} path="/">
         <Route path="Input" component={InputExample}/>
         <Route path="Select" component={SelectExample}/>
         <Route path="Toggle" component={ToggleExample}/>
+        <Route path="ToggleSet" component={ToggleSetExample}/>
     </Route>
     <Route path="util">
         <Route path="SpruceClassName" component={SpruceClassNameExample}/>

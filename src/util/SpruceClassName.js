@@ -45,12 +45,12 @@ type ClassNameProps = {
 
 
 export default function SpruceClassName(props: ClassNameProps, ...args: Array<any>): string {
-    const {name = ""} = props;
+    const {name} = props;
 
     const modifiers: string = classnames(props.modifier)
         .split(' ')
         .filter(ii => ii != '')
-        .map(mm => `${name}-${mm}`)
+        .map(mm => `${String(name)}-${mm}`)
 
     return classnames(
         props.name,

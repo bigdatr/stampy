@@ -32,13 +32,24 @@ import Toggle from '../toggle/Toggle';
  * ]
  *
  * // allows a single selection of foo, bar or baz
- * <ToggleSet onChange={(value) => doStuff(value)} options={options} />
+ * <ToggleSet
+ *   onChange={(value) => doStuff(value)}
+ *   options={options}
+ * />
  *
  * // allows a single selection of foo, bar, baz, or none
- * <ToggleSet onChange={(value) => doStuff(value)} options={options} clearable />
+ * <ToggleSet
+ *   onChange={(value) => doStuff(value)}
+ *   options={options}
+ *   clearable
+ * />
  *
  * // allows any number of selections of foo, bar or baz, or none (clearable is not required for multiple)
- * <ToggleSet onChange={(valueArray) => doStuff(valueArray)} options={options} multi />
+ * <ToggleSet
+ *   onChange={(valueArray) => doStuff(valueArray)}
+ *   options={options}
+ *   multi
+ * />
  */
 
 function ToggleSet(props: ToggleSetProps): React.Element<any> {

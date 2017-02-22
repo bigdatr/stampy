@@ -48,7 +48,7 @@ Button.propTypes = {
     htmlProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
-    /** OnClick */
+    /** {OnClick} */
     onClick: PropTypes.func,
     /** {SpruceName} */
     spruceName: PropTypes.string,

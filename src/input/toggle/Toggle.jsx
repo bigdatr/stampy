@@ -30,7 +30,7 @@ function Toggle(props: ToggleProps): React.Element<any> {
         htmlProps,
         modifier,
         onChange,
-        spruceName,
+        spruceName = "",
         value
     } = props;
 
@@ -47,14 +47,14 @@ function Toggle(props: ToggleProps): React.Element<any> {
 Toggle.propTypes = {
     /** {ClassName} */
     className: StampyPropTypes.className,
-    /** Set to true to disable the toggle. When disabled `onClick` will no longer be called when clicked */
+    /** Set to true to disable the toggle. When disabled `onChange` will no longer be called when clicked */
     disabled: PropTypes.bool,
     /** {HtmlProps} */
     htmlProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
-    /** {OnChangeMulti} */
-    onChange: StampyPropTypes.onChangeMulti,
+    /** {OnChangeBoolean} */
+    onChange: StampyPropTypes.onChangeBoolean,
     /** {SpruceName} */
     spruceName: StampyPropTypes.spruceName,
     /** Boolean indicating if the toggle should be active or not */
@@ -62,14 +62,14 @@ Toggle.propTypes = {
 };
 
 type ToggleProps = {
-    children: ?React.Element<*>,
-    className: ?string,
-    disabled: ?boolean,
-    htmlProps: ?Object,
-    modifier: SpruceModifier,
-    onChange: OnChange,
-    spruceName: string,
-    value: ?boolean
+    children?: React.Element<*>,
+    className?: string,
+    disabled?: boolean,
+    htmlProps?: Object,
+    modifier?: SpruceModifier,
+    onChange?: OnChangeBoolean,
+    spruceName?: string,
+    value?: boolean
 };
 
 Toggle.defaultProps = {

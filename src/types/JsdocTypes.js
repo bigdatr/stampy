@@ -21,7 +21,15 @@
  * A callback that is called by input components to notify parents of changes in their values.
  *
  * @callback OnChange
- * @param {string|boolean} newValue The input's new value.
+ * @param {string} newValue The input's new value.
+ * @param {OnChangeMeta} meta
+ */
+
+/**
+ * A callback that is called by input components to notify parents of changes in their values.
+ *
+ * @callback OnChangeBoolean
+ * @param {boolean} newValue The input's new value.
  * @param {OnChangeMeta} meta
  */
 

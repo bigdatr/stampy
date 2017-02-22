@@ -11,6 +11,8 @@ export const StampyPropTypes = {
 
     onChange: PropTypes.func,
 
+    onChangeBoolean: PropTypes.func,
+
     onChangeMulti: PropTypes.func,
 
     onClick: PropTypes.func,

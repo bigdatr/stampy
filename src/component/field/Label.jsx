@@ -13,7 +13,7 @@ import StampyPropTypes from '../../types/PropTypes';
  * `Label` is a simple component that displays a label.
  *
  * @example
- * return <Label for='something'>Label for thing</Label>
+ * return <Label htmlFor='something'>Label for thing</Label>
  */
 
 function Label(props: LabelProps): React.Element<any> {

@@ -13,11 +13,6 @@ import StampyPropTypes from '../../types/PropTypes';
  * `Button` is a simple component that displays a button.
  * It does not keep state.
  *
- * @prop {SpruceModifier} [modifier]
- * @prop {OnClick} [onClick]
- * @prop {string} [spruceName = "Button"]
- * @prop {string} [type = "button"] HTML button type
- *
  * @example
  * return <Button>Button text</Button>
  */

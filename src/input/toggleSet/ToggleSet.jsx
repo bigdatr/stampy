@@ -2,7 +2,7 @@
 import React, {PropTypes} from 'react';
 import {List, Set} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
-import StampyPropTypes from '../../types/PropTypes';
+import StampyPropTypes from '../../decls/PropTypes';
 import Toggle from '../toggle/Toggle';
 
 /**

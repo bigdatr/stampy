@@ -2,7 +2,7 @@
 import React, {PropTypes} from 'react';
 import {fromJS, List, Map} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
-import StampyPropTypes from '../../types/PropTypes';
+import StampyPropTypes from '../../decls/PropTypes';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 /**

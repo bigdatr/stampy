@@ -112,3 +112,9 @@ test('rendering with schema as a function', tt => {
     tt.is(renderAt(firstRow, 'Td', 0).text(), '1');
     tt.is(renderAt(firstRow, 'Td', 1).text(), '2');
 });
+
+test('Table should apply tableProps to outer element', tt => {
+    const table = shallow(<Table tableProps={{'data-test': "test"}} />);
+    tt.is(table.render().children().first().get(0).attribs['data-test'], "test");
+});
+

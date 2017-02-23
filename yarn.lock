@@ -2032,9 +2032,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.33.0:
-  version "0.33.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.33.0.tgz#ef011eace7a6100f1ae08b852db78279032b8750"
+flow-bin@^0.39.0:
+  version "0.39.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.39.0.tgz#b1012a14460df1aa79d3a728e10f93c6944226d0"
 
 fn-name@^2.0.0:
   version "2.0.1"
@@ -2838,6 +2838,12 @@ jsdoc-babel@^0.2.1:
   dependencies:
     lodash "^4.13.1"
 
+jsdoc-react-proptypes@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/jsdoc-react-proptypes/-/jsdoc-react-proptypes-1.0.1.tgz#671d59b35f0c042322f6adc8a5b73a041b22b650"
+  dependencies:
+    immutable "^3.8.1"
+
 jsdoc@^3.4.2:
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/jsdoc/-/jsdoc-3.4.3.tgz#e5740d6145c681f6679e6c17783a88dbdd97ccd3"
@@ -2880,9 +2886,9 @@ jsdom@^9.8.3:
     whatwg-url "^3.0.0"
     xml-name-validator ">= 2.0.1 < 3.0.0"
 
-jsdonk@0.4.11:
-  version "0.4.11"
-  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.11.tgz#700f00d846db6380b412f25bd900ba4d7d4278b1"
+jsdonk@0.4.12:
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.12.tgz#9a398a7c1371c12d9f3973cf14c441eaf3e69d19"
   dependencies:
     immutable "^3.8.1"
     prismjs "^1.5.1"
@@ -3865,6 +3871,10 @@ react-dom@^15.3.2:
     fbjs "^0.8.1"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
+
+react-immutable-proptypes@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-immutable-proptypes/-/react-immutable-proptypes-2.1.0.tgz#023d6f39bb15c97c071e9e60d00d136eac5fa0b4"
 
 react-input-autosize@^1.1.0:
   version "1.1.0"

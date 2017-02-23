@@ -1,20 +1,11 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import RemoveProps from '../../util/RemoveProps';
-
-type InputProps = {
-    className: ?string,
-    modifier: Modifier,
-    onChange: OnChange,
-    spruceName: string,
-    type: ?string
-}
+import StampyPropTypes from '../../decls/PropTypes';
 
 /**
  * @module Inputs
  */
-
 
 /**
  * @component
@@ -22,39 +13,70 @@ type InputProps = {
  * `Input` is a simple component that displays an input.
  * It does not keep state.
  *
- * @prop {OnChange} [onChange]
- * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
- * @prop {string} [spruceName = "Input"]
- * @prop {String} [type = "button"] Input type
- *
  * @example
  * return <Input type='text' onChange={(val) => doStuff(val)}/>
  */
 
 function Input(props: InputProps): React.Element<any> {
     const {
-        modifier,
         className,
-        spruceName
+        disabled,
+        inputProps,
+        modifier,
+        onChange,
+        spruceName,
+        type,
+        value
     } = props;
 
-    const propsToRemove = ['modifier', 'spruceName'];
-
-    const filteredProps: Object = RemoveProps(propsToRemove, props);
-
     return <input
-        {...filteredProps}
-        onChange={(ee) => props.onChange && props.onChange(ee.target.value, {event: ee, element: ee.target})}
+        {...inputProps}
         className={SpruceClassName({name: spruceName, modifier, className})}
+        disabled={disabled}
+        onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
+        type={type}
+        value={value}
     />;
 }
 
+Input.propTypes = {
+    /** {ClassName} */
+    className: StampyPropTypes.className,
+    /** Set to true to disable the toggle. When disabled `onChange` will no longer be called when the input changes */
+    disabled: PropTypes.bool,
+    /** {HtmlProps} */
+    inputProps: StampyPropTypes.htmlProps,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.spruceModifier,
+    /** {OnChange} */
+    onChange: StampyPropTypes.onChange,
+    /** {SpruceName} */
+    spruceName: StampyPropTypes.spruceName,
+    /** HTML type attribute for the input */
+    type: PropTypes.string,
+    /** The string to show in the input */
+    value: PropTypes.string
+};
+
 Input.defaultProps = {
     className: '',
+    disabled: false,
+    inputProps: {},
     modifier: '',
     spruceName: 'Input',
-    type: 'text'
+    type: 'text',
+    value: ''
 }
+
+type InputProps = {
+    className?: string,
+    disabled?: boolean,
+    inputProps?: Object,
+    modifier?: SpruceModifier,
+    onChange?: OnChange,
+    spruceName?: string,
+    type?: string,
+    value?: boolean
+};
 
 export default Input;

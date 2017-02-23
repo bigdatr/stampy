@@ -5,7 +5,7 @@ import SpruceClassName from '../../util/SpruceClassName';
 type ShowHideProps = {
     children: Element<any>,
     className?: string,
-    modifier?: Modifier,
+    modifier?: SpruceModifier,
     onClick: (value: boolean) => void,
     show?: boolean,
     spruceName: string,
@@ -79,7 +79,7 @@ type ShowHideStatefulProps = {
     children: Element<any>,
     className?: string,
     defaultShow: boolean,
-    modifier?: Modifier,
+    modifier?: SpruceModifier,
     onClick: (value: boolean) => void,
     spruceName?: string,
     toggle: ReactClass<any>

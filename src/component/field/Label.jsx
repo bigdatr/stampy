@@ -1,14 +1,7 @@
 // @flow
 import React, {PropTypes} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
-import RemoveProps from '../../util/RemoveProps';
-
-type LabelProps = {
-    children: React.Element<any>,
-    className: ?string,
-    modifier: Modifier,
-    spruceName: string
-}
+import StampyPropTypes from '../../decls/PropTypes';
 
 /**
  * @module Components
@@ -19,41 +12,55 @@ type LabelProps = {
  *
  * `Label` is a simple component that displays a label.
  *
- * @prop {ClassName} [className]
- * @prop {Modifier} [modifier]
- * @prop {string} [spruceName = "Label"]
- *
  * @example
- * return <Label for='something'>Label for thing</Label>
+ * return <Label htmlFor='something'>Label for thing</Label>
  */
 
 function Label(props: LabelProps): React.Element<any> {
-    const {modifier, className, spruceName} = props;
-
-    const propsToRemove = {
-        modifier: true,
+    const {
+        children,
+        className,
+        htmlFor,
+        labelProps,
+        modifier,
         spruceName
-    };
+    } = props;
 
     return <label
-        {...RemoveProps(propsToRemove, props)}
+        {...labelProps}
+        htmlFor={htmlFor}
         className={SpruceClassName({name: spruceName, modifier, className})}
-    >{props.children}</label>;
+        children={children}
+    />;
 }
 
 Label.propTypes = {
-    className: PropTypes.string,
-    modifier: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-    ]),
-    spruceName: PropTypes.string
+    /** {ClassName} */
+    className: StampyPropTypes.className,
+    /** The id of the input HTML element this label corresponds to. */
+    htmlFor: PropTypes.string,
+    /** {HtmlProps} */
+    labelProps: StampyPropTypes.htmlProps,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.spruceModifier,
+    /** {SpruceName} */
+    spruceName: StampyPropTypes.spruceName
 };
 
 Label.defaultProps = {
     className: '',
+    labelProps: {},
     modifier: '',
     spruceName: 'Label'
-}
+};
+
+type LabelProps = {
+    children?: React.Element<*>,
+    className?: string,
+    htmlFor?: string,
+    labelProps?: Object,
+    modifier?: SpruceModifier,
+    spruceName?: string
+};
 
 export default Label;

@@ -19,3 +19,16 @@ test('basic label', tt => {
 
 });
 
+
+test('Label applies htmlFor as "for" attribute on <label>', tt => {
+    const label = shallow(<Label htmlFor="abc" />);
+    tt.is(label.render().children().first().get(0).attribs.for, "abc");
+});
+
+
+
+test('Label should apply labelProps to outer element', tt => {
+    const label = shallow(<Label labelProps={{'data-test': "test"}} />);
+    tt.is(label.render().children().first().get(0).attribs['data-test'], "test");
+});
+

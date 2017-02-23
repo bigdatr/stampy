@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
 import ReactSelect from 'react-select';
-import SpruceClassName from '../../util/SpruceClassName';
 
 type SelectProps = {
     clearable: ?boolean,
     disabled: ?boolean,
     multi: ?boolean,
-    onChange: OnChange|OnChangeMulti,
+    onChange: OnChangeMulti,
     options: Object[],
     placeholder: ?string,
     value: any
@@ -67,7 +66,7 @@ function Select(props: SelectProps): React.Element<any> {
 
 Select.propTypes = {
     clearable: React.PropTypes.string,
-    disabled: React.PropTypes.string,
+    disabled: React.PropTypes.bool,
     multi: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     options: React.PropTypes.arrayOf(

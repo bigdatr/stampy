@@ -78,3 +78,7 @@ test('disabled toggle', tt => {
 });
 
 
+test('Toggle should apply toggleProps to outer element', tt => {
+    const toggle = shallow(<Toggle toggleProps={{'data-test': "test"}} />);
+    tt.is(toggle.render().children().first().get(0).attribs['data-test'], "test");
+});

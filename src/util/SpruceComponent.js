@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {PropTypes} from 'react';
 import SpruceClassName from './SpruceClassName';
 
 /**
@@ -34,21 +34,32 @@ import SpruceClassName from './SpruceClassName';
  *      </Grid>
  * }
  */
+
 export default function SpruceComponent(name: string, Element: ReactClass<any>|string): Function {
-    function spruceComonent(props: Object): React.Element<any> {
-        const {spruceName, className, modifier, children, ...otherProps} = props;
+
+    function spruceComponent(props: Object): React.Element<any> {
+        const {
+            children,
+            className,
+            modifier,
+            spruceName,
+            ...otherProps
+        } = props;
+
         return <Element
             className={SpruceClassName({className, modifier, name: spruceName || name})}
             children={children}
             {...otherProps}
         />;
     }
-    spruceComonent.proptypes = {
-        className: React.PropTypes.string,
-        modifier: React.PropTypes.string,
-        spruceName: React.PropTypes.string
-    }
-    spruceComonent.displayName = name;
 
-    return spruceComonent;
+    spruceComponent.propTypes = {
+        className: PropTypes.string,
+        modifier: PropTypes.string,
+        spruceName: PropTypes.string
+    }
+
+    spruceComponent.displayName = name;
+
+    return spruceComponent;
 }

@@ -51,7 +51,7 @@ test('Input applies type attribute to HTML element', tt => {
 });
 
 
-test('Input should apply htmlProps to outer element', tt => {
-    const input = shallow(<Input htmlProps={{'data-test': "test"}} />);
+test('Input should apply inputProps to outer element', tt => {
+    const input = shallow(<Input inputProps={{'data-test': "test"}} />);
     tt.is(input.render().children().first().get(0).attribs['data-test'], "test");
 });

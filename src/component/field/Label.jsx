@@ -21,13 +21,13 @@ function Label(props: LabelProps): React.Element<any> {
         children,
         className,
         htmlFor,
-        htmlProps,
+        labelProps,
         modifier,
         spruceName
     } = props;
 
     return <label
-        {...htmlProps}
+        {...labelProps}
         htmlFor={htmlFor}
         className={SpruceClassName({name: spruceName, modifier, className})}
         children={children}
@@ -40,7 +40,7 @@ Label.propTypes = {
     /** The id of the input HTML element this label corresponds to. */
     htmlFor: PropTypes.string,
     /** {HtmlProps} */
-    htmlProps: StampyPropTypes.htmlProps,
+    labelProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
     /** {SpruceName} */
@@ -49,7 +49,7 @@ Label.propTypes = {
 
 Label.defaultProps = {
     className: '',
-    htmlProps: {},
+    labelProps: {},
     modifier: '',
     spruceName: 'Label'
 };
@@ -58,7 +58,7 @@ type LabelProps = {
     children?: React.Element<*>,
     className?: string,
     htmlFor?: string,
-    htmlProps?: Object,
+    labelProps?: Object,
     modifier?: SpruceModifier,
     spruceName?: string
 };

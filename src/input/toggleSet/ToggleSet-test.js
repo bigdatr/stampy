@@ -15,8 +15,8 @@ test('ToggleSet should have a class of ToggleSet', tt => {
     tt.true(toggleSet.render().children().first().hasClass('ToggleSet'));
 });
 
-test('ToggleSet should apply htmlProps to outer element', tt => {
-    const toggleSet = shallow(<ToggleSet options={options} htmlProps={{'data-test': "test"}} />);
+test('ToggleSet should apply toggleSetProps to outer element', tt => {
+    const toggleSet = shallow(<ToggleSet options={options} toggleSetProps={{'data-test': "test"}} />);
     tt.is(toggleSet.render().children().first().get(0).attribs['data-test'], "test");
 });
 
@@ -28,6 +28,13 @@ test('ToggleSet should render toggle with labels according to options', tt => {
     );
 });
 
+test('ToggleSet should apply toggleProps to all toggles', tt => {
+    const toggles = shallow(<ToggleSet options={options} toggleProps={{'data-test': "test"}} />).children();
+    tt.deepEqual(
+        toggles.map(ii => ii.render().children().first().get(0).attribs['data-test']),
+        ["test", "test", "test"]
+    );
+});
 
 test('ToggleSet should render active toggles according to value', tt => {
     const toggles = shallow(<ToggleSet options={options} />).children();

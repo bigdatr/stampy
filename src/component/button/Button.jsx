@@ -19,10 +19,10 @@ import StampyPropTypes from '../../types/PropTypes';
 
 function Button(props: ButtonProps): React.Element<any> {
     const {
+        buttonProps,
         children,
         className,
         disabled,
-        htmlProps,
         modifier,
         onClick,
         spruceName,
@@ -30,7 +30,7 @@ function Button(props: ButtonProps): React.Element<any> {
     } = props;
 
     return <button
-        {...htmlProps}
+        {...buttonProps}
         children={children}
         className={SpruceClassName({name: spruceName, modifier, className})}
         disabled={disabled}
@@ -40,12 +40,12 @@ function Button(props: ButtonProps): React.Element<any> {
 }
 
 Button.propTypes = {
+    /** {HtmlProps} */
+    buttonProps: StampyPropTypes.htmlProps,
     /** {ClassName} */
     className: PropTypes.string,
     /** Set to true to disable the button, and `onClick` calls will no longer be called when clicked. */
     disabled: PropTypes.bool,
-    /** {HtmlProps} */
-    htmlProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
     /** {OnClick} */
@@ -59,17 +59,17 @@ Button.propTypes = {
 Button.defaultProps = {
     className: '',
     disabled: false,
-    htmlProps: {},
+    buttonProps: {},
     modifier: '',
     spruceName: 'Button',
     type: 'button'
 };
 
 type ButtonProps = {
+    buttonProps?: Object,
     children?: React.Element<*>,
     className?: string,
     disabled?: boolean,
-    htmlProps?: Object,
     modifier?: SpruceModifier,
     onClick?: OnClick,
     spruceName?: string,

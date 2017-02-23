@@ -53,7 +53,7 @@ test('disabled button', tt => {
     );
 });
 
-test('Button should apply htmlProps to outer element', tt => {
-    const button = shallow(<Button htmlProps={{'data-test': "test"}} />);
+test('Button should apply buttonProps to outer element', tt => {
+    const button = shallow(<Button buttonProps={{'data-test': "test"}} />);
     tt.is(button.render().children().first().get(0).attribs['data-test'], "test");
 });

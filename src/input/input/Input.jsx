@@ -21,7 +21,7 @@ function Input(props: InputProps): React.Element<any> {
     const {
         className,
         disabled,
-        htmlProps,
+        inputProps,
         modifier,
         onChange,
         spruceName,
@@ -30,7 +30,7 @@ function Input(props: InputProps): React.Element<any> {
     } = props;
 
     return <input
-        {...htmlProps}
+        {...inputProps}
         className={SpruceClassName({name: spruceName, modifier, className})}
         disabled={disabled}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
@@ -45,7 +45,7 @@ Input.propTypes = {
     /** Set to true to disable the toggle. When disabled `onChange` will no longer be called when the input changes */
     disabled: PropTypes.bool,
     /** {HtmlProps} */
-    htmlProps: StampyPropTypes.htmlProps,
+    inputProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
     /** {OnChange} */
@@ -61,7 +61,7 @@ Input.propTypes = {
 Input.defaultProps = {
     className: '',
     disabled: false,
-    htmlProps: {},
+    inputProps: {},
     modifier: '',
     spruceName: 'Input',
     type: 'text',
@@ -71,7 +71,7 @@ Input.defaultProps = {
 type InputProps = {
     className?: string,
     disabled?: boolean,
-    htmlProps?: Object,
+    inputProps?: Object,
     modifier?: SpruceModifier,
     onChange?: OnChange,
     spruceName?: string,

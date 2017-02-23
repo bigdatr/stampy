@@ -5,7 +5,7 @@
  */
 
 /**
- * An object of attributes to be applied to the HTML tag of the component.
+ * An object of attributes to be applied to the outer-most HTML tag of the component.
  *
  * @typedef {Object} HtmlProps
  */

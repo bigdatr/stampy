@@ -60,7 +60,8 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
         className,
         clearable,
         disabled,
-        htmlProps,
+        toggleProps,
+        toggleSetProps,
         modifier,
         multi,
         onChange,
@@ -103,13 +104,14 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
                 children={label}
                 disabled={disabled}
                 onChange={toggleOnChange}
+                toggleProps={toggleProps}
                 value={selection.has(value)}
             />;
         })
         .toArray();
 
     return <div
-        {...htmlProps}
+        {...toggleSetProps}
         className={SpruceClassName({name: spruceName, modifier, className})}
         children={toggles}
     />;
@@ -122,8 +124,10 @@ ToggleSet.propTypes = {
     clearable: PropTypes.bool,
     /** Set to true to disable the toggle set. When disabled the user cannot change the state of the `ToggleSet` */
     disabled: PropTypes.bool,
+    /** {Object} An object of attributes to be applied to the HTML tags of each of the toggles created by this component. */
+    toggleProps: StampyPropTypes.htmlProps,
     /** {HtmlProps} */
-    htmlProps: StampyPropTypes.htmlProps,
+    toggleSetProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
     /** Set to true to allow the user to select more than one option at once. When `multi=true` the first argument of `onChange` will be an array of selected options. */
@@ -153,7 +157,7 @@ ToggleSet.propTypes = {
 
 ToggleSet.defaultProps = {
     className: '',
-    htmlProps: {},
+    toggleSetProps: {},
     modifier: '',
     spruceName: 'ToggleSet'
 }
@@ -162,7 +166,8 @@ type ToggleSetProps = {
     className?: string,
     clearable?: boolean,
     disabled?: boolean,
-    htmlProps?: Object,
+    toggleProps?: Object,
+    toggleSetProps?: Object,
     modifier?: SpruceModifier,
     multi?: boolean,
     onChange?: OnChangeMulti,

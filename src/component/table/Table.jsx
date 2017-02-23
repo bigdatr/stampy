@@ -134,11 +134,11 @@ function Td(props: TdProps): React.Element<any> {
 function Table(props: TableProps): React.Element<any> {
     const {
         className,
-        htmlProps,
         modifier,
         rowProps = () => ({}),
         schema,
-        spruceName
+        spruceName,
+        tableProps
     } = props;
 
     const data: List<any> = fromJS(props.data);
@@ -157,7 +157,7 @@ function Table(props: TableProps): React.Element<any> {
         })
         .toArray();
 
-    return <table {...htmlProps} className={SpruceClassName({name: spruceName, modifier, className})}>
+    return <table {...tableProps} className={SpruceClassName({name: spruceName, modifier, className})}>
         <thead><tr>{tableHead}</tr></thead>
         <tbody>{tableBody}</tbody>
     </table>
@@ -176,8 +176,6 @@ Table.propTypes = {
         PropTypes.array,
         ImmutablePropTypes.list
     ]),
-    /** {HtmlProps} */
-    htmlProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
     /** {TableRowProps} */
@@ -193,7 +191,9 @@ Table.propTypes = {
         PropTypes.func
     ]),
     /** {SpruceName} */
-    spruceName: PropTypes.string
+    spruceName: PropTypes.string,
+    /** {HtmlProps} */
+    tableProps: StampyPropTypes.htmlProps
 };
 
 Table.defaultProps = {
@@ -201,7 +201,8 @@ Table.defaultProps = {
     data: List(),
     modifier: '',
     schema: List(),
-    spruceName: 'Table'
+    spruceName: 'Table',
+    tableProps: {}
 };
 
 type Schema = List<SchemaItem> | Array<SchemaItem> | Function;
@@ -215,12 +216,12 @@ type SchemaItem = {
 
 type TableProps = {
     className?: string,
-    htmlProps?: Object,
     data: ListOrArray,
     modifier?: SpruceModifier,
     rowProps?: (row: Object) => Object,
     schema: Schema,
-    spruceName?: string
+    spruceName?: string,
+    tableProps?: Object
 }
 
 export default Table;

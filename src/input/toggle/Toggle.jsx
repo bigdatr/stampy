@@ -34,9 +34,14 @@ function Toggle(props: ToggleProps): React.Element<any> {
         value
     } = props;
 
+    const additionalClassNames: Object = {
+        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+        [`${spruceName}-active`]: !!value
+    };
+
     return <button
         {...htmlProps}
-        className={SpruceClassName({name: spruceName, modifier, className}, {[`${String(spruceName)}-active`]: !!value})}
+        className={SpruceClassName({name: spruceName, modifier, className}, additionalClassNames)}
         disabled={disabled}
         onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
         type="button"

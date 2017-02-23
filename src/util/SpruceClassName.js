@@ -50,7 +50,8 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
     const modifiers: string = classnames(props.modifier)
         .split(' ')
         .filter(ii => ii != '')
-        .map(mm => `${String(name)}-${mm}`)
+        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+        .map(mm => `${name}-${mm}`)
 
     return classnames(
         props.name,

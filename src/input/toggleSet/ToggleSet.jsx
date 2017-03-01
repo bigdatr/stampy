@@ -105,6 +105,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
                 disabled={disabled}
                 onChange={toggleOnChange}
                 toggleProps={toggleProps}
+                spruceName="ToggleSet_toggle"
                 value={selection.has(value)}
             />;
         })

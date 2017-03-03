@@ -71,7 +71,7 @@
     "immutable": "^3.8.1",
     "proxyquire": "^1.7.11",
     "react-immutable-proptypes": "^2.1.0",
-    "react-select": "^1.0.0-rc.2"
+    "react-select": "^1.0.0-rc.3"
   },
   "main": "lib/index.js",
   "engines": {

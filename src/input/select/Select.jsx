@@ -1,14 +1,19 @@
 // @flow
 import React from 'react';
 import ReactSelect from 'react-select';
+import SpruceClassName from '../../util/SpruceClassName';
+import StampyPropTypes from '../../decls/PropTypes';
 
 type SelectProps = {
+    className?: string,
     clearable: ?boolean,
     disabled: ?boolean,
+    modifier?: SpruceModifier,
     multi: ?boolean,
     onChange: OnChangeMulti,
     options: Object[],
     placeholder: ?string,
+    spruceName?: string,
     value: any
 }
 
@@ -51,7 +56,10 @@ type SelectProps = {
 function Select(props: SelectProps): React.Element<any> {
     const {
         multi,
-        onChange
+        onChange,
+        className,
+        modifier,
+        spruceName: name
     } = props;
 
     const modifiedOnChange: Function = multi
@@ -60,13 +68,18 @@ function Select(props: SelectProps): React.Element<any> {
 
     return <ReactSelect
         {...props}
+        className={SpruceClassName({name, modifier, className})}
         onChange={modifiedOnChange}
     />;
 }
 
 Select.propTypes = {
+    /** {ClassName} */
+    className: StampyPropTypes.className,
     clearable: React.PropTypes.string,
     disabled: React.PropTypes.bool,
+    /** {SpruceModifier} */
+    modifier: StampyPropTypes.spruceModifier,
     multi: React.PropTypes.bool,
     onChange: React.PropTypes.func,
     options: React.PropTypes.arrayOf(
@@ -76,7 +89,13 @@ Select.propTypes = {
         })
     ),
     placeholder: React.PropTypes.string,
+    /** {SpruceName} */
+    spruceName: StampyPropTypes.spruceName,
     value: React.PropTypes.any
-}
+};
+
+Select.defaultProps = {
+    spruceName: 'Select'
+};
 
 export default Select;

@@ -76,7 +76,7 @@ function Select(props: SelectProps): React.Element<any> {
 Select.propTypes = {
     /** {ClassName} */
     className: StampyPropTypes.className,
-    clearable: React.PropTypes.string,
+    clearable: React.PropTypes.bool,
     disabled: React.PropTypes.bool,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,

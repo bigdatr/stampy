@@ -319,6 +319,31 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
     tt.deepEqual(push.firstCall.args[0].query, newQuery);
 });
 
+test('QueryStringHock setQuery should replace pathname if provided as a param', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            query: {foo: 'bar'},
+            pathname: '/'
+        }
+    };
+
+
+    myWrappedComponent.render().props.setQuery({}, '/foo');
+
+    tt.is(push.firstCall.args[0].pathname, '/foo');
+});
+
 test('QueryStringHock setQuery should noop on missing location prop', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
@@ -557,5 +582,30 @@ test('QueryStringHock updateQuery can cope with merging and not merging array pa
     myWrappedComponent.render().props.updateQuery(newQuery);
 
     tt.deepEqual(push.firstCall.args[0].query, expectedQuery);
+});
+
+test('QueryStringHock updateQuery should replace pathname if provided as a param', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            query: {foo: 'bar'},
+            pathname: '/'
+        }
+    };
+
+
+    myWrappedComponent.render().props.updateQuery({}, '/foo');
+
+    tt.is(push.firstCall.args[0].pathname, '/foo');
 });
 

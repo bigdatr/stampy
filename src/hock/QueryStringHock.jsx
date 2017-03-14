@@ -122,9 +122,12 @@ export default (config: ?Object = null): HockApplier => {
              *
              * @param {Object} queryParamsToUpdate
              * An object containing query params to update.
+             *
+             * @param {string} [pathname]
+             * An optional string that will replace the current pathname.
              */
 
-            updateQuery(queryParamsToUpdate: Object) {
+            updateQuery(queryParamsToUpdate: Object, pathname?: string) {
                 if(!this.props.location || !this.props.location.query) {
                     console.warn("Cannot call updateQuery, QueryStringHock has not been given a react-router location.query prop");
                     return;
@@ -133,7 +136,7 @@ export default (config: ?Object = null): HockApplier => {
                 const query = fromJS(existingQuery)
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
-                this.setQuery(query);
+                this.setQuery(query, pathname);
             }
 
             /**
@@ -144,9 +147,12 @@ export default (config: ?Object = null): HockApplier => {
              *
              * @param {Object} query
              * An object containing query params.
+             *
+             * @param {string} [pathname]
+             * An optional string that will replace the current pathname.
              */
 
-            setQuery(query: Object) {
+            setQuery(query: Object, pathname?: string) {
                 if(!this.props.location || !this.props.location.query) {
                     console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.query prop");
                     return;
@@ -159,14 +165,14 @@ export default (config: ?Object = null): HockApplier => {
                 if(this.context.router) {
                     // react router v2
                     this.context.router[routerMethod]({
-                        pathname: this.props.location.pathname,
+                        pathname: pathname || this.props.location.pathname,
                         query: newQuery
                     });
                 } else {
                     // react router v1
                     this.props.history[`${routerMethod}State`](
                         null,
-                        this.props.location.pathname,
+                        pathname || this.props.location.pathname,
                         newQuery
                     );
                 }

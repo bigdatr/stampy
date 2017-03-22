@@ -59,7 +59,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
     const {
         className,
         clearable,
-        disabled,
+        disabled: componentDisabled,
         toggleProps,
         toggleSetProps,
         modifier,
@@ -77,7 +77,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
             : Set();
 
     const toggles: Array<React.Element<any>> = List(options)
-        .map(({label, value}) => {
+        .map(({label, value, disabled}) => {
 
             const toggleOnChange = (added: boolean, meta: OnChangeMeta) => {
                 if(!onChange) {
@@ -102,7 +102,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
 
             return <Toggle
                 children={label}
-                disabled={disabled}
+                disabled={disabled || componentDisabled}
                 onChange={toggleOnChange}
                 toggleProps={toggleProps}
                 spruceName="ToggleSet_toggle"

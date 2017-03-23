@@ -1,11 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Routes from '../routes';
+import {routesList} from '../routes';
 
 export default () => {
-    const links = Routes
-        .props
-        .children
+    const links = routesList
         .props
         .children
         .map(route => {

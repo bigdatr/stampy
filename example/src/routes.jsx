@@ -38,9 +38,8 @@ const Routes = <HashRouter>
         <Route path="/hock/ElementQueryHock" component={ElementQueryHockExample}/>
         <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
         <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
+        {/*<Route component={ErrorHandler} />*/}
     </AppHandler>
 </HashRouter>;
-
-// how do we do ErrorHandler now in react router v4?
 
 export default Routes;

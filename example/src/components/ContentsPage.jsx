@@ -10,9 +10,14 @@ export default () => {
         .children
         .map(route => {
             const {path} = route.props;
+            if(!path) {
+                return null;
+            }
             return <li key={path}>
                 <Link to={path}>{path}</Link>
             </li>;
-        });
+        })
+        .filter(ii => ii);
+
     return <ul>{links}</ul>;
 }

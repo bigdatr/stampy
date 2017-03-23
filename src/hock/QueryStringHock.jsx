@@ -70,7 +70,7 @@ export default (config: ?Object = null): HockApplier => {
          * @decorator {QueryStringHock}
          *
          * @prop {Object} location
-         * Required for `react-router` v1, v2, v2 and v4. Must be react router location object.
+         * Required for `react-router` v1, v2, v3 and v4. Must be react router location object.
          *
          * @prop {Object} history
          * Required only for `react-router` v1. Must be react router history object.

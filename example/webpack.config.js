@@ -37,7 +37,8 @@ const development = {
         root: [path.resolve(__dirname, './src'), path.resolve(__dirname, './node_modules')],
         alias: {
             stampy: path.resolve(__dirname, "../")
-        }
+        },
+        fallback: path.resolve(__dirname, '../node_modules')
     },
     plugins: [
         new webpack.DefinePlugin({

@@ -222,7 +222,11 @@ export default (config: ?Object = null): HockApplier => {
 
                     newPath += `?${newQueryString}`;
                 }
-                this.context.router.history[routerMethod](newPath);
+
+                // only set new pathname if it has changed
+                if(newPath != this.props.location.pathname + this.props.location.search) {
+                    this.context.router.history[routerMethod](newPath);
+                }
             }
 
             render(): React.Element<any> {

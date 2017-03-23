@@ -362,6 +362,40 @@ test('QueryStringHock should set query for react-router v4 using context.router.
     tt.false(push.called, 'router.push should not be called');
 });
 
+test('QueryStringHock should not change path if path is the same for react-router v4', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+    const replace = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push,
+                replace
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "?a=A",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: "A"
+    };
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+    tt.false(push.called, 'router.push should not be called');
+    tt.false(replace.called, 'router.replace should not be called');
+});
+
 test('QueryStringHock should not set a query string when no query using react-router v4', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
@@ -381,7 +415,7 @@ test('QueryStringHock should not set a query string when no query using react-ro
     };
     myWrappedComponent.props = {
         location: {
-            search: "",
+            search: "?old=OLD",
             pathname
         }
     };

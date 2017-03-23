@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, IndexRoute} from 'react-router';
+import {HashRouter, Route} from 'react-router-dom';
 
 import AppHandler from 'components/AppHandler';
 import ErrorHandler from 'components/ErrorHandler';
@@ -17,35 +17,30 @@ import ToggleSetExample from 'input/toggleSet/ToggleSetExample';
 
 import ElementQueryHockExample from 'hock/ElementQueryHockExample';
 import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
+import QueryStringHockExample from 'hock/QueryStringHockExample';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
 
-const routes = <Route component={AppHandler} path="/">
-    <IndexRoute component={ContentsPage} />
-    <Route path="component">
-        <Route path="Button" component={ButtonExample}/>
-        <Route path="Label" component={LabelExample}/>
-        <Route path="ShowHide" component={ShowHideExample}/>
-        <Route path="Table" component={TableExample}/>
-    </Route>
-    <Route path="input">
-        <Route path="Input" component={InputExample}/>
-        <Route path="Select" component={SelectExample}/>
-        <Route path="Toggle" component={ToggleExample}/>
-        <Route path="ToggleSet" component={ToggleSetExample}/>
-    </Route>
-    <Route path="util">
-        <Route path="SpruceClassName" component={SpruceClassNameExample}/>
-        <Route path="SpruceComponent" component={SpruceComponentExample}/>
-    </Route>
+const Routes = <HashRouter>
+    <AppHandler>
+        <Route exact path="/" component={ContentsPage} />
+        <Route path="/component/Button" component={ButtonExample}/>
+        <Route path="/component/Label" component={LabelExample}/>
+        <Route path="/component/ShowHide" component={ShowHideExample}/>
+        <Route path="/component/Table" component={TableExample}/>
+        <Route path="/input/Input" component={InputExample}/>
+        <Route path="/input/Select" component={SelectExample}/>
+        <Route path="/input/Toggle" component={ToggleExample}/>
+        <Route path="/input/ToggleSet" component={ToggleSetExample}/>
+        <Route path="/util/SpruceClassName" component={SpruceClassNameExample}/>
+        <Route path="/util/SpruceComponent" component={SpruceComponentExample}/>
+        <Route path="/hock/ElementQueryHock" component={ElementQueryHockExample}/>
+        <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
+        <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
+    </AppHandler>
+</HashRouter>;
 
-    <Route path="hock">
-        <Route path="ElementQueryHock" component={ElementQueryHockExample}/>
-        <Route path="ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
-    </Route>
+// how do we do ErrorHandler now in react router v4?
 
-    <Route path="*" component={ErrorHandler}/>
-</Route>;
-
-export default routes;
+export default Routes;

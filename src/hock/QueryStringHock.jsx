@@ -224,7 +224,7 @@ export default (config: ?Object = null): HockApplier => {
                 }
 
                 // only set new pathname if it has changed
-                if(newPath != this.props.location.pathname + this.props.location.search) {
+                if(newPath !== this.props.location.pathname + this.props.location.search) {
                     this.context.router.history[routerMethod](newPath);
                 }
             }

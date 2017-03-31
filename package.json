@@ -26,7 +26,8 @@
     "postcss": "postcss --use autoprefixer -r lib/**/*.css",
     "prepublish": "yarn run build",
     "test": "NODE_ENV=test nyc --report-dir=./coverage ava && yarn run check-coverage",
-    "test-all": "NODE_ENV=test yarn run lint && yarn run flow && yarn run test"
+    "test-all": "NODE_ENV=test yarn run lint && yarn run flow && yarn run test",
+    "watch": "yarn run dev"
   },
   "devDependencies": {
     "app-module-path": "^2.0.0",
@@ -52,7 +53,7 @@
     "jsdoc-babel": "^0.2.1",
     "jsdoc-react-proptypes": "^1.0.1",
     "jsdom": "^9.8.3",
-    "jsdonk": "0.4.12",
+    "jsdonk": "^0.4.18",
     "node-sass": "^3.11.2",
     "nyc": "^10.0.0",
     "postcss-cli": "^2.6.0",

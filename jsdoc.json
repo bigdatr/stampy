@@ -9,6 +9,9 @@
      "template": "node_modules/jsdonk",
      "jsdonk": {
         "title": "Stampy",
+        "repo": {
+          "github": "https://github.com/bigdatr/stampy"
+        },
         "sections": {
           "module": {
             "typedef": false

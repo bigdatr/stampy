@@ -15,6 +15,27 @@ test('ToggleSet should have a class of ToggleSet', tt => {
     tt.true(toggleSet.render().children().first().hasClass('ToggleSet'));
 });
 
+test('ToggleSet should apply spruceName as class on ToggleSet', tt => {
+    const toggleSet = shallow(<ToggleSet options={options} spruceName="NewName" />);
+    tt.true(toggleSet.render().children().first().hasClass('NewName'));
+});
+
+test('ToggleSet should apply a class of ToggleSet_toggle to all toggles by default', tt => {
+    const toggles = shallow(<ToggleSet options={options} />).children();
+    tt.deepEqual(
+        toggles.map(ii => /\ToggleSet_toggle\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        [true, true, true]
+    );
+});
+
+test('ToggleSet should apply toggleSpruceName to all toggles', tt => {
+    const toggles = shallow(<ToggleSet options={options} toggleSpruceName="NewName" />).children();
+    tt.deepEqual(
+        toggles.map(ii => /\bNewName\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        [true, true, true]
+    );
+});
+
 test('ToggleSet should apply toggleSetProps to outer element', tt => {
     const toggleSet = shallow(<ToggleSet options={options} toggleSetProps={{'data-test': "test"}} />);
     tt.is(toggleSet.render().children().first().get(0).attribs['data-test'], "test");

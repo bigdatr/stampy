@@ -67,6 +67,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
         onChange,
         options,
         spruceName,
+        toggleSpruceName,
         value
     } = props;
 
@@ -105,7 +106,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
                 disabled={disabled || componentDisabled}
                 onChange={toggleOnChange}
                 toggleProps={toggleProps}
-                spruceName="ToggleSet_toggle"
+                spruceName={toggleSpruceName}
                 value={selection.has(value)}
             />;
         })
@@ -144,6 +145,8 @@ ToggleSet.propTypes = {
     ).isRequired,
     /** {SpruceName} */
     spruceName: StampyPropTypes.spruceName,
+    /** {string} The spruce name used by each toggle in the toggle set */
+    toggleSpruceName: StampyPropTypes.spruceName,
     /**
      * The values that have been selected. Under normal usage these should correspond to values in the `options` array.
      * When `multi=false` this expects a string, or when `multi=true` this expects an array of strings.
@@ -160,7 +163,8 @@ ToggleSet.defaultProps = {
     className: '',
     toggleSetProps: {},
     modifier: '',
-    spruceName: 'ToggleSet'
+    spruceName: 'ToggleSet',
+    toggleSpruceName: 'ToggleSet_toggle'
 }
 
 type ToggleSetProps = {
@@ -174,6 +178,7 @@ type ToggleSetProps = {
     onChange?: OnChangeMulti,
     options: Object[],
     spruceName?: string,
+    toggleSpruceName?: string,
     value?: string|Array<string>
 }
 

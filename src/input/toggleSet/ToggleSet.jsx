@@ -183,6 +183,7 @@ type ToggleSetProps = {
     options: Object[],
     spruceName?: string,
     toggleSpruceName?: string,
+    toggleModifier?: SpruceModifier,
     value?: string|Array<string>
 }
 

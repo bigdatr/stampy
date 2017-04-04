@@ -36,6 +36,14 @@ test('ToggleSet should apply toggleSpruceName to all toggles', tt => {
     );
 });
 
+test('ToggleSet should apply toggleModifier to all toggles', tt => {
+    const toggles = shallow(<ToggleSet options={options} toggleSpruceName="NewName" toggleModifier="big" />).children();
+    tt.deepEqual(
+        toggles.map(ii => /\bNewName-big\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        [true, true, true]
+    );
+});
+
 test('ToggleSet should apply toggleSetProps to outer element', tt => {
     const toggleSet = shallow(<ToggleSet options={options} toggleSetProps={{'data-test': "test"}} />);
     tt.is(toggleSet.render().children().first().get(0).attribs['data-test'], "test");

@@ -11,6 +11,10 @@ const fooWrapper = shallow(<Foo modifier="red">Rad</Foo>);
 
 test('the component renders the given type', tt => {
     tt.is(fooWrapper.type(), 'li');
+
+    const Bar = SpruceComponent('Bar', 'div');
+    const barWrapper = shallow(<Bar modifier="red" element="span">Rad</Bar>);
+    tt.is(barWrapper.type(), 'span');
 });
 
 test('the component renders SpruceClassNames', tt => {

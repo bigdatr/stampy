@@ -35,7 +35,7 @@ import SpruceClassName from './SpruceClassName';
  * }
  */
 
-export default function SpruceComponent(name: string, Element: ReactClass<any>|string): Function {
+export default function SpruceComponent(name: string, defaultElement: ReactClass<any>|string): Function {
 
     function spruceComponent(props: Object): React.Element<any> {
         const {
@@ -43,10 +43,13 @@ export default function SpruceComponent(name: string, Element: ReactClass<any>|s
             className,
             modifier,
             spruceName,
+            element,
             ...otherProps
         } = props;
 
-        return <Element
+        const Component = element || defaultElement;
+
+        return <Component
             className={SpruceClassName({className, modifier, name: spruceName || name})}
             children={children}
             {...otherProps}
@@ -55,6 +58,10 @@ export default function SpruceComponent(name: string, Element: ReactClass<any>|s
 
     spruceComponent.propTypes = {
         className: PropTypes.string,
+        element: PropTypes.oneOfType([
+            PropTypes.func,
+            PropTypes.string
+        ]),
         modifier: PropTypes.string,
         spruceName: PropTypes.string
     }

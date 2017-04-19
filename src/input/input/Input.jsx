@@ -42,7 +42,7 @@ function Input(props: InputProps): React.Element<any> {
 Input.propTypes = {
     /** {ClassName} */
     className: StampyPropTypes.className,
-    /** Set to true to disable the toggle. When disabled `onChange` will no longer be called when the input changes */
+    /** Set to true to disable the input. When disabled `onChange` will no longer be called when the input changes */
     disabled: PropTypes.bool,
     /** {HtmlProps} */
     inputProps: StampyPropTypes.htmlProps,

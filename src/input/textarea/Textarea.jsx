@@ -14,7 +14,7 @@ import StampyPropTypes from '../../decls/PropTypes';
  * It does not keep state.
  *
  * @example
- * return <Textarea type='text' onChange={(val) => doStuff(val)}/>
+ * return <Textarea onChange={(val) => doStuff(val)}/>
  */
 
 function Textarea(props: TextareaProps): React.Element<any> {
@@ -25,7 +25,6 @@ function Textarea(props: TextareaProps): React.Element<any> {
         modifier,
         onChange,
         spruceName,
-        type,
         value
     } = props;
 
@@ -34,7 +33,6 @@ function Textarea(props: TextareaProps): React.Element<any> {
         className={SpruceClassName({name: spruceName, modifier, className})}
         disabled={disabled}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
-        type={type}
         value={value}
     />;
 }
@@ -52,8 +50,6 @@ Textarea.propTypes = {
     onChange: StampyPropTypes.onChange,
     /** {SpruceName} */
     spruceName: StampyPropTypes.spruceName,
-    /** HTML type attribute for the textarea */
-    type: PropTypes.string,
     /** The string to show in the textarea */
     value: PropTypes.string
 };
@@ -64,7 +60,6 @@ Textarea.defaultProps = {
     textareaProps: {},
     modifier: '',
     spruceName: 'Textarea',
-    type: 'text',
     value: ''
 }
 
@@ -75,7 +70,6 @@ type TextareaProps = {
     modifier?: SpruceModifier,
     onChange?: OnChange,
     spruceName?: string,
-    type?: string,
     value?: boolean
 };
 

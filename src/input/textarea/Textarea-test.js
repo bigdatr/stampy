@@ -37,19 +37,7 @@ test('textarea', tt => {
         textareaComponent.render().children().first().hasClass('OtherToggle'),
         'textarea applies passed classname'
     );
-
-    tt.is(
-        textareaElem.render().children().first().get(0).attribs.type,
-        "text",
-        'Textarea defaults to type="text"'
-    );
 });
-
-test('Textarea applies type attribute to HTML element', tt => {
-    const textarea = shallow(<Textarea type="tel" />);
-    tt.is(textarea.render().children().first().get(0).attribs.type, "tel");
-});
-
 
 test('Textarea should apply textareaProps to outer element', tt => {
     const textarea = shallow(<Textarea textareaProps={{'data-test': "test"}} />);

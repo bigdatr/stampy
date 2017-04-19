@@ -5,6 +5,7 @@ export {default as ShowHide} from './component/showHide/ShowHide';
 export {ShowHideStateful} from './component/showHide/ShowHide';
 
 export {default as Input} from './input/input/Input';
+export {default as Textarea} from './input/textarea/Textarea';
 export {default as Select} from './input/select/Select';
 export {default as Toggle} from './input/toggle/Toggle';
 export {default as ToggleSet} from './input/toggleSet/ToggleSet';

@@ -74,7 +74,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
 
     const selection: Set<string> = multi
         ? Set(value)
-        : typeof value == "string"
+        : typeof value == "string" || typeof value == "boolean"
             ? Set([value])
             : Set();
 
@@ -153,12 +153,14 @@ ToggleSet.propTypes = {
     toggleModifier: StampyPropTypes.spruceModifier,
     /**
      * The values that have been selected. Under normal usage these should correspond to values in the `options` array.
-     * When `multi=false` this expects a string, or when `multi=true` this expects an array of strings.
+     * When `multi=false` this expects a string or boolean, or when `multi=true` this expects an array of strings or booleans.
      */
     value: PropTypes.oneOfType([
         PropTypes.string,
+        PropTypes.bool,
         PropTypes.arrayOf(
-            PropTypes.string
+            PropTypes.string,
+            PropTypes.bool,
         )
     ])
 }

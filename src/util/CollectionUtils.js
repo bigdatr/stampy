@@ -107,14 +107,22 @@ export function set(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
     if(Iterable.isIterable(collection)) {
         return collection.set(key, value);
     }
-    var newCollection: Array<*>|Object = clone(collection);
+
+    var newCollection: Array<*>|Object = collection
+        ? clone(collection)
+        : {};
+
     newCollection[key] = value;
     return newCollection;
 }
 
 /**
  * A function that works like Immutable's `setIn`, but can also work on Objects and Arrays.
- * Operations are done immutably even on non immutable.js collections
+ * Operations are done immutably even on non immutable.js collections.
+ *
+ * Please note that if you set deep properties on objects or arrays with circular references
+ * this may result in parts of the collection being cloned.
+ *
  * @example
  * const obj = {
  *   a: {}

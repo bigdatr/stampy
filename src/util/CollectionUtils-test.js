@@ -340,6 +340,14 @@ test('setIn() works with arrays', tt => {
     tt.deepEqual(setIn(obj, ['a', 1], '789'), expectedObj);
 });
 
+test('setIn() creates new objects (not arrays!) when required to set deeper values on paths that are numbers. This matches immutable.js behaviour.', tt => {
+    const array = [[1,2]];
+    const expectedArray = [[1,2],undefined,{"1": 3}];
+
+    tt.deepEqual(setIn(array, [2, 1], 3), expectedArray);
+});
+
+
 test('setIn() works with Maps', tt => {
     const map = fromJS({
         a: {

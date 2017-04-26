@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {fromJS, Map} from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import memoize from 'fast-memoize';
+import memoize from 'lru-memoize';
 import {getIn, setIn} from '../util/CollectionUtils';
 
 type FormHockConfig = {
@@ -89,8 +89,15 @@ function FormHock(config: FormHockConfig = {}): Function {
 
             constructor(props: Object) {
                 super(props);
-                this.getFields = memoize(this.getFields.bind(this));
-                this.createOnChange = memoize(this.createOnChange.bind(this));
+                // memoize only the most recently generated fields prop
+                this.getFields = memoize()(this.getFields.bind(this));
+
+                // create onChange functions for each field
+                this.fieldOnChange = configFields
+                    .reduce((obj: Object, pathString: string) => {
+                        obj[pathString] = (newValue: *) => this.onChange(newValue, pathString.split("."));
+                        return obj;
+                    }, {});
             }
 
             onChange(changedValue: *, path: Array<string>) {
@@ -98,16 +105,12 @@ function FormHock(config: FormHockConfig = {}): Function {
                 onChange(setIn(value, path, changedValue));
             }
 
-            createOnChange(pathString: string): Function {
-                return (newValue: *) => this.onChange(newValue, pathString.split("."));
-            }
-
             getFields(valueProp: Object): Object {
                 return configFields
                     .reduce((fields: Map<string,*>, pathString: string): Map<string,*> => {
                         const path: Array<string> = pathString.split(".");
                         const value: * = getIn(valueProp, path, "");
-                        const onChange: Function = this.createOnChange(pathString);
+                        const onChange: Function = this.fieldOnChange[pathString];
                         return fields.setIn(path, {value, onChange});
                     }, Map())
                     .toJS();

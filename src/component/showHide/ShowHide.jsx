@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes, Element} from 'react';
+import PropTypes from 'prop-types';
+import React, {Element} from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 
 type ShowHideProps = {
@@ -10,7 +11,7 @@ type ShowHideProps = {
     show?: boolean,
     spruceName: string,
     toggle: ReactClass<any>
-}
+};
 
 /**
  * @module Components
@@ -60,7 +61,7 @@ ShowHide.defaultProps = {
     onClick: (data) => data,
     show: false,
     spruceName: 'ShowHide'
-}
+};
 
 
 /**

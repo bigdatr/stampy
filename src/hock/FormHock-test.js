@@ -201,7 +201,7 @@ test('FormHock memoizes the onChange props it passes down', tt => {
         }
     };
 
-    var firstFieldsProp = myWrappedComponent.render().props.fields;
+    var firstFieldsProp = myWrappedComponent.render().props.fields.name.onChange;
 
     myWrappedComponent.props = {
         value: {
@@ -209,7 +209,7 @@ test('FormHock memoizes the onChange props it passes down', tt => {
         }
     };
 
-    var secondFieldsProp = myWrappedComponent.render().props.fields;
+    var secondFieldsProp = myWrappedComponent.render().props.fields.name.onChange;
 
     tt.is(firstFieldsProp.name.onChange, secondFieldsProp.name.onChange, 'subsequent renders should not cause new onChange functions to be made');
 });

@@ -1999,18 +1999,7 @@ fast-levenshtein@~2.0.4:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.5.tgz#bd33145744519ab1c36c3ee9f31f08e9079b67f2"
 
-fbjs@^0.8.1, fbjs@^0.8.4:
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.6.tgz#7eb67d6986b2d5007a9b6e92e0e7cb6f75cad290"
-  dependencies:
-    core-js "^1.0.0"
-    isomorphic-fetch "^2.1.1"
-    loose-envify "^1.0.0"
-    object-assign "^4.1.0"
-    promise "^7.1.1"
-    ua-parser-js "^0.7.9"
-
-fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.12"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.12.tgz#10b5d92f76d45575fd63a217d4ea02bea2f8ed04"
   dependencies:
@@ -3016,9 +3005,9 @@ jsdom@^9.8.3:
     whatwg-url "^3.0.0"
     xml-name-validator ">= 2.0.1 < 3.0.0"
 
-jsdonk@^0.4.18:
-  version "0.4.18"
-  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.18.tgz#72e31979cddc5f154bbebe7d6af88e75254a219a"
+jsdonk@^0.4.20:
+  version "0.4.20"
+  resolved "https://registry.yarnpkg.com/jsdonk/-/jsdonk-0.4.20.tgz#7e586f75d3b9d254ab89ed25088af2b22df763b9"
   dependencies:
     immutable "^3.8.1"
     prismjs "^1.5.1"
@@ -3265,6 +3254,10 @@ lru-cache@^4.0.1:
   dependencies:
     pseudomap "^1.0.1"
     yallist "^2.0.0"
+
+lru-memoize@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/lru-memoize/-/lru-memoize-1.0.2.tgz#f5ae84d288e7d55fec8388ec0bd725621bc815d0"
 
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"

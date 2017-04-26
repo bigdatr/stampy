@@ -321,3 +321,42 @@ test('setIn() works at depth 3 on existing key', tt => {
 
     tt.deepEqual(setIn(obj, ['a', 0, 'c'], '456'), expectedObj);
 });
+
+test('setIn() works with arrays', tt => {
+    const obj = {
+        a: [
+            "123",
+            "456"
+        ]
+    };
+
+    const expectedObj = {
+        a: [
+            "123",
+            "789"
+        ]
+    };
+
+    tt.deepEqual(setIn(obj, ['a', 1], '789'), expectedObj);
+});
+
+test('setIn() works with Maps', tt => {
+    const map = fromJS({
+        a: {
+            b: "123"
+        }
+    });
+
+    const expectedObj = fromJS({
+        a: {
+            b: "456"
+        }
+    });
+
+    tt.true(
+        is(
+            setIn(map, ['a', 'b'], '456'),
+            expectedObj
+        )
+    );
+});

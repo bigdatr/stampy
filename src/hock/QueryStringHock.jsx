@@ -1,6 +1,6 @@
 // @flow
-
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import {fromJS, List, Map} from 'immutable';
 import URLSearchParams from 'url-search-params';
 
@@ -245,7 +245,7 @@ export default (config: ?Object = null): HockApplier => {
         };
 
         QueryStringHock.contextTypes = {
-            router: React.PropTypes.object
+            router: PropTypes.object
         };
 
         return QueryStringHock;

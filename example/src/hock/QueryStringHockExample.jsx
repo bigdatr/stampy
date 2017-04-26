@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {QueryStringHock} from 'stampy';
 
@@ -22,8 +23,8 @@ const Example = (props) => {
 }
 
 Example.propTypes = {
-    setQuery: React.PropTypes.func,
-    updateQuery: React.PropTypes.func
+    setQuery: PropTypes.func,
+    updateQuery: PropTypes.func
 };
 
 const QueryStringHockExample = QueryStringHock({

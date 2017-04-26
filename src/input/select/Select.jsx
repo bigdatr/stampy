@@ -1,4 +1,5 @@
 // @flow
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactSelect from 'react-select';
 import SpruceClassName from '../../util/SpruceClassName';
@@ -15,7 +16,7 @@ type SelectProps = {
     placeholder: ?string,
     spruceName?: string,
     value: any
-}
+};
 
 /**
  * @module Inputs
@@ -76,22 +77,22 @@ function Select(props: SelectProps): React.Element<any> {
 Select.propTypes = {
     /** {ClassName} */
     className: StampyPropTypes.className,
-    clearable: React.PropTypes.bool,
-    disabled: React.PropTypes.bool,
+    clearable: PropTypes.bool,
+    disabled: PropTypes.bool,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
-    multi: React.PropTypes.bool,
-    onChange: React.PropTypes.func,
-    options: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-            value: React.PropTypes.string,
-            label: React.PropTypes.string
+    multi: PropTypes.bool,
+    onChange: PropTypes.func,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.string,
+            label: PropTypes.string
         })
     ),
-    placeholder: React.PropTypes.string,
+    placeholder: PropTypes.string,
     /** {SpruceName} */
     spruceName: StampyPropTypes.spruceName,
-    value: React.PropTypes.any
+    value: PropTypes.any
 };
 
 Select.defaultProps = {

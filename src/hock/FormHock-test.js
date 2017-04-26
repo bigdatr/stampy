@@ -2,7 +2,6 @@ import React from 'react';
 import test from 'ava';
 import sinon from 'sinon';
 import FormHock from './FormHock';
-import {fromJS} from 'immutable';
 
 test('FormHock passes props straight through to children', tt => {
 
@@ -97,3 +96,120 @@ test('FormHock provides empty string as value in fields prop when keypath not fo
     );
 });
 
+test('FormHock calls onChange with updated value when onChange prop is fired', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = FormHock({
+        fields: ['name', 'food']
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const onFormChange = sinon.spy();
+    myWrappedComponent.props = {
+        value: {
+            name: 'Bob',
+            food: 'bats'
+        },
+        onChange: onFormChange
+    };
+
+    const {props} = myWrappedComponent.render();
+    props.fields.name.onChange("???");
+
+    const expectedObj = {
+        name: '???',
+        food: 'bats'
+    };
+
+    tt.true(onFormChange.calledOnce, 'onChange prop should be called');
+    tt.deepEqual(onFormChange.firstCall.args[0], expectedObj, 'onChange prop should be passed the updated value');
+});
+
+
+test('FormHock calls onChange with updated nested value when onChange prop is fired', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = FormHock({
+        fields: ['name.last', 'food']
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const onFormChange = sinon.spy();
+    myWrappedComponent.props = {
+        value: {
+            name: {
+                last: 'Bob'
+            },
+            food: 'bats'
+        },
+        onChange: onFormChange
+    };
+
+    const {props} = myWrappedComponent.render();
+    props.fields.name.last.onChange("???");
+
+    const expectedObj = {
+        name: {
+            last: '???'
+        },
+        food: 'bats'
+    };
+
+    tt.true(onFormChange.calledOnce, 'onChange prop should be called');
+    tt.deepEqual(onFormChange.firstCall.args[0], expectedObj, 'onChange prop should be passed the updated value');
+});
+
+test('FormHock memoizes its fields prop', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = FormHock({
+        fields: ['name']
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    myWrappedComponent.props = {
+        value: {
+            name: 'Bob'
+        }
+    };
+
+    var firstFieldsProp = myWrappedComponent.render().props.fields;
+    var secondFieldsProp = myWrappedComponent.render().props.fields;
+
+    myWrappedComponent.props = {
+        value: {
+            name: 'Jim'
+        }
+    };
+
+    var thirdFieldsProp = myWrappedComponent.render().props.fields;
+
+    tt.is(firstFieldsProp, secondFieldsProp, 'subsequent renders should not cause new objects to be made');
+    tt.not(secondFieldsProp, thirdFieldsProp, 'changes in props should cause new objects to be made');
+    tt.is(thirdFieldsProp.name.value, 'Jim', 'changes in props should update value');
+});
+
+test('FormHock memoizes the onChange props it passes down', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = FormHock({
+        fields: ['name']
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    myWrappedComponent.props = {
+        value: {
+            name: 'Bob'
+        }
+    };
+
+    var firstFieldsProp = myWrappedComponent.render().props.fields;
+
+    myWrappedComponent.props = {
+        value: {
+            name: 'Jim'
+        }
+    };
+
+    var secondFieldsProp = myWrappedComponent.render().props.fields;
+
+    tt.is(firstFieldsProp.name.onChange, secondFieldsProp.name.onChange, 'subsequent renders should not cause new onChange functions to be made');
+});

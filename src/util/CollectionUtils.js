@@ -1,6 +1,6 @@
-// @flow
+/* eslint-disable */
 
-import {List, Map, Iterable, fromJS} from 'immutable';
+import {List, Map, Iterable} from 'immutable';
 
 /**
  * @module Utils
@@ -28,14 +28,11 @@ const clone: Function = (item: Object|Array<*>): Object|Array<*> => {
 
 export function has(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number): * {
     if(Iterable.isIterable(collection)) {
-        // $FlowFixMe: Immutable's flow type checking on has() appears to be broken
         return collection.has(key);
     }
     if(Array.isArray(collection)) {
-        // $FlowFixMe: flow doesnt seem to know that we've already confirmed that key is a number
         return typeof key == "number" && key >= 0 && key < collection.length;
     }
-    // $FlowFixMe: flow doesnt seem to know that Lists will not reach this line because they return true for isIterable
     return collection.hasOwnProperty(key);
 }
 
@@ -55,15 +52,13 @@ export function has(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  * @memberof module:Utils~CollectionUtils
  */
 
-export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, notFoundValue: ?*): * {
+export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, notFoundValue: * = null): * {
     if(!has(collection, key)) {
         return notFoundValue;
     }
     if(Iterable.isIterable(collection)) {
-        // $FlowFixMe: flow doesnt seem to know that collections of type array wont make it to this part
         return collection.get(key, notFoundValue);
     }
-    // $FlowFixMe: flow doesnt seem to know that Lists and Maps wont make it to this part
     return collection[key];
 }
 
@@ -84,7 +79,7 @@ export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  * @memberof module:Utils~CollectionUtils
  */
 
-export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string>, notFoundValue: *): * {
+export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string>, notFoundValue: * = null): * {
     var item: * = collection;
     for(let key of keyPath) {
         if(!has(item, key)) {
@@ -110,7 +105,6 @@ export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Arr
 
 export function set(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, value: *): List<*>|Map<*,*>|Object|Array<*> {
     if(Iterable.isIterable(collection)) {
-        // $FlowFixMe: flow doesnt seem to know that collections of type array wont make it to this part
         return collection.set(key, value);
     }
     var newCollection: Array<*>|Object = clone(collection);
@@ -135,10 +129,18 @@ export function set(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
 
 export function setIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string|number>, value: *): List<*>|Map<*,*>|Object|Array<*> {
     if(Iterable.isIterable(collection)) {
-        // $FlowFixMe: flow doesnt seem to know that collections of type array wont make it to this part
         return collection.setIn(keyPath, value);
     }
-    return fromJS(collection).setIn(keyPath, value).toJS();
+
+    for(var i = keyPath.length - 1; i >= 0; i--) {
+        value = set(
+            getIn(collection, keyPath.slice(0, i)),
+            keyPath[i],
+            value
+        );
+    }
+
+    return value;
 }
 
 /**

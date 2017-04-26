@@ -48,6 +48,15 @@ test('get() works with Objects', tt => {
     tt.is(get(obj, 'b', 'nope'), 'nope');
 });
 
+test('get() returns null if not found and no notFoundValue is specified', tt => {
+    const obj = {
+        a: "123"
+    };
+
+    tt.is(get(obj, 'b'), null);
+});
+
+
 test('get() works with Maps', tt => {
     const map = fromJS({
         a: "123"
@@ -86,6 +95,15 @@ test('getIn() works with Objects', tt => {
     tt.is(getIn(obj, ['b', 'b'], 'nope'), 'nope');
     tt.is(getIn(obj, ['a', 'a'], 'nope'), 'nope');
 });
+
+test('getIn() returns null if not found and no notFoundValue is specified', tt => {
+    const obj = {
+        a: "123"
+    };
+
+    tt.is(getIn(obj, ['b']), null);
+});
+
 
 test('getIn() works with Maps', tt => {
     const map = fromJS({
@@ -136,6 +154,21 @@ test('set() works with Objects', tt => {
     );
 });
 
+test('set() should be immutable', tt => {
+    const obj = {
+        a: "123"
+    };
+
+    const expectedObj = {
+        a: "123"
+    };
+
+    set(obj, 'a', '456');
+
+    tt.deepEqual(obj, expectedObj);
+});
+
+
 test('set() works with Maps', tt => {
     const map = fromJS({
         a: "123"
@@ -176,7 +209,6 @@ test('set() works with Lists', tt => {
     );
 });
 
-
 test('setIn() works at depth 1 on existing key', tt => {
     const obj = {
         a: "123"
@@ -186,7 +218,9 @@ test('setIn() works at depth 1 on existing key', tt => {
         a: "456"
     };
 
-    tt.deepEqual(setIn(obj, ['a'], '456'), expectedObj);
+    const setObj = setIn(obj, ['a'], '456');
+
+    tt.deepEqual(setObj, expectedObj);
 });
 
 test('setIn() works at depth 1 on new key', tt => {
@@ -200,6 +234,20 @@ test('setIn() works at depth 1 on new key', tt => {
     };
 
     tt.deepEqual(setIn(obj, ['b'], '456'), expectedObj);
+});
+
+test('setIn() should be immutable', tt => {
+    const obj = {
+        a: "123"
+    };
+
+    const expectedObj = {
+        a: "123"
+    };
+
+    setIn(obj, ['a'], '456');
+
+    tt.deepEqual(obj, expectedObj);
 });
 
 test('setIn() works at depth 2 on existing key', tt => {

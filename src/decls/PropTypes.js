@@ -14,8 +14,6 @@ const StampyPropTypes = {
 
     htmlProps: PropTypes.object,
 
-    modifier: PropTypes.string,
-
     onChange: PropTypes.func,
 
     onChangeBoolean: PropTypes.func,

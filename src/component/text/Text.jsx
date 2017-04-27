@@ -4,6 +4,30 @@ import PropTypes from 'prop-types';
 import numeral from 'numeral';
 import moment from 'moment';
 import SpruceClassName from '../../util/SpruceClassName';
+import StampyPropTypes from '../../decls/PropTypes';
+
+/**
+ * @module Components
+ */
+
+/**
+ * @component
+ *
+ * `Text` is a Goose compliant component for general purpose text rendering.
+ *
+ * _**Note:** `numberFormat` & `dateFormat` will only work if the children are either strings, numbers or dates._
+ *
+ * @example
+ * <Text>Plain Text</Text>
+ * <Text modifier="hero" element="a">Hero Link</Text>
+ * <Text numberFormat="0,0">{props.number}</Text>
+ * <Text numberFormat="YYYY-MM-DD">{props.date}</Text>
+ *
+ * <Text modifier="alpha">
+ *     <Text element="strong">Date: </Text>
+ *     <Text dateFormat="YYYY-MM-DD">{props.date}</Text>
+ * </Text>
+ */
 
 export default function Text(props: Object): React.Element<any> {
     const {
@@ -37,30 +61,26 @@ export default function Text(props: Object): React.Element<any> {
 
 Text.propTypes = {
     /** {ClassName} */
-    className: PropTypes.string,
+    className: StampyPropTypes.className,
 
     /** {ReactElement} */
-    element: PropTypes.oneOfType([
-        PropTypes.element,
-        PropTypes.string,
-        PropTypes.func
-    ]),
+    element: StampyPropTypes.element,
 
     /** {SpruceModifier} */
-    modifier: PropTypes.string,
+    modifier: StampyPropTypes.spruceModifier,
 
-    /** Numeral format string. Will cause children to be passed through numeral.format */
+    /** Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/) */
     numberFormat: PropTypes.string,
 
-    /** Moment format string. Will cause children to be cast to a Date and passed through moment.format */
+    /** Moment format string. Will cause children to be cast to a Date and passed through [moment.format](https://momentjs.com/docs/#/displaying/) */
     dateFormat: PropTypes.string,
 
     /** {OnClick} */
-    onClick: PropTypes.func,
+    onClick: StampyPropTypes.onClick,
 
     /** {SpruceName} */
-    spruceName: PropTypes.string,
+    spruceName: StampyPropTypes.spruceName,
 
     /** {Style} */
-    style: PropTypes.object
+    style: StampyPropTypes.style
 };

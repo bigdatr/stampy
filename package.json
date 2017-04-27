@@ -74,7 +74,7 @@
     "prop-types": "^15.5.8",
     "proxyquire": "^1.7.11",
     "react-immutable-proptypes": "^2.1.0",
-    "react-select": "^1.0.0-rc.2",
+    "react-select": "^1.0.0-rc.3",
     "url-search-params": "^0.7.0"
   },
   "main": "lib/index.js",

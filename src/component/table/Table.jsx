@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {fromJS, List, Map} from 'immutable';
 import SpruceClassName from '../../util/SpruceClassName';
 import StampyPropTypes from '../../decls/PropTypes';

@@ -24,21 +24,24 @@ test('QueryStringHock passes props straight through to children', tt => {
     tt.deepEqual(expectedProps, myWrappedComponent.props);
 });
 
-test('QueryStringHock passes query from react router location prop', tt => {
+test('QueryStringHock passes search from react router location prop', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = QueryStringHock()(componentToWrap);
     const myWrappedComponent = new WrappedComponent();
 
-    const query = {
+    myWrappedComponent.props = {
+        location: {
+            search: "?a=A",
+            pathname: "/"
+        }
+    };
+
+    const expectedQuery = {
         a: "A"
     };
 
-    myWrappedComponent.props = {
-        location: {query}
-    };
-
-    tt.deepEqual(myWrappedComponent.render().props.query, query);
+    tt.deepEqual(myWrappedComponent.render().props.query, expectedQuery);
 
 });
 
@@ -62,15 +65,18 @@ test('QueryStringHock should change the name of the query prop if given queryPro
     })(componentToWrap);
     const myWrappedComponent = new WrappedComponent();
 
-    const query = {
+    myWrappedComponent.props = {
+        location: {
+            search: "?a=A",
+            pathname: "/"
+        }
+    };
+
+    const expectedQuery = {
         a: "A"
     };
 
-    myWrappedComponent.props = {
-        location: {query}
-    };
-
-    tt.deepEqual(myWrappedComponent.render().props.coolQueryTime, query);
+    tt.deepEqual(myWrappedComponent.render().props.coolQueryTime, expectedQuery);
 
 });
 
@@ -82,14 +88,11 @@ test('QueryStringHock should convert missing or singular params to array when co
     })(componentToWrap);
     const myWrappedComponent = new WrappedComponent();
 
-    const query = {
-        a: "A",
-        b: ["B", "B2"],
-        d: "D"
-    };
-
     myWrappedComponent.props = {
-        location: {query}
+        location: {
+            search: "?a=A&b=B&b=B2&d=D",
+            pathname: "/"
+        }
     };
 
     const expectedQuery = {
@@ -115,13 +118,11 @@ test('QueryStringHock should use defaultQuery params when not present in query',
     })(componentToWrap);
     const myWrappedComponent = new WrappedComponent();
 
-    const query = {
-        b: "B!",
-        c: ""
-    };
-
     myWrappedComponent.props = {
-        location: {query}
+        location: {
+            search: "?b=B!&c=",
+            pathname: "/"
+        }
     };
 
     const expectedQuery = {
@@ -144,12 +145,11 @@ test('QueryStringHock should set query via history prop for react-router v1 usin
     const replaceState = sinon.spy();
 
     const pathname = "PATH";
-    const query = {};
 
     myWrappedComponent.context = {};
     myWrappedComponent.props = {
         location: {
-            query,
+            search: "",
             pathname
         },
         history: {
@@ -183,12 +183,11 @@ test('QueryStringHock should set query via history prop for react-router v1 usin
     const replaceState = sinon.spy();
 
     const pathname = "PATH";
-    const query = {};
 
     myWrappedComponent.context = {};
     myWrappedComponent.props = {
         location: {
-            query,
+            search: "",
             pathname
         },
         history: {
@@ -210,7 +209,7 @@ test('QueryStringHock should set query via history prop for react-router v1 usin
     tt.false(pushState.called, 'history.pushState should not be called');
 });
 
-test('QueryStringHock should set query via conext.router prop for react-router v2+ using pushState', tt => {
+test('QueryStringHock should set query for react-router v2 and v3 using context.router.push', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = QueryStringHock()(componentToWrap);
@@ -220,7 +219,6 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     const replace = sinon.spy();
 
     const pathname = "PATH";
-    const query = {};
 
     myWrappedComponent.context = {
         router: {
@@ -230,7 +228,7 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     };
     myWrappedComponent.props = {
         location: {
-            query,
+            search: "",
             pathname
         }
     };
@@ -246,8 +244,7 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     tt.false(replace.called, 'router.replace should not be called');
 });
 
-
-test('QueryStringHock should set query via conext.router prop for react-router v2+ using replaceState', tt => {
+test('QueryStringHock should set query for react-router v2 and v3 using context.router.replace', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = QueryStringHock({
@@ -259,7 +256,6 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     const replace = sinon.spy();
 
     const pathname = "PATH";
-    const query = {};
 
     myWrappedComponent.context = {
         router: {
@@ -269,7 +265,7 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     };
     myWrappedComponent.props = {
         location: {
-            query,
+            search: "",
             pathname
         }
     };
@@ -285,6 +281,190 @@ test('QueryStringHock should set query via conext.router prop for react-router v
     tt.false(push.called, 'router.push should not be called');
 });
 
+
+test('QueryStringHock should set query for react-router v4 using context.router.history.push', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+    const replace = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push,
+                replace
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: "A"
+    };
+
+    const newPathname = `${pathname}?a=A`;
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    tt.true(push.calledOnce, 'router.push is called');
+    tt.is(push.firstCall.args[0], newPathname, 'First arg should contain new pathname');
+    tt.false(replace.called, 'router.replace should not be called');
+});
+
+test('QueryStringHock should set query for react-router v4 using context.router.history.replace', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock({
+        replaceState: true
+    })(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+    const replace = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push,
+                replace
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: "A"
+    };
+
+    const newPathname = `${pathname}?a=A`;
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    tt.true(replace.calledOnce, 'router.replace is called');
+    tt.is(replace.firstCall.args[0], newPathname, 'First arg should contain new pathname');
+    tt.false(push.called, 'router.push should not be called');
+});
+
+test('QueryStringHock should not change path if path is the same for react-router v4', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+    const replace = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push,
+                replace
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "?a=A",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: "A"
+    };
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+    tt.false(push.called, 'router.push should not be called');
+    tt.false(replace.called, 'router.replace should not be called');
+});
+
+test('QueryStringHock should not set a query string when no query using react-router v4', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "?old=OLD",
+            pathname
+        }
+    };
+
+    const newQuery = {};
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    tt.true(push.calledOnce, 'router.push is called');
+    tt.is(push.firstCall.args[0], pathname, 'First arg should contain new pathname');
+});
+
+test('QueryStringHock should stringify array params correctly using react-router v4', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: ["A", "B", "C"],
+        z: "Z"
+    };
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    const newPathname = `${pathname}?a=A&a=B&a=C&z=Z`;
+
+    tt.true(push.calledOnce, 'router.push is called');
+    tt.is(push.firstCall.args[0], newPathname, 'First arg should contain new pathname');
+});
+
 test('QueryStringHock setQuery should replace existing query completely', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;
@@ -293,11 +473,6 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
 
     const push = sinon.spy();
 
-    const query = {
-        c: "C",
-        d: "D"
-    };
-
     myWrappedComponent.context = {
         router: {
             push
@@ -305,7 +480,8 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
     };
     myWrappedComponent.props = {
         location: {
-            query
+            search: "?c=C&d=D",
+            pathname: '/'
         }
     };
 
@@ -317,6 +493,31 @@ test('QueryStringHock setQuery should replace existing query completely', tt => 
     myWrappedComponent.render().props.setQuery(newQuery);
 
     tt.deepEqual(push.firstCall.args[0].query, newQuery);
+});
+
+test('QueryStringHock setQuery should replace pathname if provided as a param', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "?foo=bar",
+            pathname: '/'
+        }
+    };
+
+
+    myWrappedComponent.render().props.setQuery({}, '/foo');
+
+    tt.is(push.firstCall.args[0].pathname, '/foo');
 });
 
 test('QueryStringHock setQuery should noop on missing location prop', tt => {
@@ -352,8 +553,6 @@ test('QueryStringHock setQuery should filter out empty strings and nulls', tt =>
 
     const push = sinon.spy();
 
-    const query = {};
-
     myWrappedComponent.context = {
         router: {
             push
@@ -361,7 +560,8 @@ test('QueryStringHock setQuery should filter out empty strings and nulls', tt =>
     };
     myWrappedComponent.props = {
         location: {
-            query
+            search: "",
+            pathname: '/'
         }
     };
 
@@ -391,10 +591,6 @@ test('QueryStringHock updateQuery should merge with existing query', tt => {
     const push = sinon.spy();
 
     const pathname = "PATH";
-    const query = {
-        c: "C",
-        d: "D"
-    };
 
     myWrappedComponent.context = {
         router: {
@@ -403,7 +599,7 @@ test('QueryStringHock updateQuery should merge with existing query', tt => {
     };
     myWrappedComponent.props = {
         location: {
-            query,
+            search: "?c=C&d=D",
             pathname
         }
     };
@@ -460,11 +656,6 @@ test('QueryStringHock updateQuery should filter out empty strings and nulls', tt
 
     const push = sinon.spy();
 
-    const query = {
-        b: "B",
-        c: "C"
-    };
-
     myWrappedComponent.context = {
         router: {
             push
@@ -472,7 +663,8 @@ test('QueryStringHock updateQuery should filter out empty strings and nulls', tt
     };
     myWrappedComponent.props = {
         location: {
-            query
+            search: "?b=B&c=C",
+            pathname: '/'
         }
     };
 
@@ -513,14 +705,17 @@ test('QueryStringHock updateQuery can cope with merging and not merging array pa
 
     const push = sinon.spy();
 
-    const query = {
-        oneToNone: "one",
-        oneToOne: "one",
-        oneToTwo: "one",
-        twoToNone: ["1", "2"],
-        twoToOne: ["1", "2"],
-        twoToTwo: ["1", "2"]
-    };
+    const search = "?"+[
+        "oneToNone=one",
+        "oneToOne=one",
+        "oneToTwo=one",
+        "twoToNone=1",
+        "twoToOne=1",
+        "twoToTwo=1",
+        "twoToNone=2",
+        "twoToOne=2",
+        "twoToTwo=2"
+    ].join("&");
 
     myWrappedComponent.context = {
         router: {
@@ -529,7 +724,8 @@ test('QueryStringHock updateQuery can cope with merging and not merging array pa
     };
     myWrappedComponent.props = {
         location: {
-            query
+            search,
+            pathname: '/'
         }
     };
 
@@ -557,5 +753,30 @@ test('QueryStringHock updateQuery can cope with merging and not merging array pa
     myWrappedComponent.render().props.updateQuery(newQuery);
 
     tt.deepEqual(push.firstCall.args[0].query, expectedQuery);
+});
+
+test('QueryStringHock updateQuery should replace pathname if provided as a param', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+    const push = sinon.spy();
+
+    myWrappedComponent.context = {
+        router: {
+            push
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "?foo=bar",
+            pathname: '/'
+        }
+    };
+
+
+    myWrappedComponent.render().props.updateQuery({}, '/foo');
+
+    tt.is(push.firstCall.args[0].pathname, '/foo');
 });
 

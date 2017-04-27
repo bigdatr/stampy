@@ -1,7 +1,8 @@
 // @flow
-
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import {fromJS, List, Map} from 'immutable';
+import URLSearchParams from 'url-search-params';
 
 /**
  * @module Hocks
@@ -13,14 +14,24 @@ export default (config: ?Object = null): HockApplier => {
         const replaceState: boolean = !!(config && config.replaceState);
         const queryPropName: string = (config && config.queryPropName) || "query";
         const arrayParams: List<string> = (config && fromJS(config.arrayParams)) || List();
-        const defaultQuery: Map<string,any> = (config && fromJS(config.defaultQuery)) || Map();
+
+        // default all array params to empty lists
+        const defaultArrayParams: Map<string, List<string>> = arrayParams
+            .reduce((defaultQuery: Map<string, List<string>>, arrayParam: string) => {
+                return defaultQuery.set(arrayParam, List());
+            }, Map())
+
+        // default query is comprised of the default array param lists,
+        // with config.defaultQuery merged on top of it
+        const defaultQuery: Map<string,any> = defaultArrayParams
+            .merge((config && fromJS(config.defaultQuery)) || Map());
 
         /**
          * @component
          *
          * `QueryStringHock` is a higher order component designed to greatly simplify getting
          * and setting the query string, if your app is using `react-router`
-         * (currently works with v1.x and v2.x).  When used on a component, your component will
+         * (currently works with v1, v2, v3 and v4).  When used on a component, your component will
          * receive some extra props.
          *
          * It also allows for array parameters, push state vs replace state,
@@ -32,7 +43,8 @@ export default (config: ?Object = null): HockApplier => {
          * are passed straight to a <Route> object.
          * If you're using `react-router` v1 then you'll also need to pass it a history prop
          * that `react-router` provides.
-         * If using `react-router` v2 then QueryStringHock will automatically connect via context.
+         * If using `react-router` v2 or greater then QueryStringHock will automatically
+         * receive this via context.
          *
          * @example
          * function MyComponent(props) {
@@ -58,12 +70,12 @@ export default (config: ?Object = null): HockApplier => {
          * @decorator {QueryStringHock}
          *
          * @prop {Object} location
-         * Required for `react-router` v1 and v2. Must be react router location object.
+         * Required for `react-router` v1, v2, v3 and v4. Must be react router location object.
          *
          * @prop {Object} history
          * Required only for `react-router` v1. Must be react router history object.
          *
-         * @context {Object} router Required for `react-router` v2,
+         * @context {Object} router Required for `react-router` v2, v3 and v4
          * where it should be provided automatically.
          *
          * @childprop {Object} query The object representing the query string.
@@ -94,23 +106,33 @@ export default (config: ?Object = null): HockApplier => {
              * @param {Object} props Props to refer to.
              */
 
-            getQuery(props: Object): Object {
-                if(!props.location || !props.location.query) {
-                    return {};
+            getQuery(): Map<string, string|Array<string>> {
+                if(!this.props.location || !this.props.location.search) {
+                    return Map();
                 }
-                const existingQuery: Object = props.location.query;
-                const query: Map<string,any> = defaultQuery.merge(
-                    fromJS(existingQuery).filter(ii => ii != "")
-                );
 
-                // ensures that all arrayParams are returned as arrays (not strings or blank)
-                return arrayParams
-                    .reduce((query, arrayParamKey) => {
-                        const param = query.get(arrayParamKey, List());
-                        const arrayParamValue = List.isList(param) ? param : List([param]);
-                        return query.set(arrayParamKey, arrayParamValue);
-                    }, query)
-                    .toJS();
+                const searchParams: URLSearchParams = new URLSearchParams(this.props.location.search);
+
+                var params: Array<Array<string>>= [];
+                for(let param of searchParams) {
+                    params.push(param);
+                }
+                const groupedParams: Map<string,any> = fromJS(params)
+                    .filter(ii => ii.get(1) != "")
+                    .groupBy(ii => ii.get(0))
+                    .toMap()
+                    .map(param => param.map(ii => ii.get(1)))
+                    .map((value, key) => {
+                        // if an array param, return list as is
+                        if(arrayParams.contains(key)) {
+                            return value;
+                        }
+                        // if not an array param, use the value of the first param with this key
+                        return value.get(0);
+                    });
+
+                return defaultQuery
+                    .merge(groupedParams);
             }
 
             /**
@@ -122,18 +144,16 @@ export default (config: ?Object = null): HockApplier => {
              *
              * @param {Object} queryParamsToUpdate
              * An object containing query params to update.
+             *
+             * @param {string} [pathname]
+             * An optional string that will replace the current pathname.
              */
 
-            updateQuery(queryParamsToUpdate: Object) {
-                if(!this.props.location || !this.props.location.query) {
-                    console.warn("Cannot call updateQuery, QueryStringHock has not been given a react-router location.query prop");
-                    return;
-                }
-                const existingQuery: Object = this.props.location.query;
-                const query = fromJS(existingQuery)
+            updateQuery(queryParamsToUpdate: Object, pathname?: string) {
+                const query = this.getQuery()
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
-                this.setQuery(query);
+                this.setQuery(query, pathname);
             }
 
             /**
@@ -144,37 +164,74 @@ export default (config: ?Object = null): HockApplier => {
              *
              * @param {Object} query
              * An object containing query params.
+             *
+             * @param {string} [pathname]
+             * An optional string that will replace the current pathname.
              */
 
-            setQuery(query: Object) {
-                if(!this.props.location || !this.props.location.query) {
-                    console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.query prop");
+            setQuery(query: Object, pathname?: string) {
+                if(!this.props.location || !this.props.location.pathname) {
+                    console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.pathname prop");
                     return;
                 }
+
+                if(!pathname) {
+                    pathname = this.props.location.pathname;
+                }
+
                 const routerMethod: string = replaceState ? "replace" : "push";
                 const newQuery: Object = fromJS(query)
-                    .filter(ii => ii !== "" && ii != null) // non strict null comparison to catch undefined & null
-                    .toJS();
+                    .filter(ii => ii !== "" && ii != null); // non strict null comparison to catch undefined & null
 
-                if(this.context.router) {
-                    // react router v2
-                    this.context.router[routerMethod]({
-                        pathname: this.props.location.pathname,
-                        query: newQuery
-                    });
-                } else {
+                if(!this.context.router) {
                     // react router v1
                     this.props.history[`${routerMethod}State`](
                         null,
-                        this.props.location.pathname,
-                        newQuery
+                        pathname,
+                        newQuery.toJS()
                     );
+                    return;
+                }
+
+                if(!this.context.router.history) {
+                    // react router v2 and v3
+                    this.context.router[routerMethod]({
+                        pathname,
+                        query: newQuery.toJS()
+                    });
+                    return;
+                }
+
+                // react router v4
+                var newPath = pathname;
+                if(!newQuery.isEmpty()) {
+
+                    // build query string
+                    const newQueryString: string = newQuery
+                        .reduce((list: List<string>, value: string|List<string>, key: string): List<string> => {
+                            if(List.isList(value)) {
+                                return list.concat(
+                                    // $FlowFixMe: flow doesnt seem to know that List.isList() returns false for strings
+                                    value.map(ii => `${key}=${ii}`)
+                                );
+                            }
+                            // $FlowFixMe: flow doesnt seem to know that List.isList() returns false for strings
+                            return list.push(`${key}=${value}`);
+                        }, List())
+                        .join("&")
+
+                    newPath += `?${newQueryString}`;
+                }
+
+                // only set new pathname if it has changed
+                if(newPath !== this.props.location.pathname + this.props.location.search) {
+                    this.context.router.history[routerMethod](newPath);
                 }
             }
 
             render(): React.Element<any> {
                 const newProps: Object = {
-                    [queryPropName]: this.getQuery(this.props),
+                    [queryPropName]: this.getQuery().toJS(), // TODO memoize this!
                     setQuery: this.setQuery,
                     updateQuery: this.updateQuery
                 };
@@ -188,7 +245,7 @@ export default (config: ?Object = null): HockApplier => {
         };
 
         QueryStringHock.contextTypes = {
-            router: React.PropTypes.object
+            router: PropTypes.object
         };
 
         return QueryStringHock;

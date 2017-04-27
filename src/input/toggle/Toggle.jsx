@@ -1,5 +1,6 @@
 // @flow
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import SpruceClassName from '../../util/SpruceClassName';
 import StampyPropTypes from '../../decls/PropTypes';
 
@@ -36,7 +37,10 @@ function Toggle(props: ToggleProps): React.Element<any> {
 
     const additionalClassNames: Object = {
         // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        [`${spruceName}-active`]: !!value
+        [`${spruceName}-active`]: !!value,
+        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+        [`${spruceName}-disabled`]: disabled
+
     };
 
     return <button

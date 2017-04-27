@@ -1,7 +1,6 @@
 /* @flow */
 /* eslint-disable no-unused-vars */
-
-import {PropTypes} from 'react';
+import PropTypes from 'prop-types';
 
 const StampyPropTypes = {
 

@@ -1,6 +1,6 @@
 {
   "name": "stampy",
-  "version": "0.13.2",
+  "version": "0.22.0",
   "description": "The new and improved stampy",
   "repository": {
     "type": "git",
@@ -26,12 +26,13 @@
     "postcss": "postcss --use autoprefixer -r lib/**/*.css",
     "prepublish": "yarn run build",
     "test": "NODE_ENV=test nyc --report-dir=./coverage ava && yarn run check-coverage",
-    "test-all": "NODE_ENV=test yarn run lint && yarn run flow && yarn run test"
+    "test-all": "NODE_ENV=test yarn run lint && yarn run flow && yarn run test",
+    "watch": "yarn run dev"
   },
   "devDependencies": {
     "app-module-path": "^2.0.0",
     "autoprefixer": "^6.5.2",
-    "ava": "^0.17.0",
+    "ava": "^0.18.2",
     "babel-cli": "^6.5.0",
     "babel-core": "^6.5.0",
     "babel-eslint": "^6.0.2",
@@ -52,7 +53,7 @@
     "jsdoc-babel": "^0.2.1",
     "jsdoc-react-proptypes": "^1.0.1",
     "jsdom": "^9.8.3",
-    "jsdonk": "0.4.12",
+    "jsdonk": "^0.4.20",
     "node-sass": "^3.11.2",
     "nyc": "^10.0.0",
     "postcss-cli": "^2.6.0",
@@ -69,9 +70,12 @@
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.9",
     "immutable": "^3.8.1",
+    "lru-memoize": "^1.0.2",
+    "prop-types": "^15.5.8",
     "proxyquire": "^1.7.11",
     "react-immutable-proptypes": "^2.1.0",
-    "react-select": "^1.0.0-rc.3"
+    "react-select": "^1.0.0-rc.3",
+    "url-search-params": "^0.7.0"
   },
   "main": "lib/index.js",
   "engines": {

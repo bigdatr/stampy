@@ -18,6 +18,7 @@ import ToggleSetExample from 'input/toggleSet/ToggleSetExample';
 import ElementQueryHockExample from 'hock/ElementQueryHockExample';
 import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
 import QueryStringHockExample from 'hock/QueryStringHockExample';
+import StateHockExample from 'hock/StateHockExample';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
@@ -37,6 +38,7 @@ export const routesList = <Switch>
     <Route path="/hock/ElementQueryHock" component={ElementQueryHockExample}/>
     <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
     <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
+    <Route path="/hock/StateHock" component={StateHockExample}/>
     <Route component={ErrorHandler} />
 </Switch>;
 

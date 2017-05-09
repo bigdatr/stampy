@@ -18,3 +18,4 @@ export {default as ElementQueryHock} from './hock/ElementQueryHock';
 export {default as FormHock} from './hock/FormHock';
 export {default as PropChangeHock} from './hock/PropChangeHock';
 export {default as QueryStringHock} from './hock/QueryStringHock';
+export {default as StateHock} from './hock/StateHock';

@@ -68,9 +68,7 @@ export default (config: StateHockConfig = {}): HockApplier => {
          */
 
         class StateHock extends Component {
-            state: Object = {
-                value: initialState
-            };
+            state: Object;
             constructor(props: Object) {
                 super(props);
                 this.state = {

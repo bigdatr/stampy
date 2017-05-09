@@ -2,11 +2,23 @@
 
 import React, {Component} from 'react';
 
+type StateHockConfig = {
+    initialState?: Function,
+    dataValueProp?: string,
+    dataChangeProp?: string
+};
+
 /**
  * @module Hocks
  */
 
-export default (initialState: any): HockApplier => {
+export default (config: StateHockConfig = {}): HockApplier => {
+    const {
+        initialState = () => undefined,
+        dataValueProp = 'dataValue',
+        dataChangeProp = 'dataChange'
+    } = config;
+
     return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
 
         /**
@@ -35,7 +47,7 @@ export default (initialState: any): HockApplier => {
          * // Immutable Data
          * import {StateHock} from 'stampy';
          * import {Map} from 'immutable';
-         *
+         *¡
          * const example = (props) => {
          *     const {value, onChange} = props;
          *     return <div>
@@ -59,16 +71,25 @@ export default (initialState: any): HockApplier => {
             state: Object = {
                 value: initialState
             };
+            constructor(props: Object) {
+                super(props);
+                this.state = {
+                    dataValue: initialState(props)
+                }
+            }
             onChange: Function = (payload: Function) => {
                 this.setState({
-                    value: payload
+                    dataValue: payload
                 });
             }
             render(): React.Element<any> {
+                const hockProps = {
+                    [dataValueProp]: this.state.dataValue,
+                    [dataChangeProp]: this.onChange
+                }
                 return <ComponentToDecorate
                     {...this.props}
-                    value={this.state.value}
-                    onChange={this.onChange}
+                    {...hockProps}
                 />;
             }
         }

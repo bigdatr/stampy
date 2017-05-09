@@ -20,6 +20,8 @@ import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
 import QueryStringHockExample from 'hock/QueryStringHockExample';
 import StateHockExample from 'hock/StateHockExample';
 
+import KeyedStatePipeExample from 'pipe/KeyedStatePipeExample';
+
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
 
@@ -39,6 +41,7 @@ export const routesList = <Switch>
     <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
     <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
     <Route path="/hock/StateHock" component={StateHockExample}/>
+    <Route path="/pipe/KeyedStatePipe" component={KeyedStatePipeExample}/>
     <Route component={ErrorHandler} />
 </Switch>;
 

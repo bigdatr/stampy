@@ -48,12 +48,12 @@ test('get() works with Objects', tt => {
     tt.is(get(obj, 'b', 'nope'), 'nope');
 });
 
-test('get() returns null if not found and no notFoundValue is specified', tt => {
+test('get() returns undefined if not found and no notFoundValue is specified', tt => {
     const obj = {
         a: "123"
     };
 
-    tt.is(get(obj, 'b'), null);
+    tt.is(get(obj, 'b'), undefined);
 });
 
 
@@ -96,12 +96,12 @@ test('getIn() works with Objects', tt => {
     tt.is(getIn(obj, ['a', 'a'], 'nope'), 'nope');
 });
 
-test('getIn() returns null if not found and no notFoundValue is specified', tt => {
+test('getIn() returns undefined if not found and no notFoundValue is specified', tt => {
     const obj = {
         a: "123"
     };
 
-    tt.is(getIn(obj, ['b']), null);
+    tt.is(getIn(obj, ['b']), undefined);
 });
 
 

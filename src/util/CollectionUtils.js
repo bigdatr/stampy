@@ -52,7 +52,7 @@ export function has(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  * @memberof module:Utils~CollectionUtils
  */
 
-export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, notFoundValue: * = null): * {
+export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, notFoundValue: * = undefined): * {
     if(!has(collection, key)) {
         return notFoundValue;
     }
@@ -79,7 +79,7 @@ export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  * @memberof module:Utils~CollectionUtils
  */
 
-export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string>, notFoundValue: * = null): * {
+export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string>, notFoundValue: * = undefined): * {
     var item: * = collection;
     for(let key of keyPath) {
         if(!has(item, key)) {

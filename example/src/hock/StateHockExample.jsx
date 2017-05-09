@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import {StateHock, ListHock} from 'stampy';
-import {List} from 'immutable';
-
-
+import {StateHock} from 'stampy';
+import {Map} from 'immutable';
 
 const Example = (props) => {
     const {
@@ -25,6 +22,6 @@ const Example = (props) => {
     </div>;
 }
 
-const withState = StateHock();
+const withState = StateHock({initialState: () => Map()});
 
 export default withState(Example);

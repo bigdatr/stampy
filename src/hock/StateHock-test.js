@@ -9,21 +9,21 @@ import StateHock from './StateHock';
 //
 
 test('StateHock matches (config) => (Component) => Hock', tt => {
-    var Child = (props) => <div/>;
+    var Child = () => <div/>;
     tt.is(typeof StateHock, 'function');
     tt.is(typeof StateHock(), 'function');
     tt.is(typeof StateHock()(Child), 'function');
 });
 
 test('StateHock passes other props through', tt => {
-    var Child = (props) => <div/>;
+    var Child = () => <div/>;
     var Component = StateHock()(Child);
     tt.is(shallow(<Component foo="bar" />).props().foo, 'bar');
     tt.is(shallow(<Component dataValue="bar" />).props().dataValue, undefined);
 });
 
 test('StateHock will allow you to change dataValueProp & dataChangeProp', tt => {
-    var Child = (props) => <div/>;
+    var Child = () => <div/>;
     var Component = StateHock({
         initialState: () => 0,
         dataValueProp: 'foo',
@@ -52,7 +52,7 @@ test('StateHock will set a defualt dataValue', tt => {
 });
 
 test('StateHock props.dataChange will replace dataValue', tt => {
-    var Child = (props) => <div/>;
+    var Child = () => <div/>;
     var Component = StateHock({initialState: () => 0})(Child);
     var instance = shallow(<Component />);
     instance.props().dataChange(1);

@@ -6,6 +6,12 @@ const StampyPropTypes = {
 
     className: PropTypes.string,
 
+    element: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.string,
+        PropTypes.func
+    ]),
+
     htmlProps: PropTypes.object,
 
     onChange: PropTypes.func,
@@ -21,7 +27,9 @@ const StampyPropTypes = {
         PropTypes.object
     ]),
 
-    spruceName: PropTypes.string
+    spruceName: PropTypes.string,
+
+    style: PropTypes.object
 };
 
 export default StampyPropTypes;

@@ -24,3 +24,5 @@ export {default as StateHock} from './hock/StateHock';
 
 // pipes
 export {default as KeyedStatePipe} from './pipe/KeyedStatePipe';
+export {default as KeyedSplitterPipe} from './pipe/KeyedSplitterPipe';
+export {default as DownPipe} from './pipe/DownPipe';

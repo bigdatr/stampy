@@ -3,24 +3,20 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import KeyedStatePipe from './KeyedStatePipe';
 
+import {TransparentHockTests} from '../hock/HockTests-testutil';
 
 //
 // Hock Tests
 //
 
-test('KeyedStatePipe matches (config) => (Component) => Hock', tt => {
+test(`KeyedStatePipe matches (config) => (Component) => Hock`, tt => {
     var Child = () => <div/>;
     tt.is(typeof KeyedStatePipe, 'function');
     tt.is(typeof KeyedStatePipe(), 'function');
     tt.is(typeof KeyedStatePipe()(Child), 'function');
 });
 
-test('KeyedStatePipe passes other props through', tt => {
-    var Child = () => <div/>;
-    var Component = KeyedStatePipe()(Child);
-    tt.is(shallow(<Component dataValue={{}} foo="bar" />).props().foo, 'bar');
-    tt.is(shallow(<Component dataValue={{}} />).props().dataValue, undefined);
-});
+TransparentHockTests(KeyedStatePipe, 'DownPipe');
 
 test('KeyedStatePipe will allow you to change dataValueProp & dataChangeProp', tt => {
     var Child = () => <div/>;
@@ -32,7 +28,9 @@ test('KeyedStatePipe will allow you to change dataValueProp & dataChangeProp', t
 
     tt.is(shallow(<Component foo={{a: 1}} />).props().aValue, 1);
 
-    shallow(<Component foo={{}} changeFoo={pp => tt.deepEqual(pp, {a: 1})} />).props().aChange(1)
+    shallow(<Component foo={{}} changeFoo={pp => tt.deepEqual(pp, {a: 1})} />)
+        .props()
+        .aChange(1);
 
 });
 

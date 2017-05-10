@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {get, set} from '../util/CollectionUtils';
 
 /**
- * @module Hocks
+ * @module Pipes
  */
 
 export default (config: Object = {}): HockApplier => {
@@ -21,7 +21,7 @@ export default (config: Object = {}): HockApplier => {
          *
          * The KeyedStatePipe lets you store state changes seperate to each other.
          * The `config.keys` array is reduced into a series of Value/Change pairs
-         * that update thier respective key as they change.
+         * that update their respective key as they change.
          *
          * @example
          * import {StateHock, KeyedStatePipe} from 'stampy';
@@ -35,7 +35,7 @@ export default (config: Object = {}): HockApplier => {
          *
          *
          * @decorator {KeyedStatePipe}
-         * @memberof module:Hocks
+         * @memberof module:Pipes
          */
 
         class KeyedStatePipe extends Component {
@@ -43,16 +43,17 @@ export default (config: Object = {}): HockApplier => {
                 this.props[dataChangeProp](set(this.props[dataValueProp], key, payload));
             }
             render(): React.Element<any> {
-                const hockProps = keys
+                const hockProps: Object = keys
                     .reduce((props: Object, key: string) => {
                         props[`${key}Value`] = get(this.props[dataValueProp], key);
                         props[`${key}Change`] = this.dataChange(key)
                         return props;
                     }, {});
 
-                const newProps = Object.assign({}, this.props, hockProps);
-                delete newProps[dataValueProp];
-                delete newProps[dataChangeProp];
+                const clonedProps = Object.assign({}, this.props);
+                delete clonedProps[dataValueProp];
+                delete clonedProps[dataChangeProp];
+                const newProps = Object.assign({}, clonedProps, hockProps);
 
                 return <ComponentToDecorate {...newProps} />;
             }

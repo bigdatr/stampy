@@ -59,3 +59,21 @@ test('KeyedStatePipe onChange function will change state.key based on name', tt 
 
     instance.props().fooChange(2);
 });
+
+test('KeyedStatePipe will not pass down original dataValue and dataChange props', tt => {
+    var Child = () => <div/>;
+    var Component = KeyedStatePipe({keys: ['foo']})(Child);
+    var instance = shallow(<Component dataValue={{foo: 1}}/>);
+
+    tt.false(instance.props().hasOwnProperty('dataValue'));
+    tt.false(instance.props().hasOwnProperty('dataChange'));
+});
+
+test('KeyedStatePipe will create data props off config.keys', tt => {
+    var Child = () => <div/>;
+    var Component = KeyedStatePipe({keys: ['data']})(Child);
+    var instance = shallow(<Component dataValue={{data: 1}}/>);
+
+    tt.is(instance.props().dataValue, 1);
+    tt.is(typeof instance.props().dataChange, 'function');
+});

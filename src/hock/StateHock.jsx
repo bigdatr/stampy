@@ -25,7 +25,7 @@ export default (config: StateHockConfig = {}): HockApplier => {
          * @component
          *
          * State hock allows you to control state changes through the prop cycle. It provides a prop of `value` and `onChange`.
-         * Value is the current state and onChange is a callback whose return value will replace `value`.
+         * Value is the current state and dataChange is a callback whose return value will replace `value`.
          * Because the whole state is replaced each time, it works particuarlly well with immutable data.
          *
          * @example
@@ -33,35 +33,35 @@ export default (config: StateHockConfig = {}): HockApplier => {
          * import {StateHock} from 'stampy';
          *
          * const example = (props) => {
-         *     const {value, onChange} = props;
+         *     const {dataValue, dataChange} = props;
          *     return <div>
-         *         <div>value: {value}</div>
-         *         <button onClick={() => onChange(value + 1)}>+</button>
-         *         <button onClick={() => onChange(value - 1)}>-</button>
+         *         <div>value: {dataValue}</div>
+         *         <button onClick={() => dataChange(dataValue + 1)}>+</button>
+         *         <button onClick={() => dataChange(dataValue - 1)}>-</button>
          *     </div>
          * }
          *
-         * const withState = StateHock(0);
+         * const withState = StateHock({initialState: (props) => 0});
          * export default withState(example);
          *
          * // Immutable Data
          * import {StateHock} from 'stampy';
          * import {Map} from 'immutable';
-         *¡
+         *
          * const example = (props) => {
-         *     const {value, onChange} = props;
+         *     const {dataValue, dataChange} = props;
          *     return <div>
-         *         <div>Foo: {value.get('foo')}</div>
-         *         <button onClick={() => onChange(value.set('foo', 'bar'))}>Bar</button>
-         *         <button onClick={() => onChange(value.set('foo', 'qux'))}>Qux</button>
+         *         <div>Foo: {dataValue.get('foo')}</div>
+         *         <button onClick={() => dataChange(dataValue.set('foo', 'bar'))}>Bar</button>
+         *         <button onClick={() => dataChange(dataValue.set('foo', 'qux'))}>Qux</button>
          *     </div>
          * }
          *
-         * const withState = StateHock(Map());
+         * const withState = StateHock({initialState: (props) => Map()});
          * export default withState(example);
          *
-         * @childprop {any} value - The current stored value
-         * @childprop {function} onChange - Callback whose return value will replace `props.value`
+         * @childprop {any} dataValue - The current stored value
+         * @childprop {function} dataChange - Callback whose return value will replace `props.dataValue`
          *
          * @decorator {StateHock}
          * @memberof module:Hocks

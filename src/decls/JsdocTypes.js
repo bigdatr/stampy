@@ -57,7 +57,7 @@
  */
 
 /**
- * The base class name to use with the Spuce naming convention for this component.
+ * The base class name to use with the Spruce naming convention for this component.
  *
  * @typedef {string} SpruceName
  */

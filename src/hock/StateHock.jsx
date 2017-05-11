@@ -4,8 +4,8 @@ import React, {Component} from 'react';
 
 type StateHockConfig = {
     initialState?: Function,
-    dataValueProp?: string,
-    dataChangeProp?: string
+    valueProp?: string,
+    onChangeProp?: string
 };
 
 /**
@@ -15,8 +15,8 @@ type StateHockConfig = {
 export default (config: StateHockConfig = {}): HockApplier => {
     const {
         initialState = () => undefined,
-        dataValueProp = 'dataValue',
-        dataChangeProp = 'dataChange'
+        valueProp = 'value',
+        onChangeProp = 'onChange'
     } = config;
 
     return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
@@ -72,18 +72,18 @@ export default (config: StateHockConfig = {}): HockApplier => {
             constructor(props: Object) {
                 super(props);
                 this.state = {
-                    dataValue: initialState(props)
+                    value: initialState(props)
                 }
             }
             onChange: Function = (payload: Function) => {
                 this.setState({
-                    dataValue: payload
+                    value: payload
                 });
             }
             render(): React.Element<any> {
                 const hockProps = {
-                    [dataValueProp]: this.state.dataValue,
-                    [dataChangeProp]: this.onChange
+                    [valueProp]: this.state.value,
+                    [onChangeProp]: this.onChange
                 }
                 return <ComponentToDecorate
                     {...this.props}

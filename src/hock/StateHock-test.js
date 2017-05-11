@@ -19,19 +19,19 @@ test('StateHock passes other props through', tt => {
     var Child = () => <div/>;
     var Component = StateHock()(Child);
     tt.is(shallow(<Component foo="bar" />).props().foo, 'bar');
-    tt.is(shallow(<Component dataValue="bar" />).props().dataValue, undefined);
+    tt.is(shallow(<Component value="bar" />).props().value, undefined);
 });
 
-test('StateHock will allow you to change dataValueProp & dataChangeProp', tt => {
+test('StateHock will allow you to change valueProp & onChangeProp', tt => {
     var Child = () => <div/>;
     var Component = StateHock({
         initialState: () => 0,
-        dataValueProp: 'foo',
-        dataChangeProp: 'changeFoo'
+        valueProp: 'foo',
+        onChangeProp: 'changeFoo'
     })(Child);
 
     tt.is(shallow(<Component foo="bar" />).props().foo, 0);
-    tt.is(typeof shallow(<Component dataValue="bar" />).props().changeFoo, 'function');
+    tt.is(typeof shallow(<Component value="bar" />).props().changeFoo, 'function');
 });
 
 
@@ -40,9 +40,9 @@ test('StateHock will allow you to change dataValueProp & dataChangeProp', tt => 
 // Functionality
 //
 
-test('StateHock will set a defualt dataValue', tt => {
+test('StateHock will set a defualt value', tt => {
     const Child = (props) => {
-        tt.is(props.dataValue, 0);
+        tt.is(props.value, 0);
         return <div/>;
     };
 
@@ -51,10 +51,10 @@ test('StateHock will set a defualt dataValue', tt => {
     shallow(<Component />).dive();
 });
 
-test('StateHock props.dataChange will replace dataValue', tt => {
+test('StateHock props.onChange will replace value', tt => {
     var Child = () => <div/>;
     var Component = StateHock({initialState: () => 0})(Child);
     var instance = shallow(<Component />);
-    instance.props().dataChange(1);
-    tt.is(instance.props().dataValue, 1);
+    instance.props().onChange(1);
+    tt.is(instance.props().value, 1);
 });

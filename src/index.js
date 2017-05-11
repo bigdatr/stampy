@@ -14,6 +14,7 @@ export {default as SpruceClassName} from './util/SpruceClassName';
 export {default as SpruceComponent} from './util/SpruceComponent';
 export {default as CollectionUtils} from './util/CollectionUtils';
 export {default as Compose} from './util/Compose';
+export {default as ConfigureHock} from './util/ConfigureHock';
 
 export {default as ElementQueryHock} from './hock/ElementQueryHock';
 export {default as FormHock} from './hock/FormHock';

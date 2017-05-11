@@ -27,14 +27,14 @@ const Example = (props: Object) => {
 
 const withState = StateHock({
     initialState: () => Map({
-        data: {
+        value: {
             name: {
                 first: "Bob",
                 last: "Thunk"
             },
             age: 24
         },
-        error: {
+        errorValue: {
             name: {
                 first: "Name too short",
                 last: null
@@ -44,23 +44,23 @@ const withState = StateHock({
     })
 });
 
-const splitToKeys = KeyedStatePipe({
-    keys: ['data', 'error']
-});
+const splitToKeys = KeyedStatePipe(() => ({
+    keys: [
+        ['value', 'onChange'],
+        ['errorValue', 'errorChange']
+    ]
+}));
 
 const splitToPipes = KeyedSplitterPipe(() => ({
-    keys: ['data', 'error'],
+    keys: [
+        ['value', 'onChange'],
+        ['errorValue', 'errorChange']
+    ],
     paths: [
         'name.first',
         'name.last',
         'age'
-    ],
-    splitProp: 'split',
-    splitPropModifier: (pp: Object) => ({
-        ...pp,
-        value: pp.dataValue,
-        onChange: pp.dataChange
-    })
+    ]
 }));
 
 const withHocks = Compose(

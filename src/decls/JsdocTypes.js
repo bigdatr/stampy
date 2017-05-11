@@ -62,6 +62,14 @@
  * @typedef {string} SpruceName
  */
 
+/**
+ * A function to configure hocks.
+ *
+ * @callback HockConfig
+ * @param {Object} props The current props.
+ * @returns {Object}
+ */
+
 // externals
 
 /**

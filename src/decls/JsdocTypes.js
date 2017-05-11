@@ -70,6 +70,13 @@
  * @returns {Object}
  */
 
+/**
+ * @callback HockApplier
+ *
+ * @param {ReactComponent} Component
+ * The component to wrap in this hock.
+ */
+
 // externals
 
 /**

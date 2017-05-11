@@ -38,6 +38,8 @@ export default ConfigureHock(
              * export default withDownPipe(Example);
              *
              * @decorator {DownPipe}
+             * @decorator {HockApplier}
+             *
              * @memberof module:Pipes
              */
 
@@ -52,3 +54,8 @@ export default ConfigureHock(
         }
     }
 );
+
+/**
+ * @callback DownPipe
+ */
+

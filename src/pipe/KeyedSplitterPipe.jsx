@@ -20,12 +20,19 @@ export default ConfigureHock(
              * @component
              *
              * The KeyedSplitterPipe lets you split a pipe into a series of smaller pipes.
-             * Partial values and partial change functions are given to each pipe.
+             * Partial values and partial change functions are given to each pipe
+             * so they can continue to be composed.
              *
              * A common usage would be to split a pipe containing the values of a form
              * into a series of pipes, one for each field.
              *
+             * @childprop {Object} split
+             * The prop containing the new pipes that KeyedSplitterPipe created.
+             * This prop's name can be changed in config.
+             *
              * @decorator {KeyedSplitterPipe}
+             * @decorator {HockApplier}
+             *
              * @memberof module:Pipes
              */
 
@@ -103,7 +110,7 @@ export default ConfigureHock(
                         }, {});
                 }
 
-                // creates an output pipe
+                // creates a set of output pipes
                 // declared static (contains no reference to "this")
                 // so it can be called from memoized methods
                 static split(
@@ -144,8 +151,37 @@ export default ConfigureHock(
         }
     },
     {
-        keys: [['value', 'onChange']],
         paths: [],
+        keys: [['value', 'onChange']],
         splitProp: 'split'
     }
 );
+
+
+/**
+ * @callback KeyedSplitterPipe
+ * @param {KeyedSplitterPipeConfig} [config]
+ */
+
+/**
+ * @callback KeyedSplitterPipeConfig
+ * @param {Object} props
+ * @return {KeyedSplitterPipeConfigResult}
+ * A function that accepts props and returns configuration for KeyedSplitterPipe.
+ */
+
+/**
+ * @typedef KeyedSplitterPipeConfigResult
+ * @property {Array<string>} paths
+ * An array of strings indicating which nested properties should have pipes created for them.
+ *
+ * Use dots to specify nested props,
+ * e.g. `"user.id"` refers to the `id` property on the `user`
+ *
+ * @property {Array<Array<string>>} [keys = [['value', 'onChange']]]
+ * An array of value/onChange pairs to include in each pipe.
+ *
+ * @property {string} [splitProp = "split"]
+ * Sets the name of the prop containing the new pipes that KeyedSplitterPipe created.
+ */
+

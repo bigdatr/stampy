@@ -28,10 +28,12 @@
  *     }
  * );
  *
+ * @name ConfigureHock
+ * @kind function
  * @param {ConfiguredHockCreator} hockCreator A function that must return a hock Component.
  * @param {Object} [defaultConfig = {}] The default config. Key / value pairs on this object are used only when the key isn't returned from the hock config function.
  * @param {Object} [defaultApplierConfig = {}] The default applier config. Key / value pairs on this object are used only when the key isn't specified on the applierConfig object.
- * @returns {Function} The configured hock to export.
+ * @return {Function} The configured hock to export.
  */
 
 export default function ConfigureHock(hockCreator: Function, defaultConfig: Object = {}, defaultApplierConfig: Object = {}): Function {

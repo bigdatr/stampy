@@ -37,6 +37,20 @@ export default ConfigureHock(
                     this.initialize(props);
                 }
 
+                // reinitialize if output of config function changes
+                componentWillReceiveProps(nextProps: Object) {
+
+                    const configChanged: boolean = !is(
+                        fromJS(config(this.props)),
+                        fromJS(config(nextProps))
+                    );
+
+                    if(configChanged) {
+                        this.initialize(nextProps);
+                    }
+                }
+
+                // sets up a map of change functions, so these dont have to be recreated each render
                 initialize: Function = (props: Object) => {
                     const {paths, keys} = config(props);
 
@@ -51,72 +65,75 @@ export default ConfigureHock(
                         }, Map());
                 }
 
-                componentWillReceiveProps(nextProps: Object) {
-                    const keysChanged: boolean = is(
-                        List(config(this.props).paths),
-                        List(config(nextProps).paths)
-                    );
-
-                    const pathsChanged: boolean = is(
-                        List(config(this.props).keys),
-                        List(config(nextProps).keys)
-                    );
-
-                    if(keysChanged || pathsChanged) {
-                        this.initialize(nextProps);
+                createPartialChange: Function = (path: string, key: List<string>) => (newPartialValue: *) => {
+                    const [keyValue, keyChange] = key.toArray();
+                    const existingValue: * = this.props[keyValue];
+                    const updatedValue: * = setIn(existingValue, path.split("."), newPartialValue);
+                    const changeFunction: * = this.props[keyChange];
+                    if(!changeFunction || typeof changeFunction !== "function") {
+                        console.warn(`KeyedSplitterPipe cannot call change on "${keyChange}" prop. Expected function, got ${changeFunction}`);
+                        return;
                     }
-                }
+                    this.props[keyChange](updatedValue);
+                };
 
-                createPipe: Function = (props: Object, path: string): Object => {
-                    const {keys} = config(props);
+                // creates an output pipe
+                // declared static (contains no reference to "this")
+                // so it can be called from memoized methods
+                static createPipe(
+                    props: Object,
+                    path: string,
+                    keys: Array<Array<string>>,
+                    partialChangeFunctions: PartialChangeMap
+                ): Object {
 
                     const pathArray: Array<string> = path.split(".");
                     return fromJS(keys)
                         .reduce((obj: Object, key: List<string>): Object => {
                             const [keyValue, keyChange] = key.toArray();
+                            const value: * = props[keyValue]
+                                ? getIn(props[keyValue], pathArray)
+                                : undefined;
+
                             return {
                                 ...obj,
-                                [keyValue]: getIn(props[keyValue] || {}, pathArray),
-                                [keyChange]: this.partialChangeFunctions.getIn([path, keyChange])
+                                [keyValue]: value,
+                                [keyChange]: partialChangeFunctions.getIn([path, keyChange])
                             };
                         }, {});
-                };
+                }
 
-                createPartialChange: Function = (path: string, key: List<string>) => (newPartialValue: *) => {
-                    const [keyValue, keyChange] = key.toArray();
-                    const existingValue: * = this.props[keyValue];
-                    const updatedValue: * = setIn(existingValue, path.split("."), newPartialValue);
-                    this.props[keyChange](updatedValue);
-                };
+                // creates an output pipe
+                // declared static (contains no reference to "this")
+                // so it can be called from memoized methods
+                static split(
+                    props: Object,
+                    paths: Array<string>,
+                    keys: Array<Array<string>>,
+                    partialChangeFunctions: PartialChangeMap
+                ): Object {
 
-                nestPipes: Function = (flatPipes: Object): Object => {
-                    return Object.keys(flatPipes)
-                        .reduce((fields: Object, key: string) => {
-                            return setIn(fields, key.split("."), flatPipes[key]);
+                    return List(paths)
+                        // turn ['a','b'] into {a: null, b: null}
+                        .reduce((flatPipes: Map<string,*>, path: string): Map<string,*> => {
+                            return flatPipes.set(path, null);
+                        }, Map())
+                        // assign an object with value/change pairs to each
+                        .map((pipe: *, path: string) => KeyedSplitterPipe.createPipe(props, path, keys, partialChangeFunctions))
+                        .reduce((pipes: Object, pipe: Object, path: string) => {
+                            return setIn(pipes, path.split("."), pipe);
                         }, {});
-                };
+                }
 
                 // memoize only the most recently generated split
-                split: Function = memoize()(
-                    (props: Object): Object => {
-                        const {paths} = config(props);
-                        const flatPipes: Object = List(paths)
-                            // turn ['a','b'] into {a: null, b: null}
-                            .reduce((flatPipes: Map<string,*>, path: string): Map<string,*> => {
-                                return flatPipes.set(path, null);
-                            }, Map())
-                            // assign an object with value/change pairs to each
-                            .map((pipe: *, path: string) => this.createPipe(props, path))
-                            .toObject();
-
-                        return this.nestPipes(flatPipes);
-                    }
-                );
+                // also make sure all variables that can affect the output of this.split()
+                // are passed in as arguments, so memoization can work correctly
+                splitMemoized: Function = memoize()(KeyedSplitterPipe.split);
 
                 render(): React.Element<any> {
-                    const {splitProp} = config(this.props);
+                    const {splitProp, paths, keys} = config(this.props);
                     const hockProps: Object = {
-                        [splitProp]: this.split(this.props)
+                        [splitProp]: this.splitMemoized(this.props, paths, keys, this.partialChangeFunctions)
                     };
                     const newProps = Object.assign({}, this.props, hockProps);
                     return <ComponentToDecorate {...newProps} />;
@@ -127,7 +144,7 @@ export default ConfigureHock(
         }
     },
     {
-        keys: ['data'],
+        keys: [['value', 'onChange']],
         paths: [],
         splitProp: 'split'
     }

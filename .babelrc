@@ -1,6 +1,7 @@
 {
-    "presets": ["blueflag"],
-    "plugins": ["babel-plugin-transform-class-properties"],
+    "presets": [
+        ["blueflag", {"browser": true}]
+    ],
     "ignore": [
         "**/*-test.js"
     ],

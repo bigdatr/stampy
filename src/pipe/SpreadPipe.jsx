@@ -19,7 +19,7 @@ export default ConfigureHock(
              * The SpreadPipe turns properties on a single value/Change pair
              * into a set of value/Change pairs.
              *
-             * The `config.keys` array is reduced into a series of Value/Change pairs
+             * The `config.valueChangePairs` array is reduced into a series of Value/Change pairs
              * that update their respective key as they change.
              *
              * Commonly used to separate multiple pieces of data being stored
@@ -30,7 +30,7 @@ export default ConfigureHock(
              *
              * const withState = StateHock({initialState: () => Map()});
              * const withSpread = SpreadPipe({
-             *     keys: [
+             *     valueChangePairs: [
              *         ['value', 'onChange'],
              *         ['sortValue', 'sortChange']
              *     ]
@@ -51,32 +51,32 @@ export default ConfigureHock(
              * This prop's name can be changed in config.
              *
              * @childprop {*} ...
-             * A pair of props for each value/Change pair specified in config.keys.
+             * A pair of props for each value/Change pair specified in config.valueChangePairs.
              *
              * @decorator {SpreadPipe}
              * @memberof module:Pipes
              */
 
             class SpreadPipe extends Component {
-                dataChange: Function = (keyValue: string): Function => (payload: Function) => {
+                dataChange: Function = (pairValue: string): Function => (payload: Function) => {
                     const {onChangeProp, valueProp} = config(this.props);
-                    this.props[onChangeProp](set(this.props[valueProp], keyValue, payload));
+                    this.props[onChangeProp](set(this.props[valueProp], pairValue, payload));
                 }
                 render(): React.Element<any> {
                     const {
-                        keys,
+                        valueChangePairs,
                         onChangeProp,
                         valueProp
                     } = config(this.props);
 
                     const value = this.props[valueProp];
 
-                    const hockProps: Object = fromJS(keys)
-                        .reduce((props: Object, key: List<string>) => {
-                            const [keyValue, keyChange] = key.toArray();
+                    const hockProps: Object = fromJS(valueChangePairs)
+                        .reduce((props: Object, pair: ValueChangePairList) => {
+                            const [pairValue, pairChange] = pair.toArray();
 
-                            props[keyValue] = get(value, keyValue);
-                            props[keyChange] = this.dataChange(keyValue)
+                            props[pairValue] = get(value, pairValue);
+                            props[pairChange] = this.dataChange(pairValue)
                             return props;
                         }, {});
 
@@ -93,7 +93,7 @@ export default ConfigureHock(
         }
     },
     {
-        keys: [['value', 'onChange']],
+        valueChangePairs: [['value', 'onChange']],
         valueProp: 'value',
         onChangeProp: 'onChange'
     }
@@ -114,8 +114,9 @@ export default ConfigureHock(
 /**
  * @typedef SpreadPipeConfigResult
  *
- * @property {Array<Array<string>>} [keys = [['value', 'onChange']]]
- * An array of value/Change pairs to include in each pipe.
+ * @property {Array<ValueChangePair>|List<ValueChangePair>} [valueChangePairs = [['value', 'onChange']]]
+ * An array of value/Change pairs to spread.
+ * These will all be made availabe as props.
  *
  * @property {string} valueProp
  * The name of the prop to receive the value from.

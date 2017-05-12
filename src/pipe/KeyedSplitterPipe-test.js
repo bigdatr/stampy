@@ -35,7 +35,7 @@ test(`KeyedSplitterPipe does not recreate props every render`, tt => {
 test('KeyedSplitterPipe provides correct values in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
         ],
@@ -77,7 +77,7 @@ test('KeyedSplitterPipe provides correct values in split prop', tt => {
 test('KeyedSplitterPipe should pass undefined values for paths that dont exist', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['value', 'onChange']
         ],
         paths: [
@@ -102,7 +102,7 @@ test('KeyedSplitterPipe should pass undefined values for paths that dont exist',
 test('KeyedSplitterPipe should pass undefined values if valueProp doesnt exist', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['value', 'onChange']
         ],
         paths: [
@@ -120,7 +120,7 @@ test('KeyedSplitterPipe should pass undefined values if valueProp doesnt exist',
 test('KeyedSplitterPipe provides correct change functions in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
         ],
@@ -191,7 +191,7 @@ test('KeyedSplitterPipe provides correct change functions in split prop', tt => 
 test('KeyedSplitterPipe should silently fail if change function prop not provided', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['value', 'onChange']
         ],
         paths: [
@@ -211,10 +211,10 @@ test('KeyedSplitterPipe should silently fail if change function prop not provide
     });
 });
 
-test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if config.paths or config.keys changes', tt => {
+test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if config.paths or config.valueChangePairs changes', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe((props) => ({
-        keys: [[props.valueField, 'onChange']],
+        valueChangePairs: [[props.valueField, 'onChange']],
         paths: [props.nameField]
     }))(componentToWrap);
 
@@ -240,7 +240,7 @@ test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if c
         valueField: "val",
         nameField: "name"
     });
-    tt.true(myWrappedComponent.initialize.calledOnce, 'initialize is called if keys changes');
+    tt.true(myWrappedComponent.initialize.calledOnce, 'initialize is called if valueChangePairs changes');
 
     myWrappedComponent.initialize = sinon.spy();
     myWrappedComponent.componentWillReceiveProps({
@@ -289,7 +289,7 @@ test('KeyedSplitterPipe can set config.splitProp', tt => {
 });
 
 
-test('KeyedSplitterPipe has a default config for keys', tt => {
+test('KeyedSplitterPipe has a default config for valueChangePairs', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe(() => ({
         paths: ['name']
@@ -302,7 +302,7 @@ test('KeyedSplitterPipe has a default config for keys', tt => {
         }
     };
     const {split} = myWrappedComponent.render().props;
-    tt.is(split.name.value, "Tom", 'value is included in default keys');
-    tt.is(typeof split.name.onChange, "function", 'onChange is included in default keys');
-    tt.is(Object.keys(split.name).length, 2, 'no other keys are default');
+    tt.is(split.name.value, "Tom", 'value is included in default valueChangePairs');
+    tt.is(typeof split.name.onChange, "function", 'onChange is included in default valueChangePairs');
+    tt.is(Object.keys(split.name).length, 2, 'no other valueChangePairs are default');
 });

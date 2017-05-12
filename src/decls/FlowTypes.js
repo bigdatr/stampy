@@ -27,3 +27,7 @@ type OnChangeBoolean = (newValue: boolean, meta: OnChangeMeta) => void;
 type OnChangeMulti = (newValues: Array<string>|string, meta: OnChangeMeta) => void;
 
 type OnClick = (event: Object) => void;
+
+type ValueChangePair = List<string> | Array<string>;
+
+type ValueChangePairList = List<string>;

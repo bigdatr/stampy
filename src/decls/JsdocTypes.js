@@ -77,6 +77,13 @@
  * The component to wrap in this hock.
  */
 
+/**
+ * @typedef {Array<string>|List<string>} ValueChangePair
+ * Use with pipes, the value/change pair specify the names of
+ * matching value and onChange function, to receive and modify a value.
+ * They should always have exactly 2 elements.
+ */
+
 // externals
 
 /**

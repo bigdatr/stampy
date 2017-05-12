@@ -59,29 +59,29 @@ export default ConfigureHock(
 
                 // sets up a map of change functions, so these dont have to be recreated each render
                 initialize: Function = (props: Object) => {
-                    const {paths, keys} = config(props);
+                    const {paths, valueChangePairs} = config(props);
 
                     this.partialChangeFunctions = List(paths)
                         .reduce((funcs: PartialChangeMap, path: string): PartialChangeMap => {
-                            const map: Map<string,*> = fromJS(keys)
-                                .reduce((map: Map<string,*>, key: List<string>): Map<string,*> => {
-                                    return map.set(key.get(1), this.createPartialChange(path, key));
+                            const map: Map<string,*> = fromJS(valueChangePairs)
+                                .reduce((map: Map<string,*>, pair: ValueChangePairList): Map<string,*> => {
+                                    return map.set(pair.get(1), this.createPartialChange(path, pair));
                                 }, Map());
 
                             return funcs.set(path, map);
                         }, Map());
                 }
 
-                createPartialChange: Function = (path: string, key: List<string>) => (newPartialValue: *) => {
-                    const [keyValue, keyChange] = key.toArray();
-                    const existingValue: * = this.props[keyValue];
+                createPartialChange: Function = (path: string, pair: ValueChangePairList) => (newPartialValue: *) => {
+                    const [pairValue, pairChange] = pair.toArray();
+                    const existingValue: * = this.props[pairValue];
                     const updatedValue: * = setIn(existingValue, path.split("."), newPartialValue);
-                    const changeFunction: * = this.props[keyChange];
+                    const changeFunction: * = this.props[pairChange];
                     if(!changeFunction || typeof changeFunction !== "function") {
-                        console.warn(`KeyedSplitterPipe cannot call change on "${keyChange}" prop. Expected function, got ${changeFunction}`);
+                        console.warn(`KeyedSplitterPipe cannot call change on "${pairChange}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
-                    this.props[keyChange](updatedValue);
+                    this.props[pairChange](updatedValue);
                 };
 
                 // creates an output pipe
@@ -90,22 +90,22 @@ export default ConfigureHock(
                 static createPipe(
                     props: Object,
                     path: string,
-                    keys: Array<Array<string>>,
+                    valueChangePairs: List<List<string>>,
                     partialChangeFunctions: PartialChangeMap
                 ): Object {
 
                     const pathArray: Array<string> = path.split(".");
-                    return fromJS(keys)
-                        .reduce((obj: Object, key: List<string>): Object => {
-                            const [keyValue, keyChange] = key.toArray();
-                            const value: * = props[keyValue]
-                                ? getIn(props[keyValue], pathArray)
+                    return valueChangePairs
+                        .reduce((obj: Object, pair: ValueChangePairList): Object => {
+                            const [pairValue, pairChange] = pair.toArray();
+                            const value: * = props[pairValue]
+                                ? getIn(props[pairValue], pathArray)
                                 : undefined;
 
                             return {
                                 ...obj,
-                                [keyValue]: value,
-                                [keyChange]: partialChangeFunctions.getIn([path, keyChange])
+                                [pairValue]: value,
+                                [pairChange]: partialChangeFunctions.getIn([path, pairChange])
                             };
                         }, {});
                 }
@@ -116,7 +116,7 @@ export default ConfigureHock(
                 static split(
                     props: Object,
                     paths: Array<string>,
-                    keys: Array<Array<string>>,
+                    valueChangePairs: List<ValueChangePair>|Array<ValueChangePair>,
                     partialChangeFunctions: PartialChangeMap
                 ): Object {
 
@@ -126,7 +126,7 @@ export default ConfigureHock(
                             return flatPipes.set(path, null);
                         }, Map())
                         // assign an object with value/change pairs to each
-                        .map((pipe: *, path: string) => KeyedSplitterPipe.createPipe(props, path, keys, partialChangeFunctions))
+                        .map((pipe: *, path: string) => KeyedSplitterPipe.createPipe(props, path, fromJS(valueChangePairs), partialChangeFunctions))
                         .reduce((pipes: Object, pipe: Object, path: string) => {
                             return setIn(pipes, path.split("."), pipe);
                         }, {});
@@ -138,9 +138,9 @@ export default ConfigureHock(
                 splitMemoized: Function = memoize()(KeyedSplitterPipe.split);
 
                 render(): React.Element<any> {
-                    const {splitProp, paths, keys} = config(this.props);
+                    const {splitProp, paths, valueChangePairs} = config(this.props);
                     const hockProps: Object = {
-                        [splitProp]: this.splitMemoized(this.props, paths, keys, this.partialChangeFunctions)
+                        [splitProp]: this.splitMemoized(this.props, paths, valueChangePairs, this.partialChangeFunctions)
                     };
                     const newProps = Object.assign({}, this.props, hockProps);
                     return <ComponentToDecorate {...newProps} />;
@@ -152,7 +152,7 @@ export default ConfigureHock(
     },
     {
         paths: [],
-        keys: [['value', 'onChange']],
+        valueChangePairs: [['value', 'onChange']],
         splitProp: 'split'
     }
 );
@@ -178,7 +178,7 @@ export default ConfigureHock(
  * Use dots to specify nested props,
  * e.g. `"user.id"` refers to the `id` property on the `user`
  *
- * @property {Array<Array<string>>} [keys = [['value', 'onChange']]]
+ * @property {Array<ValueChangePair>|List<ValueChangePair>} [valueChangePairs = [['value', 'onChange']]]
  * An array of value/onChange pairs to include in each pipe.
  *
  * @property {string} [splitProp = "split"]

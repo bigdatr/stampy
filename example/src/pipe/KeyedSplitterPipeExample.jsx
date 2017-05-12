@@ -45,14 +45,14 @@ const withState = StateHock({
 });
 
 const withSpread = SpreadPipe(() => ({
-    keys: [
+    valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']
     ]
 }));
 
 const withPipes = KeyedSplitterPipe(() => ({
-    keys: [
+    valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']
     ],

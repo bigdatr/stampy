@@ -40,7 +40,7 @@ test(`SpreadPipe does not recreate props every render`, tt => {
 test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
-        keys: [
+        valueChangePairs: [
             ['aValue', 'aChange'],
             ['bValue', 'bChange']
         ],
@@ -62,10 +62,10 @@ test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
 // Functionality
 //
 
-test('SpreadPipe will create correct props off config.keys', tt => {
+test('SpreadPipe will create correct props off config.valueChangePairs', tt => {
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
-        keys: [['fooValue', 'fooChange']]
+        valueChangePairs: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component value={{fooValue: 1}}/>);
 
@@ -77,7 +77,7 @@ test('SpreadPipe onChange function will change state.key based on name', tt => {
     var spy = (value) => tt.deepEqual(value, {fooValue: 2});
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
-        keys: [['fooValue', 'fooChange']]
+        valueChangePairs: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component onChange={spy} value={{fooValue: 1}}/>);
 
@@ -87,7 +87,7 @@ test('SpreadPipe onChange function will change state.key based on name', tt => {
 test('SpreadPipe will not pass down original value and onChange props', tt => {
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
-        keys: [['fooValue', 'fooChange']]
+        valueChangePairs: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component value={{fooValue: 1}}/>);
 
@@ -95,10 +95,10 @@ test('SpreadPipe will not pass down original value and onChange props', tt => {
     tt.false(instance.props().hasOwnProperty('onChange'));
 });
 
-test('SpreadPipe will create value/onChange props off config.keys', tt => {
+test('SpreadPipe will create value/onChange props off config.valueChangePairs', tt => {
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
-        keys: [['value', 'onChange']]
+        valueChangePairs: [['value', 'onChange']]
     }))(Child);
     var instance = shallow(<Component value={{value: 1}}/>);
 

@@ -23,7 +23,7 @@ const Example = (props: Object) => {
 const withState = StateHock({initialState: () => Map()});
 
 const withSpread = SpreadPipe(() => ({
-    keys: [
+    valueChangePairs: [
         ['value', 'onChange'],
         ['sortValue', 'sortChange'],
         ['filterValue', 'filterChange']

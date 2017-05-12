@@ -36,7 +36,7 @@ function Input(props: InputProps): React.Element<any> {
         disabled={disabled}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
         type={type}
-        value={value}
+        value={(value == null) ? '' : value}
     />;
 }
 
@@ -77,7 +77,7 @@ type InputProps = {
     onChange?: OnChange,
     spruceName?: string,
     type?: string,
-    value?: boolean
+    value?: string
 };
 
 export default Input;

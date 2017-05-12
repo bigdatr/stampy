@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import SpreadPipe from './SpreadPipe';
 import {Map} from 'immutable';
+import sinon from 'sinon';
 
 //
 // Hock Tests
@@ -57,6 +58,29 @@ test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
 });
 
 
+test('SpreadPipe should call initialize on componentWillReceiveProps if config changes', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SpreadPipe((props) => ({
+        valueChangePairs: [[props.valueField, 'onChange']]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        valueField: "value"
+    });
+
+    myWrappedComponent.initialize = sinon.spy();
+    myWrappedComponent.componentWillReceiveProps({
+        valueField: "value",
+        something: "unrelated"
+    });
+    tt.false(myWrappedComponent.initialize.called, 'initialize is not called if an unrelated prop changes');
+
+    myWrappedComponent.initialize = sinon.spy();
+    myWrappedComponent.componentWillReceiveProps({
+        valueField: "val"
+    });
+    tt.true(myWrappedComponent.initialize.calledOnce, 'initialize is called if valueChangePairs changes');
+});
 
 //
 // Functionality

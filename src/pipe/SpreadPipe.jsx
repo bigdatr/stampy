@@ -1,9 +1,11 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS} from 'immutable';
+import {fromJS, Map, List, is} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {get, set} from '../util/CollectionUtils';
+
+type PartialChangeMap = Map<string,Map<string,Function>>;
 
 /**
  * @module Pipes
@@ -58,6 +60,50 @@ export default ConfigureHock(
              */
 
             class SpreadPipe extends Component {
+
+                partialChangeFunctions: PartialChangeMap = Map();
+                constructor(props: Object) {
+                    super(props);
+                    this.initialize(props);
+                }
+
+                // reinitialize if output of config function changes
+                componentWillReceiveProps(nextProps: Object) {
+
+                    const configChanged: boolean = !is(
+                        fromJS(config(this.props)),
+                        fromJS(config(nextProps))
+                    );
+
+                    if(configChanged) {
+                        this.initialize(nextProps);
+                    }
+                }
+
+                // sets up a map of change functions, so these dont have to be recreated each render
+                initialize: Function = (props: Object) => {
+                    const {valueChangePairs} = config(props);
+
+                    this.partialChangeFunctions = fromJS(valueChangePairs)
+                        .reduce((map: Map<string,*>, pair: ValueChangePairList): Map<string,*> => {
+                            return map.set(pair.get(1), this.createPartialChange(pair));
+                        }, Map());
+                }
+
+                createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
+                    console.log("newp", newPartialValue);
+
+                    const [pairValue, pairChange] = pair.toArray();
+                    const existingValue: * = this.props[pairValue];
+                    const changeFunction: * = this.props[pairChange];
+                    const updatedValue: * = set(existingValue, pairValue, newPartialValue);
+                    if(!changeFunction || typeof changeFunction !== "function") {
+                        console.warn(`SpreadPipe cannot call change on "${pairChange}" prop. Expected function, got ${changeFunction}`);
+                        return;
+                    }
+                    changeFunction(updatedValue);
+                };
+
                 dataChange: Function = (pairValue: string): Function => (payload: Function) => {
                     const {onChangeProp, valueProp} = config(this.props);
                     this.props[onChangeProp](set(this.props[valueProp], pairValue, payload));
@@ -76,7 +122,7 @@ export default ConfigureHock(
                             const [pairValue, pairChange] = pair.toArray();
 
                             props[pairValue] = get(value, pairValue);
-                            props[pairChange] = this.dataChange(pairValue)
+                            props[pairChange] = this.partialChangeFunctions.get(pairChange);
                             return props;
                         }, {});
 

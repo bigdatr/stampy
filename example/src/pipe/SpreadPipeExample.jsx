@@ -1,5 +1,5 @@
 import React from 'react';
-import {StateHock, KeyedStatePipe, Input} from 'stampy';
+import {StateHock, SpreadPipe, Input} from 'stampy';
 import {Map} from 'immutable';
 
 const Example = (props: Object) => {
@@ -22,7 +22,7 @@ const Example = (props: Object) => {
 
 const withState = StateHock({initialState: () => Map()});
 
-const splitToKeys = KeyedStatePipe(() => ({
+const withSpread = SpreadPipe(() => ({
     keys: [
         ['value', 'onChange'],
         ['sortValue', 'sortChange'],
@@ -30,4 +30,4 @@ const splitToKeys = KeyedStatePipe(() => ({
     ]
 }));
 
-export default withState(splitToKeys(Example));
+export default withState(withSpread(Example));

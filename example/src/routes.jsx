@@ -20,7 +20,7 @@ import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
 import QueryStringHockExample from 'hock/QueryStringHockExample';
 import StateHockExample from 'hock/StateHockExample';
 
-import KeyedStatePipeExample from 'pipe/KeyedStatePipeExample';
+import SpreadPipeExample from 'pipe/SpreadPipeExample';
 import KeyedSplitterPipeExample from 'pipe/KeyedSplitterPipeExample';
 import DownPipeExample from 'pipe/DownPipeExample';
 
@@ -43,7 +43,7 @@ export const routesList = <Switch>
     <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
     <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
     <Route path="/hock/StateHock" component={StateHockExample}/>
-    <Route path="/pipe/KeyedStatePipe" component={KeyedStatePipeExample}/>
+    <Route path="/pipe/SpreadPipe" component={SpreadPipeExample}/>
     <Route path="/pipe/KeyedSplitterPipe" component={KeyedSplitterPipeExample}/>
     <Route path="/pipe/DownPipe" component={DownPipeExample}/>
     <Route component={ErrorHandler} />

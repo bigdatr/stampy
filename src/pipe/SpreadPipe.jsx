@@ -16,7 +16,7 @@ export default ConfigureHock(
             /**
              * @component
              *
-             * The KeyedStatePipe turns properties on a single value/Change pair
+             * The SpreadPipe turns properties on a single value/Change pair
              * into a set of value/Change pairs.
              *
              * The `config.keys` array is reduced into a series of Value/Change pairs
@@ -26,10 +26,10 @@ export default ConfigureHock(
              * in a single state hock.
              *
              * @example
-             * import {StateHock, KeyedStatePipe} from 'stampy';
+             * import {StateHock, SpreadPipe} from 'stampy';
              *
              * const withState = StateHock({initialState: () => Map()});
-             * const withSpread = KeyedStatePipe({
+             * const withSpread = SpreadPipe({
              *     keys: [
              *         ['value', 'onChange'],
              *         ['sortValue', 'sortChange']
@@ -53,11 +53,11 @@ export default ConfigureHock(
              * @childprop {*} ...
              * A pair of props for each value/Change pair specified in config.keys.
              *
-             * @decorator {KeyedStatePipe}
+             * @decorator {SpreadPipe}
              * @memberof module:Pipes
              */
 
-            class KeyedStatePipe extends Component {
+            class SpreadPipe extends Component {
                 dataChange: Function = (keyValue: string): Function => (payload: Function) => {
                     const {onChangeProp, valueProp} = config(this.props);
                     this.props[onChangeProp](set(this.props[valueProp], keyValue, payload));
@@ -89,7 +89,7 @@ export default ConfigureHock(
                 }
             }
 
-            return KeyedStatePipe;
+            return SpreadPipe;
         }
     },
     {
@@ -100,19 +100,19 @@ export default ConfigureHock(
 );
 
 /**
- * @callback KeyedStatePipe
- * @param {KeyedStatePipeConfig} [config]
+ * @callback SpreadPipe
+ * @param {SpreadPipeConfig} [config]
  */
 
 /**
- * @callback KeyedStatePipeConfig
+ * @callback SpreadPipeConfig
  * @param {Object} props
- * @return {KeyedStatePipeConfigResult}
- * A function that accepts props and returns configuration for KeyedStatePipe.
+ * @return {SpreadPipeConfigResult}
+ * A function that accepts props and returns configuration for SpreadPipe.
  */
 
 /**
- * @typedef KeyedStatePipeConfigResult
+ * @typedef SpreadPipeConfigResult
  *
  * @property {Array<Array<string>>} [keys = [['value', 'onChange']]]
  * An array of value/Change pairs to include in each pipe.

@@ -21,17 +21,17 @@ export default ConfigureHock(
              * import React from 'react';
              * import {StateHock, DownPipe, Input} from 'stampy';
              *
-             * const Example = ({dataValue, renamedValue}) => {
-             *     // if Example normally receives dataValue = "abc",
+             * const Example = ({value, renamedValue}) => {
+             *     // if Example normally receives value = "abc",
              *     // then the DownPipe here causes Example to receive
              *     // renamedValue = "abc"
-             *     // dataValue = undefined
+             *     // value = undefined
              *     return null;
              * }
              *
              * const withDownPipe = DownPipe(props => ({
              *     childProps: {
-             *         renamedValue: props.dataValue
+             *         renamedValue: props.value
              *     }
              * }));
              *

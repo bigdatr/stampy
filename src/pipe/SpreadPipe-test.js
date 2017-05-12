@@ -1,29 +1,29 @@
 import test from 'ava';
 import {shallow} from 'enzyme';
 import React from 'react';
-import KeyedStatePipe from './KeyedStatePipe';
+import SpreadPipe from './SpreadPipe';
 import {Map} from 'immutable';
 
 //
 // Hock Tests
 //
 
-test(`KeyedStatePipe matches (config) => (Component) => Hock`, tt => {
+test(`SpreadPipe matches (config) => (Component) => Hock`, tt => {
     var Child = () => <div/>;
-    tt.is(typeof KeyedStatePipe, 'function');
-    tt.is(typeof KeyedStatePipe(), 'function');
-    tt.is(typeof KeyedStatePipe()(Child), 'function');
+    tt.is(typeof SpreadPipe, 'function');
+    tt.is(typeof SpreadPipe(), 'function');
+    tt.is(typeof SpreadPipe()(Child), 'function');
 });
 
-test(`KeyedStatePipe passes other props through`, tt => {
+test(`SpreadPipe passes other props through`, tt => {
     var Child = () => <div/>;
-    var Component = KeyedStatePipe()(Child);
+    var Component = SpreadPipe()(Child);
     tt.is(shallow(<Component value={{}} foo="bar" />).props().foo, 'bar');
 });
 
-test(`KeyedStatePipe does not recreate props every render`, tt => {
+test(`SpreadPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedStatePipe()(componentToWrap);
+    const WrappedComponent = SpreadPipe()(componentToWrap);
     const myWrappedComponent = new WrappedComponent();
     myWrappedComponent.props = {
         value: "anything"
@@ -37,9 +37,9 @@ test(`KeyedStatePipe does not recreate props every render`, tt => {
     });
 });
 
-test('KeyedStatePipe will allow you to change valueProp & onChangeProp', tt => {
+test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
     var Child = () => <div/>;
-    var Component = KeyedStatePipe(() => ({
+    var Component = SpreadPipe(() => ({
         keys: [
             ['aValue', 'aChange'],
             ['bValue', 'bChange']
@@ -62,9 +62,9 @@ test('KeyedStatePipe will allow you to change valueProp & onChangeProp', tt => {
 // Functionality
 //
 
-test('KeyedStatePipe will create correct props off config.keys', tt => {
+test('SpreadPipe will create correct props off config.keys', tt => {
     var Child = () => <div/>;
-    var Component = KeyedStatePipe(() => ({
+    var Component = SpreadPipe(() => ({
         keys: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component value={{fooValue: 1}}/>);
@@ -73,10 +73,10 @@ test('KeyedStatePipe will create correct props off config.keys', tt => {
     tt.is(typeof instance.props().fooChange, 'function');
 });
 
-test('KeyedStatePipe onChange function will change state.key based on name', tt => {
+test('SpreadPipe onChange function will change state.key based on name', tt => {
     var spy = (value) => tt.deepEqual(value, {fooValue: 2});
     var Child = () => <div/>;
-    var Component = KeyedStatePipe(() => ({
+    var Component = SpreadPipe(() => ({
         keys: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component onChange={spy} value={{fooValue: 1}}/>);
@@ -84,9 +84,9 @@ test('KeyedStatePipe onChange function will change state.key based on name', tt 
     instance.props().fooChange(2);
 });
 
-test('KeyedStatePipe will not pass down original value and onChange props', tt => {
+test('SpreadPipe will not pass down original value and onChange props', tt => {
     var Child = () => <div/>;
-    var Component = KeyedStatePipe(() => ({
+    var Component = SpreadPipe(() => ({
         keys: [['fooValue', 'fooChange']]
     }))(Child);
     var instance = shallow(<Component value={{fooValue: 1}}/>);
@@ -95,9 +95,9 @@ test('KeyedStatePipe will not pass down original value and onChange props', tt =
     tt.false(instance.props().hasOwnProperty('onChange'));
 });
 
-test('KeyedStatePipe will create value/onChange props off config.keys', tt => {
+test('SpreadPipe will create value/onChange props off config.keys', tt => {
     var Child = () => <div/>;
-    var Component = KeyedStatePipe(() => ({
+    var Component = SpreadPipe(() => ({
         keys: [['value', 'onChange']]
     }))(Child);
     var instance = shallow(<Component value={{value: 1}}/>);

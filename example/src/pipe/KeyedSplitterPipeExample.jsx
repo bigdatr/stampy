@@ -2,7 +2,7 @@ import React from 'react';
 import {Map} from 'immutable';
 import {
     StateHock,
-    KeyedStatePipe,
+    SpreadPipe,
     KeyedSplitterPipe,
     Input,
     Compose
@@ -44,14 +44,14 @@ const withState = StateHock({
     })
 });
 
-const splitToKeys = KeyedStatePipe(() => ({
+const withSpread = SpreadPipe(() => ({
     keys: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']
     ]
 }));
 
-const splitToPipes = KeyedSplitterPipe(() => ({
+const withPipes = KeyedSplitterPipe(() => ({
     keys: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']
@@ -65,8 +65,8 @@ const splitToPipes = KeyedSplitterPipe(() => ({
 
 const withHocks = Compose(
     withState,
-    splitToKeys,
-    splitToPipes
+    withSpread,
+    withPipes
 );
 
 export default withHocks(Example);

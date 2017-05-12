@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS, Map, List, is} from 'immutable';
+import {fromJS, Map, is} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {get, set} from '../util/CollectionUtils';
 

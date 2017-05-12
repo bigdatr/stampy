@@ -1,29 +1,33 @@
 import React from 'react';
-import {StateHock, KeyedStatePipe, Input} from 'stampy';
+import {StateHock, SpreadPipe, Input} from 'stampy';
 import {Map} from 'immutable';
 
 const Example = (props: Object) => {
     const {
-        dataValue,
+        value,
         sortValue,
         filterValue,
-        dataChange,
+        onChange,
         sortChange,
         filterChange
     } = props;
 
     return <div style={{fontFamily: 'monospace'}}>
-        <label style={{display: 'block'}}>data <Input value={dataValue} onChange={dataChange} /></label>
+        <label style={{display: 'block'}}>data <Input value={value} onChange={onChange} /></label>
         <label style={{display: 'block'}}>sort <Input value={sortValue} onChange={sortChange} /></label>
         <label style={{display: 'block'}}>filter <Input value={filterValue} onChange={filterChange} /></label>
-        <pre>{JSON.stringify({dataValue, sortValue, filterValue}, null, 4)}</pre>
+        <pre>{JSON.stringify({value, sortValue, filterValue}, null, 4)}</pre>
     </div>;
 }
 
 const withState = StateHock({initialState: () => Map()});
 
-const splitToKeys = KeyedStatePipe({
-    keys: ['data', 'sort', 'filter']
-});
+const withSpread = SpreadPipe(() => ({
+    valueChangePairs: [
+        ['value', 'onChange'],
+        ['sortValue', 'sortChange'],
+        ['filterValue', 'filterChange']
+    ]
+}));
 
-export default withState(splitToKeys(Example));
+export default withState(withSpread(Example));

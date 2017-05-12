@@ -57,9 +57,31 @@
  */
 
 /**
- * The base class name to use with the Spuce naming convention for this component.
+ * The base class name to use with the Spruce naming convention for this component.
  *
  * @typedef {string} SpruceName
+ */
+
+/**
+ * A function to configure hocks.
+ *
+ * @callback HockConfig
+ * @param {Object} props The current props.
+ * @returns {Object}
+ */
+
+/**
+ * @callback HockApplier
+ *
+ * @param {ReactComponent} Component
+ * The component to wrap in this hock.
+ */
+
+/**
+ * @typedef {Array<string>|List<string>} ValueChangePair
+ * Use with pipes, the value/change pair specify the names of
+ * matching value and onChange function, to receive and modify a value.
+ * They should always have exactly 2 elements.
  */
 
 // externals

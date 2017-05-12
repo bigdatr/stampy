@@ -91,8 +91,6 @@ export default ConfigureHock(
                 }
 
                 createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
-                    console.log("newp", newPartialValue);
-
                     const [pairValue, pairChange] = pair.toArray();
                     const existingValue: * = this.props[pairValue];
                     const changeFunction: * = this.props[pairChange];

@@ -55,3 +55,9 @@ test('Input should apply inputProps to outer element', tt => {
     const input = shallow(<Input inputProps={{'data-test': "test"}} />);
     tt.is(input.render().children().first().get(0).attribs['data-test'], "test");
 });
+
+
+test('Input will cast a value of null and undefined to an empty string', tt => {
+    tt.is(shallow(<Input value={null} />).node.props.value, '');
+    tt.is(shallow(<Input value={undefined} />).node.props.value, '');
+});

@@ -91,21 +91,22 @@ export default ConfigureHock(
                 }
 
                 createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
-                    const [pairValue, pairChange] = pair.toArray();
-                    const existingValue: * = this.props[pairValue];
-                    const changeFunction: * = this.props[pairChange];
+                    const {
+                        onChangeProp,
+                        valueProp
+                    } = config(this.props);
+
+                    const [pairValue] = pair.toArray();
+                    const existingValue: * = this.props[valueProp];
+                    const changeFunction: * = this.props[onChangeProp];
                     const updatedValue: * = set(existingValue, pairValue, newPartialValue);
                     if(!changeFunction || typeof changeFunction !== "function") {
-                        console.warn(`SpreadPipe cannot call change on "${pairChange}" prop. Expected function, got ${changeFunction}`);
+                        console.warn(`SpreadPipe cannot call change on "${onChangeProp}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
                     changeFunction(updatedValue);
                 };
 
-                dataChange: Function = (pairValue: string): Function => (payload: Function) => {
-                    const {onChangeProp, valueProp} = config(this.props);
-                    this.props[onChangeProp](set(this.props[valueProp], pairValue, payload));
-                }
                 render(): React.Element<any> {
                     const {
                         valueChangePairs,

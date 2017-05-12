@@ -39,6 +39,7 @@ test(`SpreadPipe does not recreate props every render`, tt => {
 });
 
 test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
+    tt.plan(2);
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
         valueChangePairs: [
@@ -57,6 +58,21 @@ test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
 
 });
 
+test('SpreadPipe should silently fail if change function prop not provided', tt => {
+    tt.plan(1);
+    var Child = () => <div/>;
+    var Component = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['aValue', 'aChange']
+        ]
+    }))(Child);
+
+    tt.notThrows(() => {
+        shallow(<Component value={{}} />)
+            .props()
+            .aChange(1);
+    });
+});
 
 test('SpreadPipe should call initialize on componentWillReceiveProps if config changes', tt => {
     const componentToWrap = () => <div>Example Component</div>;

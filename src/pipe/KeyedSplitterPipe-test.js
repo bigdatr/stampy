@@ -106,7 +106,7 @@ test('KeyedSplitterPipe should pass undefined values if valueProp doesnt exist',
             ['value', 'onChange']
         ],
         paths: [
-            'name',
+            'name'
         ]
     }))(componentToWrap);
 
@@ -211,7 +211,7 @@ test('KeyedSplitterPipe should silently fail if change function prop not provide
     });
 });
 
-test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if config.paths or config.valueChangePairs changes', tt => {
+test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if config changes', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = KeyedSplitterPipe((props) => ({
         valueChangePairs: [[props.valueField, 'onChange']],
@@ -222,10 +222,6 @@ test('KeyedSplitterPipe should call initialize on componentWillReceiveProps if c
         valueField: "value",
         nameField: "name"
     });
-    //myWrappedComponent.props = {
-    //    valueField: "value",
-    //    nameField: "name"
-    //};
 
     myWrappedComponent.initialize = sinon.spy();
     myWrappedComponent.componentWillReceiveProps({

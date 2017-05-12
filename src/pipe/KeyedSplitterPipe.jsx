@@ -75,13 +75,13 @@ export default ConfigureHock(
                 createPartialChange: Function = (path: string, pair: ValueChangePairList) => (newPartialValue: *) => {
                     const [pairValue, pairChange] = pair.toArray();
                     const existingValue: * = this.props[pairValue];
-                    const updatedValue: * = setIn(existingValue, path.split("."), newPartialValue);
                     const changeFunction: * = this.props[pairChange];
+                    const updatedValue: * = setIn(existingValue, path.split("."), newPartialValue);
                     if(!changeFunction || typeof changeFunction !== "function") {
                         console.warn(`KeyedSplitterPipe cannot call change on "${pairChange}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
-                    this.props[pairChange](updatedValue);
+                    changeFunction(updatedValue);
                 };
 
                 // creates an output pipe

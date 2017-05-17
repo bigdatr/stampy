@@ -23,6 +23,7 @@ import StateHockExample from 'hock/StateHockExample';
 import SpreadPipeExample from 'pipe/SpreadPipeExample';
 import KeyedSplitterPipeExample from 'pipe/KeyedSplitterPipeExample';
 import DownPipeExample from 'pipe/DownPipeExample';
+import UpPipeExample from 'pipe/UpPipeExample';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
@@ -46,6 +47,7 @@ export const routesList = <Switch>
     <Route path="/pipe/SpreadPipe" component={SpreadPipeExample}/>
     <Route path="/pipe/KeyedSplitterPipe" component={KeyedSplitterPipeExample}/>
     <Route path="/pipe/DownPipe" component={DownPipeExample}/>
+    <Route path="/pipe/UpPipe" component={UpPipeExample}/>
     <Route component={ErrorHandler} />
 </Switch>;
 

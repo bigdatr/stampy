@@ -172,6 +172,7 @@ export default ConfigureHock(
 
 /**
  * @typedef KeyedSplitterPipeConfigResult
+ * @type {Object}
  * @property {Array<string>} paths
  * An array of strings indicating which nested properties should have pipes created for them.
  *

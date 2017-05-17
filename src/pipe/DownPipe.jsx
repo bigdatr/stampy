@@ -72,6 +72,7 @@ export default ConfigureHock(
 
 /**
  * @typedef DownPipeConfigResult
+ * @type {Object}
  * @property {Object} childProps
  * The new set of props to pass down.
  */

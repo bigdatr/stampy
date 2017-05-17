@@ -158,6 +158,7 @@ export default ConfigureHock(
 
 /**
  * @typedef SpreadPipeConfigResult
+ * @type {Object}
  *
  * @property {Array<ValueChangePair>|List<ValueChangePair>} [valueChangePairs = [['value', 'onChange']]]
  * An array of value/Change pairs to spread.

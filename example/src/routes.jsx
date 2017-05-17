@@ -7,7 +7,7 @@ import ContentsPage from 'components/ContentsPage';
 
 import ButtonExample from 'component/button/ButtonExample';
 import LabelExample from 'component/field/LabelExample';
-import ShowHideExample from 'component/ShowHide/ShowHideExample';
+import ShowHideExample from 'component/showHide/ShowHideExample';
 import TableExample from 'component/table/TableExample';
 
 import InputExample from 'input/input/InputExample';

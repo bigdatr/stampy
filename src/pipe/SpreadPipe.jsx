@@ -137,11 +137,11 @@ export default ConfigureHock(
             return SpreadPipe;
         }
     },
-    {
+    (): Object => ({
         valueChangePairs: [['value', 'onChange']],
         valueProp: 'value',
         onChangeProp: 'onChange'
-    }
+    })
 );
 
 /**

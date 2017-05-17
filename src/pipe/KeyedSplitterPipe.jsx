@@ -150,11 +150,11 @@ export default ConfigureHock(
             return KeyedSplitterPipe;
         }
     },
-    {
+    (): Object => ({
         paths: [],
         valueChangePairs: [['value', 'onChange']],
         splitProp: 'split'
-    }
+    })
 );
 
 

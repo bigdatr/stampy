@@ -27,6 +27,7 @@
     "prepublish": "yarn run build",
     "test": "NODE_ENV=test nyc --report-dir=./coverage ava && yarn run check-coverage",
     "test-all": "NODE_ENV=test yarn run lint && yarn run flow && yarn run test",
+    "view-coverage": "yarn run check-coverage; open ./coverage/lcov-report/index.html",
     "watch": "yarn run dev"
   },
   "devDependencies": {

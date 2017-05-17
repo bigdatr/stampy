@@ -52,10 +52,27 @@ export default ConfigureHock(
 
             return DownPipe;
         }
-    }
+    },
+    (props: Object): Object => ({
+        childProps: props
+    })
 );
 
 /**
  * @callback DownPipe
+ * @param {DownPipeConfig} [config]
  */
 
+/**
+ * @callback DownPipeConfig
+ * @param {Object} props
+ * @return {DownPipeConfigResult}
+ * A function that accepts props and returns configuration for DownPipe.
+ */
+
+/**
+ * @typedef DownPipeConfigResult
+ * @type {Object}
+ * @property {Object} childProps
+ * The new set of props to pass down.
+ */

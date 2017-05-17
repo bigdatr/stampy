@@ -30,14 +30,20 @@
  *
  * @name ConfigureHock
  * @kind function
- * @param {ConfiguredHockCreator} hockCreator A function that must return a hock Component.
- * @param {Object} [defaultConfig = {}] The default config. Key / value pairs on this object are used only when the key isn't returned from the hock config function.
- * @param {Object} [defaultApplierConfig = {}] The default applier config. Key / value pairs on this object are used only when the key isn't specified on the applierConfig object.
+ * @param {ConfiguredHockCreator} hockCreator
+ * A function that must return a hock Component.
+ *
+ * @param {Function} [defaultConfig = () => {}]
+ * The default config. Key / value pairs on the object returned from this function are used only when the key isn't returned from the hock config function.
+ *
+ * @param {Object} [defaultApplierConfig = {}]
+ * The default applier config. Key / value pairs on this object are used only when the key isn't specified on the applierConfig object.
+ *
  * @return {Function} The configured hock to export.
  */
 
-export default function ConfigureHock(hockCreator: Function, defaultConfig: Object = {}, defaultApplierConfig: Object = {}): Function {
-    return (config: HockConfig = () => defaultConfig, applierConfig: Object = defaultApplierConfig): HockApplier => {
+export default function ConfigureHock(hockCreator: Function, defaultConfig: Function = () => ({}), defaultApplierConfig: Object = {}): Function {
+    return (config: HockConfig = defaultConfig, applierConfig: Object = defaultApplierConfig): HockApplier => {
         if(typeof config !== "function") {
             throw new Error("config must be a function");
         }
@@ -49,7 +55,7 @@ export default function ConfigureHock(hockCreator: Function, defaultConfig: Obje
             if(typeof configObject !== "object") {
                 throw new Error("result of config function must be an object");
             }
-            return Object.assign({}, defaultConfig, configObject);
+            return Object.assign({}, defaultConfig(props, ...otherArgs), configObject);
         };
         const applierConfigWithDefaults = Object.assign({}, defaultApplierConfig, applierConfig);
         return hockCreator(configWithDefaults, applierConfigWithDefaults);

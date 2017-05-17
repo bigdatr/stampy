@@ -26,23 +26,51 @@ test('ConfigureHock should default config to a function that returns an empty ob
 test('ConfigureHock should default applierConfig to an empty object', tt => {
     ConfigureHock((config, applierConfig) => {
         tt.deepEqual(applierConfig, {}, 'applierConfig should be empty object');
-    }, () => {});
+    }, () => ({}));
 });
 
-test('ConfigureHock should default individual config keys', tt => {
+test('ConfigureHock should aplly defaults to individual config keys', tt => {
     var myConfig = () => ({cool: true, choice: true});
-    var myHock = ConfigureHock((config) => {
-        tt.deepEqual(config(), {cool: true, nice: false, choice: true});
-    }, {nice: false, choice: false});
+    var myHock = ConfigureHock(
+        (config) => {
+            tt.deepEqual(config(), {cool: true, nice: false, choice: true});
+        },
+        () => ({
+            nice: false,
+            choice: false
+        })
+    );
+
+    myHock(myConfig);
+});
+
+test('ConfigureHock should pass props to config function', tt => {
+    var myConfig = () => ({});
+    var myHock = ConfigureHock(
+        (config) => {
+            tt.deepEqual(config({niceProp: "!!!"}), {nice: "!!!", choice: false});
+        },
+        (props) => ({
+            nice: props.niceProp,
+            choice: false
+        })
+    );
 
     myHock(myConfig);
 });
 
 test('ConfigureHock should default individual applierConfig keys', tt => {
     var myApplierConfig = {cool: true, choice: true};
-    var myHock = ConfigureHock((config, myApplierConfig) => {
-        tt.deepEqual(myApplierConfig, {cool: true, nice: false, choice: true});
-    }, {}, {nice: false, choice: false});
+    var myHock = ConfigureHock(
+        (config, myApplierConfig) => {
+            tt.deepEqual(myApplierConfig, {cool: true, nice: false, choice: true});
+        },
+        () => ({}),
+        {
+            nice: false,
+            choice: false
+        }
+    );
 
     myHock(() => ({}), myApplierConfig);
 });

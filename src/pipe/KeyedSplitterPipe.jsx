@@ -16,7 +16,8 @@ export default ConfigureHock(
             /**
              * @component
              *
-             * The KeyedSplitterPipe lets you split a pipe into a series of smaller pipes.
+             * The KeyedSplitterPipe lets you split a pipe with Objects or Maps as a value
+             * into a series of smaller pipes.
              * Partial values and partial change functions are given to each pipe
              * so they can continue to be composed.
              *

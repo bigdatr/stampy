@@ -288,7 +288,7 @@ test('KeyedSplitterPipe should update childProps on componentWillReceiveProps if
     tt.is(
         anotherWrappedComponent.render().props.split.name.val,
         "VALNAME!",
-        'split() memoization uses correct arguments, and config props affect split correctly'
+        'split() uses correct arguments, and config props affect split correctly'
     );
 });
 

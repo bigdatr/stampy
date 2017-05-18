@@ -23,9 +23,9 @@
  *             return CoolHock;
  *         }
  *     },
- *     {
+ *     () => ({
  *         name: "default name"
- *     }
+ *     })
  * );
  *
  * @name ConfigureHock

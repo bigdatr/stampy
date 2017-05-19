@@ -60,6 +60,7 @@ export default ConfigureHock(
             class SpreadPipe extends Component {
 
                 childProps: Object;
+                upToDateValue: Object;
 
                 constructor(props: Object) {
                     super(props);
@@ -102,23 +103,22 @@ export default ConfigureHock(
                                 return props;
                             }, {});
                     }
+
+                    // cache the new value prop so we can cope with multiple onChange calls in a row
+                    this.upToDateValue = nextValue;
                 };
 
                 createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
-                    const {
-                        onChangeProp,
-                        valueProp
-                    } = config(this.props);
-
+                    const {onChangeProp} = config(this.props);
                     const [pairValue] = pair.toArray();
-                    const existingValue: * = this.props[valueProp];
+
                     const changeFunction: * = this.props[onChangeProp];
-                    const updatedValue: * = set(existingValue, pairValue, newPartialValue);
+                    this.upToDateValue = set(this.upToDateValue, pairValue, newPartialValue);
                     if(!changeFunction || typeof changeFunction !== "function") {
                         console.warn(`SpreadPipe cannot call change on "${onChangeProp}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
-                    changeFunction(updatedValue);
+                    changeFunction(this.upToDateValue);
                 };
 
                 render(): React.Element<any> {

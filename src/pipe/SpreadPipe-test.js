@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import SpreadPipe from './SpreadPipe';
 import {Map} from 'immutable';
+import sinon from 'sinon';
 
 //
 // Hock Tests
@@ -158,6 +159,26 @@ test('SpreadPipe onChange function will change state.key based on name', tt => {
     var instance = shallow(<Component onChange={spy} value={{fooValue: 1}}/>);
 
     instance.props().fooChange(2);
+});
+
+test('SpreadPipe onChange function can cope with multiple calls between props updates', tt => {
+    var onChange = sinon.spy();
+    var Child = () => <div/>;
+    var Component = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['fooValue', 'fooChange'],
+            ['barValue', 'barChange']
+        ]
+    }))(Child);
+    var instance = shallow(<Component onChange={onChange} value={{fooValue: 1, barValue: 2}}/>);
+
+    instance.props().fooChange(2);
+    instance.props().barChange(4);
+
+    tt.true(onChange.calledTwice, 'onChange should be called twice');
+    tt.deepEqual(onChange.firstCall.args[0], {fooValue: 2, barValue: 2}, 'first onChange should update foo');
+    // intentionally not updating props after the first call
+    tt.deepEqual(onChange.secondCall.args[0], {fooValue: 2, barValue: 4}, 'second onChange should update bar and foo should still be updated');
 });
 
 test('SpreadPipe will not pass down original value and onChange props', tt => {

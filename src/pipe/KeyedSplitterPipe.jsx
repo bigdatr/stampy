@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS, List, Map} from 'immutable';
+import {fromJS, List, Map, is} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {getIn, setIn} from '../util/CollectionUtils';
 
@@ -52,7 +52,7 @@ export default ConfigureHock(
                     const nextConfig: Object = config(nextProps);
 
                     const {splitProp} = nextConfig;
-                    const paths = List(nextConfig.paths);
+                    const paths: List<string> = List(nextConfig.paths);
 
                     // get the props based on the values and change function in the value change pairs
                     const prevValueChangePairs: List<ValueChangePairList> = fromJS(prevConfig.valueChangePairs);
@@ -69,7 +69,7 @@ export default ConfigureHock(
 
                     // only update childProps when necessary
                     if(
-                        !paths.equals(List(prevConfig.paths))
+                        !is(paths, List(prevConfig.paths))
                         || prevConfig.splitProp !== splitProp
                         || valuesHaveChanged
                         || !this.childProps

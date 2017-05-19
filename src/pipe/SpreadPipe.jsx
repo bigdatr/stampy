@@ -75,8 +75,8 @@ export default ConfigureHock(
                     const prevConfig: Object = config(prevProps);
                     const nextConfig: Object = config(nextProps);
 
-                    const prevValue: string = prevProps[prevConfig.valueProp];
-                    const nextValue: string = nextProps[nextConfig.valueProp];
+                    const prevValue: * = prevProps[prevConfig.valueProp];
+                    const nextValue: * = nextProps[nextConfig.valueProp];
 
                     const prevValueChangePairs: List<string> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<string> = fromJS(nextConfig.valueChangePairs);

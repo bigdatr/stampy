@@ -47,8 +47,10 @@ export default ConfigureHock(
                 onPropChange: Function;
                 constructor(props: Object) {
                     super(props);
-                    this.onPropChange = config(props).onPropChange;
-                    this.onPropChange(props);
+                    this.onPropChange = config(this.props).onPropChange;
+                }
+                componentDidMount() {
+                    this.onPropChange(this.props);
                 }
                 componentWillReceiveProps(nextProps: Object) {
                     const propsHaveChanged = List(config(nextProps).paths)

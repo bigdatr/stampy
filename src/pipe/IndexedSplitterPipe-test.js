@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import React from 'react';
 import IndexedSplitterPipe from './IndexedSplitterPipe';
-import {Map} from 'immutable';
+import {Map, fromJS, is, List} from 'immutable';
 
 //
 // hock tests
@@ -104,6 +104,34 @@ test('IndexedSplitterPipe provides correct values in split prop', tt => {
     tt.is(split[1].value.hi, "hello");
     tt.is(split[0].errorValue, "!");
     tt.is(split[1].errorValue, "?");
+    tt.is(split[0].key, 0, 'default keys should be provided based off index');
+    tt.is(split[1].key, 1, 'default keys should be provided based off index');
+});
+
+test('IndexedSplitterPipe provides key in split prop if listKeysValue prop is provided', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe(() => ({
+        valueChangePairs: [
+            ['value', 'onChange'],
+            ['errorValue', 'errorChange']
+        ]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        value: [
+            "A",
+            "B"
+        ],
+        errorValue: [
+            "!",
+            "?"
+        ],
+        listKeysValue: [10,11]
+    });
+
+    const {split} = myWrappedComponent.render().props;
+    tt.is(split[0].key, 10, 'keys should be provided based off contents of listKeysProp');
+    tt.is(split[1].key, 11, 'keys should be provided based off contents of listKeysProp');
 });
 
 test('IndexedSplitterPipe should pass undefined values when passed values of unequal length', tt => {
@@ -232,5 +260,347 @@ test('IndexedSplitterPipe has a default config for valueChangePairs', tt => {
     const {split} = myWrappedComponent.render().props;
     tt.is(split[0].value, "Tom", 'value is included in default valueChangePairs');
     tt.is(typeof split[0].onChange, "function", 'onChange is included in default valueChangePairs');
-    tt.is(Object.keys(split[0]).length, 2, 'no other valueChangePairs are default');
+});
+
+//
+// static methods
+//
+
+test('IndexedSplitterPipe.zipValues works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const {zipValues} = IndexedSplitterPipe()(componentToWrap);
+
+    const unzipped = fromJS({
+        value: [1,2,3],
+        errorValue: ["invalid name"]
+    });
+
+    const zipped = zipValues(unzipped);
+    const expectedOutput = fromJS([
+        {
+            value: 1,
+            errorValue: "invalid name"
+        },
+        {
+            value: 2,
+            errorValue: undefined
+        },
+        {
+            value: 3,
+            errorValue: undefined
+        }
+    ]);
+
+    tt.true(
+        is(
+            zipped,
+            expectedOutput
+        )
+    );
+});
+
+test('IndexedSplitterPipe.unzipValues works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const {unzipValues} = IndexedSplitterPipe()(componentToWrap);
+
+    const zipped = fromJS([
+        {
+            value: 1,
+            errorValue: "invalid name"
+        },
+        {
+            value: 2,
+            errorValue: undefined
+        },
+        {
+            value: 3,
+            errorValue: undefined
+        }
+    ]);
+
+    const upzipped = unzipValues(zipped, fromJS(['value', 'errorValue']));
+
+    const expectedOutput = fromJS({
+        value: [1,2,3],
+        errorValue: ["invalid name", undefined, undefined]
+    });
+
+    tt.true(
+        is(
+            upzipped,
+            expectedOutput
+        )
+    );
+});
+
+//
+// modify methods
+//
+
+test('IndexedSplitterPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: ["A","B","C"],
+        onChange
+    });
+
+    myWrappedComponent.render().props.onPop();
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.deepEqual(
+        onChange.firstCall.args[0],
+        ["A","B"],
+        'onChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: ["A","B","C"],
+        onChange
+    });
+
+    myWrappedComponent.render().props.onPop();
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.deepEqual(
+        onChange.firstCall.args[0],
+        ["A","B"],
+        'onChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes modifier functions should fail silently if no onChange is given (using onPop as example)', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+
+    const myWrappedComponent = new WrappedComponent({
+        value: ["A","B","C"]
+    });
+
+    tt.notThrows(() => {
+        myWrappedComponent.render().props.onPop();
+    });
+});
+
+
+test('IndexedSplitterPipes onPop works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onPop();
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A","B"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([10,11])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes onPush works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onPush("D");
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A","B","C","D"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([10,11,12,13])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes onSwap works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onSwap(0,2);
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["C","B","A"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([12,11,10])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes onSwapNext works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onSwapNext(0);
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["B","A","C"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([11,10,12])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes onSwapNext does nothing if used on last item in array', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onSwapNext(2);
+
+    tt.false(onChange.called, 'onChange should not be called');
+    tt.false(listKeysChange.called, 'listKeysChange should not be called');
+});
+
+test('IndexedSplitterPipes onSwapPrev works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onSwapPrev(2);
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A","C","B"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([10,12,11])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+
+test('IndexedSplitterPipes onSwapNext does nothing if used on last item in array', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onSwapPrev(0);
+
+    tt.false(onChange.called, 'onChange should not be called');
+    tt.false(listKeysChange.called, 'listKeysChange should not be called');
 });

@@ -119,30 +119,24 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         }));
                 }
 
-                static zipValues(valueChangeProps: List<Map<string,*>>): List<Map<string,*>> {
+                static zipValues(unzipped: Map<string,List<*>|Array<*>>): List<Map<string,*>> {
                     // find total length of output value i.e. the longest input value
-                    const length: number = valueChangeProps
-                        .map(ii => List(ii.get('value')).size)
+                    const length: number = unzipped
+                        .map(ii => List(ii).size)
                         .max();
-
-                    // get value change props values keyed by valueName
-                    const valueChangeMap: Map<Map<string,*>> = valueChangeProps
-                        .reduce((map: List<Map<string,*>>, ii: Map<string,*>) => {
-                            return map.set(ii.get('valueName'), ii.get('value'));
-                        }, Map());
 
                     // zip the values together, fill with undefined where required
                     return Range(0, length)
                         .toList()
                         .map((index: number) => Map(
-                            valueChangeMap.reduce((map: Map<string,*>, value: *, valueName: string) => {
-                                map[valueName] = value ? get(value, index) : undefined;
-                                return map;
+                            unzipped.reduce((obj: Object, value: List<*>|Array<*>, valueName: string): Object => {
+                                obj[valueName] = get(value, index);
+                                return obj;
                             }, {})
                         ));
                 }
 
-                static unzipValues(zipped: List<Map<string,*>>, valueNames: List<string>): Map<List<string,*>> {
+                static unzipValues(zipped: List<Map<string,*>>, valueNames: List<string>): Map<string,List<*>> {
                     return Map(
                         valueNames.reduce((obj: Object, valueName: string) => {
                             obj[valueName] = zipped.map(ii => ii.get(valueName));
@@ -151,7 +145,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     );
                 }
 
-                split(valueChangeProps: List<Map<string,*>>): Array {
+                split(valueChangeProps: List<Map<string,*>>): Array<*> {
                     const length: number = valueChangeProps
                         .map(ii => ii.get('valueLength'))
                         .max();
@@ -168,9 +162,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     return valueChangeProps
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
-                            const value: * = valueProp
-                                ? get(valueProp, index)
-                                : undefined;
+                            const value: * = get(valueProp, index);
 
                             const onChange: Function = this.createPartialChange(index, valueChangeProp);
                             const listKeys: Object = valueChangeProp.get('listKeys');
@@ -179,7 +171,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                 ...obj,
                                 [valueChangeProp.get('valueName')]: value,
                                 [valueChangeProp.get('onChangeName')]: onChange,
-                                key: listKeys ? listKeys.get(index) : index // use keys from listKeys if provided
+                                key: listKeys ? List(listKeys).get(index) : index // use keys from listKeys if provided
                             };
                         }, {});
                 }
@@ -200,20 +192,25 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     changeFunction(updatedValue);
                 };
 
-                onModify: Function = (valueChangeProps: List<Map<string,*>>, listKeys: List<number>, modifier: Function): Function => {
+                onModify: Function = (valueChangeProps: List<Map<string,*>>, listKeys: ?List<number>, modifier: Function): Function => {
+
+                    const unzipped: Map<string, List<*>|Array<*>> = valueChangeProps
+                        .reduce((map: Map<string, List<*>|Array<*>>, ii: Map<string,*>) => {
+                            return map.set(ii.get('valueName'), ii.get('value'));
+                        }, Map());
+
                     const modify: Function = (valueListUpdated: List<Map<string,*>>, updatedListKeys: List<Map<string,*>>) => {
                         // call onChange for the list keys
-                        this.props.listKeysChange(updatedListKeys);
+                        this.props.listKeysChange && this.props.listKeysChange(updatedListKeys);
 
                         // call onChange for each changeFunction
                         const valueNames: List<string> = valueChangeProps.map(ii => ii.get('valueName'));
                         IndexedSplitterPipe
                             .unzipValues(valueListUpdated, valueNames)
                             .forEach((updatedValue: List<*>, valueName: string) => {
-                                const onChangeName: string = valueChangeProps
-                                    .find(ii => ii.get('valueName') == valueName)
-                                    .get('onChangeName');
-
+                                // $FlowFixMe: flow's not clever enough to realize that item will always be found
+                                const item: Map<string,*> = valueChangeProps.find(ii => ii.get('valueName') == valueName);
+                                const onChangeName: string = item.get('onChangeName');
                                 const changeFunction: * = this.props[onChangeName];
 
                                 if(!changeFunction || typeof changeFunction !== "function") {
@@ -221,14 +218,21 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                     return;
                                 }
 
-                                changeFunction(updatedValue);
+                                changeFunction(
+                                    List.isList(unzipped.get(valueName))
+                                        ? updatedValue
+                                        : updatedValue.toArray()
+                                );
                             });
                     };
 
-                    const value: List<Map<string,*>> = IndexedSplitterPipe.zipValues(valueChangeProps);
+                    const zipped: List<Map<string,*>> = IndexedSplitterPipe.zipValues(unzipped);
+                    if(!listKeys) {
+                        listKeys = List();
+                    }
 
                     // call the modifying function, passing in a callback for the modifying function to provide is updated info
-                    return modifier(value, listKeys, modify);
+                    return modifier(zipped, listKeys, modify);
                 };
 
                 onPop: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => () => {
@@ -254,7 +258,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         .set(indexA, value.get(indexB))
                         .set(indexB, value.get(indexA));
 
-                    const listKeysUpdated: List<Map<string,*>> = listKeys
+                    const listKeysUpdated: List<number> = listKeys
                         .set(indexA, listKeys.get(indexB))
                         .set(indexB, listKeys.get(indexA));
 
@@ -286,6 +290,21 @@ const IndexedSplitterPipe: Function = ConfigureHock(
     },
     DEFAULT_PROPS
 );
+
+export default IndexedSplitterPipe;
+
+/**
+ * @component
+ *
+ * IndexedSplitterPipeStateful is a stateful version of the IndexedSplitterPipe.
+ * It will provide `listKeysValue` and `listKeysChange` to the IndexedSplitterPipe
+ * hock automatically, so you don't need to keep track of these yourself when
+ * maintaining unique ids for each list item.
+ *
+ * It accepts the same config as `IndexedSplitterPipe`.
+ *
+ * @memberof module:Pipes
+ */
 
 export const IndexedSplitterPipeStateful: Function = ConfigureHock(
     (config: Function) => {

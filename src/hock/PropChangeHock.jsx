@@ -18,11 +18,11 @@ export default ConfigureHock(
              *
              * `PropChangeHock` is designed to provide a way to call a function
              * whenever a particular set of props change on a component.
-             * Whenever the `componentWillMount()` and `componentWillReceiveProps()` lifecycle methods
+             * Whenever the `componentDidMount()` and `componentWillReceiveProps()` lifecycle methods
              * are called, `PropChangeHock` will check if any of the props in `paths` have changed,
              * and call `onPropChange` if so.
              *
-             * It's often used to dispatch actions to request new data,
+             * It's often used to dispatch actions to request new data
              * when props affecting the query have changed.
              *
              * @example
@@ -47,8 +47,10 @@ export default ConfigureHock(
                 onPropChange: Function;
                 constructor(props: Object) {
                     super(props);
-                    this.onPropChange = config(props).onPropChange;
-                    this.onPropChange(props);
+                    this.onPropChange = config(this.props).onPropChange;
+                }
+                componentDidMount() {
+                    this.onPropChange(this.props);
                 }
                 componentWillReceiveProps(nextProps: Object) {
                     const propsHaveChanged = List(config(nextProps).paths)

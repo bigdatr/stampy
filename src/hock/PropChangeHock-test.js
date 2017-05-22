@@ -17,12 +17,14 @@ test('PropChangeHock passes props straight through to children', tt => {
     tt.is(myWrappedComponent.render().props.myProp, myWrappedComponent.props.myProp);
 });
 
-test('PropChangeHock calls onPropChange function on componentWillMount', tt => {
+test('PropChangeHock calls onPropChange function on componentDidMount', tt => {
     const onPropChange = sinon.spy();
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = PropChangeHock(() => ({paths: ['aa'], onPropChange}))(componentToWrap);
 
-    shallow(<WrappedComponent foo="bar" />);
+    shallow(<WrappedComponent foo="bar" />)
+        .instance()
+        .componentDidMount();
 
     tt.true(onPropChange.calledOnce, 'propChange is called');
     tt.deepEqual(onPropChange.firstCall.args[0].foo, 'bar', 'propChange is passed props from PropChangeHock component');
@@ -33,6 +35,7 @@ test('PropChangeHock doesnt call onPropChange function on componentWillReceivePr
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = PropChangeHock(() => ({paths: ['bats'], onPropChange}))(componentToWrap);
     const wrapper = shallow(<WrappedComponent foo="bar" />);
+    wrapper.instance().componentDidMount();
     wrapper.setProps({foo: 'baz'});
     tt.true(onPropChange.calledOnce);
 });
@@ -42,6 +45,7 @@ test('PropChangeHock calls onPropChange function on componentWillReceiveProps wh
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = PropChangeHock(() => ({paths: ['foo'], onPropChange}))(componentToWrap);
     const wrapper = shallow(<WrappedComponent foo="bar" />);
+    wrapper.instance().componentDidMount();
     wrapper.setProps({foo: 'baz'});
     tt.true(onPropChange.calledTwice);
 });
@@ -52,6 +56,7 @@ test('PropChangeHock doesnt call onPropChange function on componentWillReceivePr
     const WrappedComponent = PropChangeHock(() => ({paths: ['bats.wings'], onPropChange}))(componentToWrap);
 
     const wrapper = shallow(<WrappedComponent bats={{wings: null}} />);
+    wrapper.instance().componentDidMount();
     wrapper.setProps({
         bats: {
             wings: null,
@@ -68,6 +73,7 @@ test('PropChangeHock calls onPropChange function on componentWillReceiveProps wh
     const WrappedComponent = PropChangeHock(() => ({paths: ['bats.wings'], onPropChange}))(componentToWrap);
 
     const wrapper = shallow(<WrappedComponent bats={{wings: null}} />);
+    wrapper.instance().componentDidMount();
     wrapper.setProps({
         bats: {
             wings: 'foo'
@@ -79,7 +85,7 @@ test('PropChangeHock calls onPropChange function on componentWillReceiveProps wh
 
 test('PropChangeHock: onPropChange will noop when not provided.', tt => {
     const WrappedComponent = PropChangeHock(() => ({paths: []}))(() => <div/>);
-    tt.notThrows(() => shallow(<WrappedComponent bats={{wings: null}} />));
+    tt.notThrows(() => shallow(<WrappedComponent bats={{wings: null}} />).instance().componentDidMount());
 });
 
 test('PropChangeHock: will pass onPropChange to child if config.passOnPropChange is true', tt => {

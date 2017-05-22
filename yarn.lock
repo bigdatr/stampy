@@ -3147,9 +3147,9 @@ jsdoc-babel@^0.3.0:
   dependencies:
     lodash "^4.13.1"
 
-jsdoc-react-proptypes@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/jsdoc-react-proptypes/-/jsdoc-react-proptypes-1.0.1.tgz#671d59b35f0c042322f6adc8a5b73a041b22b650"
+jsdoc-react-proptypes@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/jsdoc-react-proptypes/-/jsdoc-react-proptypes-1.0.2.tgz#66923491d8102affb946adae1e43e09ba8b72b93"
   dependencies:
     immutable "^3.8.1"
 

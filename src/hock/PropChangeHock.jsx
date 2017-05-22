@@ -1,100 +1,110 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS, is} from 'immutable';
+import {is, List} from 'immutable';
+import ConfigureHock from '../util/ConfigureHock';
+import {getIn} from '../util/CollectionUtils';
 
 /**
  * @module Hocks
  */
 
-export default (propKeys: Array<string>, onPropChangeFunction: Function): HockApplier => {
-    return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
+export default ConfigureHock(
+    (config: Function): HockApplier => {
+        return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
 
-        /**
-         * @component
-         *
-         * `PropChangeHock` is designed to provide a way to call a function
-         * whenever a particular set of props change on a component.
-         * Whenever the `componentWillMount()` and `componentWillReceiveProps()` lifecycle methods
-         * are called, `PropChangeHock` will check if any of the props in `propKeys` have changed,
-         * and call `onPropChangeFunction` if so.
-         *
-         * It's often used to dispatch actions to request new data,
-         * when props affecting the query have changed.
-         *
-         * @example
-         * function MyComponent(props) {
-         *   return <span>Extremely simple React component</span>;
-         * }
-         *
-         * const withPropChange = PropChangeHock(['propA'], (props) => {
-         *   console.log(`Prop A has changed to ${props.propA}`);
-         * });
-         *
-         * export default withPropChange(MyComponent);
-         * // exports MyComponent with PropChangeHock as a higher order component
-         *
-         *
-         * @decorator {PropChangeHock}
-         *
-         * @memberof module:Hocks
-         */
+            /**
+             * @component
+             *
+             * `PropChangeHock` is designed to provide a way to call a function
+             * whenever a particular set of props change on a component.
+             * Whenever the `componentWillMount()` and `componentWillReceiveProps()` lifecycle methods
+             * are called, `PropChangeHock` will check if any of the props in `paths` have changed,
+             * and call `onPropChange` if so.
+             *
+             * It's often used to dispatch actions to request new data,
+             * when props affecting the query have changed.
+             *
+             * @example
+             * function MyComponent(props) {
+             *   return <span>Extremely simple React component</span>;
+             * }
+             *
+             * const withPropChange = PropChangeHock(props => {
+             *     paths: ['propA'],
+             *     onPropChange: (props) => console.log(`Prop A has changed to ${props.propA}`);
+             * });
+             *
+             * export default withPropChange(MyComponent);
+             *
+             * @decorator {PropChangeHock}
+             * @decorator {HockApplier}
+             *
+             * @memberof module:Hocks
+             */
 
-        class PropChangeHock extends Component {
-            componentWillMount() {
-                onPropChangeFunction(this.props);
-            }
-            componentWillReceiveProps(nextProps: Object) {
-                const thisPropsImmutable = fromJS(this.props);
-                const nextPropsImmutable = fromJS(nextProps);
+            class PropChangeHock extends Component {
+                onPropChange: Function;
+                constructor(props: Object) {
+                    super(props);
+                    this.onPropChange = config(props).onPropChange;
+                    this.onPropChange(props);
+                }
+                componentWillReceiveProps(nextProps: Object) {
+                    const propsHaveChanged = List(config(nextProps).paths)
+                        .some(ii => {
+                            const keyPath = ii.split('.');
+                            return !is(
+                                getIn(this.props, keyPath),
+                                getIn(nextProps, keyPath)
+                            );
+                        });
 
-                const propsHaveChanged = fromJS(propKeys)
-                    .some(ii => {
-                        const keyPath = ii.split('.');
-                        return !is(
-                            thisPropsImmutable.getIn(keyPath),
-                            nextPropsImmutable.getIn(keyPath)
-                        );
-                    });
-
-                if(propsHaveChanged) {
-                    onPropChangeFunction(nextProps);
+                    if(propsHaveChanged) {
+                        this.onPropChange = config(nextProps).onPropChange
+                        this.onPropChange(nextProps);
+                    }
+                }
+                render(): React.Element<any> {
+                    return <ComponentToDecorate
+                        {...this.props}
+                        onPropChange={this.onPropChange}
+                    />;
                 }
             }
-            render(): React.Element<any> {
-                return <ComponentToDecorate {...this.props} />;
-            }
-        }
 
-        return PropChangeHock;
-    }
-}
+            return PropChangeHock;
+        }
+    },
+    (): Object => ({
+        paths: [],
+        onPropChange: () => ({})
+    })
+);
 
 /**
- * Provides configuration for `PropChangeHock`.
- *
  * @callback PropChangeHock
+ * @param {PropChangeHockConfig} [config]
+ */
+
+/**
+ * @callback PropChangeHockConfig
+ * @param {Object} props
+ * @return {PropChangeHockConfigResult}
+ * A function that accepts props and returns configuration for PropChangeHock.
+ */
+
+/**
+ * @typedef PropChangeHockConfigResult
+ * @type {Object}
  *
- * @param {Array<string>} propKeys
+ * @property {Array<string>} paths
+ *
  * The props that you want to check for changes on.
  * Nested objects or values can be passed in using dot notation inside strings
  * e.g. `['page', query.name', 'query.age']`.
  *
- * @param {PropChangeFunction} onPropChangeFunction
- *
- * @return {PropChangeWrapper}
- */
-
-/**
- * A function that accepts the component you want to wrap in a `PropChangeHock`.
- *
- * @callback PropChangeWrapper
- *
- * @param {ReactComponent} ComponentToDecorate
- * The component you wish to wrap in an `PropChangeHock`.
- *
- * @return {ReactComponent}
- * The decorated component.
+ * @property {PropChangeFunction} onPropChange
  */
 
 /**

@@ -3,25 +3,48 @@ import {fromJS} from 'immutable';
 import {
     StateHock,
     SpreadPipe,
-    IndexedSplitterPipe,
+    IndexedSplitterPipeStateful,
     Input,
     Compose
 } from 'stampy';
 
 const Example = (props: Object) => {
+    const {
+        split,
+        onPush,
+        onPop,
+        onSwap,
+        onSwapPrev,
+        onSwapNext,
+        onChange,
+        value
+    } = props;
+
     return <div style={{fontFamily: 'monospace'}}>
-        {props.split.map((ii, key) => {
+        <div>
+            <button onClick={() => onPush(`${Math.ceil(Math.random() * 100)}`)}>push random</button>
+            <button onClick={() => onPop()}>pop</button>
+            <button onClick={() => onSwap(0, split.length - 1)}>swap first and last</button>
+            {/*<button onClick={() => {onChange(value.push("X").push("Y"))}}>add more options via props</button>*/}
+        </div>
+        {split.map((ii, index) => {
             const {
                 value,
                 onChange,
                 errorValue,
-                errorChange
+                errorChange,
+                isFirst,
+                isLast,
+                key
             } = ii;
 
             return <div key={key} style={{display: 'block'}}>
-                Index: {key} -
+                Key: {key + " "}
                 <label>value <Input value={value} onChange={onChange} /></label>
                 <label>error <Input value={errorValue} onChange={errorChange} /></label>
+
+                {!isFirst && <button onClick={() => onSwapPrev(index)}>↑</button>}
+                {!isLast && <button onClick={() => onSwapNext(index)}>↓</button>}
             </div>;
         })}
     </div>;
@@ -47,7 +70,7 @@ const withSpread = SpreadPipe(() => ({
     ]
 }));
 
-const withPipes = IndexedSplitterPipe(() => ({
+const withPipes = IndexedSplitterPipeStateful(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']

@@ -82,3 +82,9 @@ test('PropChangeHock: onPropChange will noop when not provided.', tt => {
     tt.notThrows(() => shallow(<WrappedComponent bats={{wings: null}} />));
 });
 
+test('PropChangeHock: will pass onPropChange to child if config.passOnPropChange is true', tt => {
+    const onPropChange = () => {};
+    const WrappedComponent = PropChangeHock(() => ({onPropChange, passOnPropChange: true}))(() => <div/>);
+    tt.is(shallow(<WrappedComponent />).prop('onPropChange'), onPropChange);
+});
+

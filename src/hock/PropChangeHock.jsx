@@ -66,10 +66,15 @@ export default ConfigureHock(
                     }
                 }
                 render(): React.Element<any> {
-                    return <ComponentToDecorate
-                        {...this.props}
-                        onPropChange={this.onPropChange}
-                    />;
+                    const props = {
+                        ...this.props
+                    }
+
+                    if(config(this.props).passOnPropChange) {
+                        props.onPropChange = this.onPropChange;
+                    }
+
+                    return <ComponentToDecorate {...props} />;
                 }
             }
 
@@ -78,7 +83,8 @@ export default ConfigureHock(
     },
     (): Object => ({
         paths: [],
-        onPropChange: () => ({})
+        onPropChange: () => ({}),
+        passOnPropChange: false
     })
 );
 

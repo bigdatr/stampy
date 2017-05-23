@@ -3,7 +3,7 @@ import {fromJS} from 'immutable';
 import {
     StateHock,
     SpreadPipe,
-    IndexedSplitterPipeStateful,
+    IndexedSplitterPipe,
     Input,
     Compose
 } from 'stampy';
@@ -24,8 +24,7 @@ const Example = (props: Object) => {
         <div>
             <button onClick={() => onPush(`${Math.ceil(Math.random() * 100)}`)}>push random</button>
             <button onClick={() => onPop()}>pop</button>
-            <button onClick={() => onSwap(0, split.length - 1)}>swap first and last</button>
-            {/*<button onClick={() => {onChange(value.push("X").push("Y"))}}>add more options via props</button>*/}
+            <button onClick={() => onSwap(0, split.size - 1)}>swap first and last</button>
         </div>
         {split.map((ii, index) => {
             const {
@@ -59,6 +58,12 @@ const withState = StateHock({
         ],
         errorValue: [
             "!"
+        ],
+        // you can often autogenerate this based off the length of the longest value array
+        listKeysValue: [
+            0,
+            1,
+            2
         ]
     })
 });
@@ -66,14 +71,16 @@ const withState = StateHock({
 const withSpread = SpreadPipe(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
-        ['errorValue', 'errorChange']
+        ['errorValue', 'errorChange'],
+        ['listKeysValue', 'listKeysChange']
     ]
 }));
 
-const withPipes = IndexedSplitterPipeStateful(() => ({
+const withPipes = IndexedSplitterPipe(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
-        ['errorValue', 'errorChange']
+        ['errorValue', 'errorChange'],
+        ['listKeysValue', 'listKeysChange']
     ]
 }));
 

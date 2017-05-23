@@ -26,6 +26,5 @@ export {default as StateHock} from './hock/StateHock';
 export {default as SpreadPipe} from './pipe/SpreadPipe';
 export {default as KeyedSplitterPipe} from './pipe/KeyedSplitterPipe';
 export {default as IndexedSplitterPipe} from './pipe/IndexedSplitterPipe';
-export {IndexedSplitterPipeStateful} from './pipe/IndexedSplitterPipe';
 export {default as DownPipe} from './pipe/DownPipe';
 export {default as UpPipe} from './pipe/UpPipe';

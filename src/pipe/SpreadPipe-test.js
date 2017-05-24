@@ -22,21 +22,86 @@ test(`SpreadPipe passes other props through`, tt => {
     tt.is(shallow(<Component value={{}} foo="bar" />).props().foo, 'bar');
 });
 
+
 test(`SpreadPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = SpreadPipe()(componentToWrap);
-    const myWrappedComponent = new WrappedComponent();
-    myWrappedComponent.props = {
-        value: "anything"
-    };
+    const WrappedComponent = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['aValue', 'aChange'],
+            ['bValue', 'bChange']
+        ]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        value: {
+            aValue: '123',
+            bValue: '456'
+        }
+    });
 
     var render1: Object = Map(myWrappedComponent.render().props);
     var render2: Object = Map(myWrappedComponent.render().props);
 
     render1.forEach((prop, key) => {
-        tt.is(prop, render2.get(key), `Prop "${key}" is not equal on re-render`);
+        tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal on re-render`);
     });
 });
+
+
+test(`SpreadPipe does not recreate props every render when using own config`, tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['aValue', 'aChange'],
+            ['bValue', 'bChange']
+        ]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        value: {
+            aValue: '123',
+            bValue: '456'
+        }
+    });
+
+    var render1: Object = Map(myWrappedComponent.render().props);
+    var render2: Object = Map(myWrappedComponent.render().props);
+
+    render1.forEach((prop, key) => {
+        tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal on re-render`);
+    });
+});
+
+test(`SpreadPipe does not recreate props when changes happen to props to used in the updating of child props`, tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['aValue', 'aChange'],
+            ['bValue', 'bChange']
+        ]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        value: {
+            aValue: '123',
+            bValue: '456'
+        },
+        unrelatedProp: 123
+    });
+
+    myWrappedComponent.props = myWrappedComponent.render().props;
+    myWrappedComponent.componentWillReceiveProps({unrelatedProp: 456});
+    var render2: Object = Map(myWrappedComponent.render().props);
+
+    Map(myWrappedComponent.props).forEach((prop, key) => {
+        tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal after unrelated props change`);
+    });
+});
+
+//
+// spread pipe tests
+//
+
 
 test('SpreadPipe will allow you to change valueProp & onChangeProp', tt => {
     tt.plan(2);
@@ -74,34 +139,6 @@ test('SpreadPipe should silently fail if change function prop not provided', tt 
     });
 });
 
-test('SpreadPipe should call initialize on componentWillReceiveProps if config changes', tt => {
-    const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = SpreadPipe((props) => ({
-        valueChangePairs: [[props.valueField, 'onChange']]
-    }))(componentToWrap);
-
-    const myWrappedComponent = new WrappedComponent({
-        valueField: "value"
-    });
-
-    myWrappedComponent.initialize = sinon.spy();
-    myWrappedComponent.componentWillReceiveProps({
-        valueField: "value",
-        something: "unrelated"
-    });
-    tt.false(myWrappedComponent.initialize.called, 'initialize is not called if an unrelated prop changes');
-
-    myWrappedComponent.initialize = sinon.spy();
-    myWrappedComponent.componentWillReceiveProps({
-        valueField: "val"
-    });
-    tt.true(myWrappedComponent.initialize.calledOnce, 'initialize is called if valueChangePairs changes');
-});
-
-//
-// Functionality
-//
-
 test('SpreadPipe will create correct props off config.valueChangePairs', tt => {
     var Child = () => <div/>;
     var Component = SpreadPipe(() => ({
@@ -122,6 +159,26 @@ test('SpreadPipe onChange function will change state.key based on name', tt => {
     var instance = shallow(<Component onChange={spy} value={{fooValue: 1}}/>);
 
     instance.props().fooChange(2);
+});
+
+test('SpreadPipe onChange function can cope with multiple calls between props updates', tt => {
+    var onChange = sinon.spy();
+    var Child = () => <div/>;
+    var Component = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['fooValue', 'fooChange'],
+            ['barValue', 'barChange']
+        ]
+    }))(Child);
+    var instance = shallow(<Component onChange={onChange} value={{fooValue: 1, barValue: 2}}/>);
+
+    instance.props().fooChange(2);
+    instance.props().barChange(4);
+
+    tt.true(onChange.calledTwice, 'onChange should be called twice');
+    tt.deepEqual(onChange.firstCall.args[0], {fooValue: 2, barValue: 2}, 'first onChange should update foo');
+    // intentionally not updating props after the first call
+    tt.deepEqual(onChange.secondCall.args[0], {fooValue: 2, barValue: 4}, 'second onChange should update bar and foo should still be updated');
 });
 
 test('SpreadPipe will not pass down original value and onChange props', tt => {

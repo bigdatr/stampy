@@ -1,11 +1,9 @@
 // @flow
 
 import React, {Component} from 'react';
-import {fromJS, Map, is} from 'immutable';
+import {fromJS} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {get, set} from '../util/CollectionUtils';
-
-type PartialChangeMap = Map<string,Map<string,Function>>;
 
 /**
  * @module Pipes
@@ -61,75 +59,78 @@ export default ConfigureHock(
 
             class SpreadPipe extends Component {
 
-                partialChangeFunctions: PartialChangeMap = Map();
+                childProps: Object;
+                upToDateValue: Object;
+
                 constructor(props: Object) {
                     super(props);
-                    this.initialize(props);
+                    this.updateChildProps({}, props);
                 }
 
-                // reinitialize if output of config function changes
                 componentWillReceiveProps(nextProps: Object) {
+                    this.updateChildProps(this.props, nextProps);
+                }
 
-                    const configChanged: boolean = !is(
-                        fromJS(config(this.props)),
-                        fromJS(config(nextProps))
-                    );
+                updateChildProps: Function = (prevProps: Object, nextProps: Object) => {
+                    const prevConfig: Object = config(prevProps);
+                    const nextConfig: Object = config(nextProps);
 
-                    if(configChanged) {
-                        this.initialize(nextProps);
+                    const prevValue: * = prevProps[prevConfig.valueProp];
+                    const nextValue: * = nextProps[nextConfig.valueProp];
+
+                    const prevValueChangePairs: List<string> = fromJS(prevConfig.valueChangePairs);
+                    const nextValueChangePairs: List<string> = fromJS(nextConfig.valueChangePairs);
+
+                    // check each prop to see if any values aren't strictly equal
+                    // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
+                    // (they are only used when onChange is actually called)
+                    const valuesHaveChanged = prevValueChangePairs
+                        .some((prev, key) => prev.get(0) !== nextValueChangePairs.getIn([key, 0]));
+
+                    // only update childProps when necessary
+                    if(
+                        prevValue !== nextValue
+                        || valuesHaveChanged
+                        || !this.childProps
+                    ) {
+
+                        this.childProps = nextValueChangePairs
+                            .reduce((props: Object, pair: ValueChangePairList) => {
+                                const [pairValue, pairChange] = pair.toArray();
+
+                                props[pairValue] = get(nextValue, pairValue);
+                                props[pairChange] = this.createPartialChange(pair);
+                                return props;
+                            }, {});
                     }
-                }
 
-                // sets up a map of change functions, so these dont have to be recreated each render
-                initialize: Function = (props: Object) => {
-                    const {valueChangePairs} = config(props);
-
-                    this.partialChangeFunctions = fromJS(valueChangePairs)
-                        .reduce((map: Map<string,*>, pair: ValueChangePairList): Map<string,*> => {
-                            return map.set(pair.get(1), this.createPartialChange(pair));
-                        }, Map());
-                }
+                    // cache the new value prop so we can cope with multiple onChange calls in a row
+                    this.upToDateValue = nextValue;
+                };
 
                 createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
-                    const {
-                        onChangeProp,
-                        valueProp
-                    } = config(this.props);
-
+                    const {onChangeProp} = config(this.props);
                     const [pairValue] = pair.toArray();
-                    const existingValue: * = this.props[valueProp];
+
                     const changeFunction: * = this.props[onChangeProp];
-                    const updatedValue: * = set(existingValue, pairValue, newPartialValue);
+                    this.upToDateValue = set(this.upToDateValue, pairValue, newPartialValue);
                     if(!changeFunction || typeof changeFunction !== "function") {
                         console.warn(`SpreadPipe cannot call change on "${onChangeProp}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
-                    changeFunction(updatedValue);
+                    changeFunction(this.upToDateValue);
                 };
 
                 render(): React.Element<any> {
                     const {
-                        valueChangePairs,
                         onChangeProp,
                         valueProp
                     } = config(this.props);
 
-                    const value = this.props[valueProp];
-
-                    const hockProps: Object = fromJS(valueChangePairs)
-                        .reduce((props: Object, pair: ValueChangePairList) => {
-                            const [pairValue, pairChange] = pair.toArray();
-
-                            props[pairValue] = get(value, pairValue);
-                            props[pairChange] = this.partialChangeFunctions.get(pairChange);
-                            return props;
-                        }, {});
-
                     const clonedProps = Object.assign({}, this.props);
                     delete clonedProps[valueProp];
                     delete clonedProps[onChangeProp];
-                    const newProps = Object.assign({}, clonedProps, hockProps);
-
+                    const newProps = Object.assign({}, clonedProps, this.childProps);
                     return <ComponentToDecorate {...newProps} />;
                 }
             }

@@ -20,7 +20,9 @@ const Example = (props: Object) => {
     </div>;
 }
 
-const withState = StateHock({initialState: () => Map()});
+const withState = StateHock((props) => ({
+    initialState: Map()
+}));
 
 const withSpread = SpreadPipe(() => ({
     valueChangePairs: [

@@ -16,34 +16,35 @@ const DEFAULT_PROPS: Function = (): Object => ({
     splitProp: 'split',
     onPopProp: 'onPop',
     onPushProp: 'onPush',
+    onRemoveProp: 'onRemove',
     onSwapProp: 'onSwap',
     onSwapPrevProp: 'onSwapPrev',
     onSwapNextProp: 'onSwapNext'
 });
 
-const IndexedSplitterPipe: Function = ConfigureHock(
+const SplitIndexPipe: Function = ConfigureHock(
     (config: Function): HockApplier => {
         return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
 
             /**
              * @component
              *
-             * The IndexedSplitterPipe lets you split a pipe with Arrays or Lists as a value
+             * The SplitIndexPipe lets you split a pipe with Arrays or Lists as a value
              * into a series of smaller pipes.
              * Partial values and partial change functions are given to each pipe
              * so they can continue to be composed.
              *
              * @childprop {Object} split
-             * The prop containing the new pipes that IndexedSplitterPipe created.
+             * The prop containing the new pipes that SplitIndexPipe created.
              * This prop's name can be changed in config.
              *
-             * @decorator {IndexedSplitterPipe}
+             * @decorator {SplitIndexPipe}
              * @decorator {HockApplier}
              *
              * @memberof module:Pipes
              */
 
-            class IndexedSplitterPipe extends Component {
+            class SplitIndexPipe extends Component {
 
                 childProps: Object;
 
@@ -64,6 +65,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         splitProp,
                         onPushProp,
                         onPopProp,
+                        onRemoveProp,
                         onSwapProp,
                         onSwapPrevProp,
                         onSwapNextProp
@@ -73,8 +75,8 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const prevValueChangePairs: List<ValueChangePairList> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<ValueChangePairList> = fromJS(nextConfig.valueChangePairs);
 
-                    const prevValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(prevProps, prevValueChangePairs);
-                    const nextValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(nextProps, nextValueChangePairs);
+                    const prevValueChangeProps: ValueChangeProps = SplitIndexPipe.getValueChangeProps(prevProps, prevValueChangePairs);
+                    const nextValueChangeProps: ValueChangeProps = SplitIndexPipe.getValueChangeProps(nextProps, nextValueChangePairs);
 
                     // check each prop to see if any values aren't strictly equal
                     // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
@@ -90,6 +92,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         prevConfig.splitProp !== splitProp
                         || prevConfig.onPushProp !== onPushProp
                         || prevConfig.onPopProp !== onPopProp
+                        || prevConfig.onRemoveProp !== onRemoveProp
                         || prevConfig.onSwapProp !== onSwapProp
                         || prevConfig.onSwapPrevProp !== onSwapPrevProp
                         || prevConfig.onSwapNextProp !== onSwapNextProp
@@ -98,9 +101,10 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         || !this.childProps
                     ) {
                         this.childProps = {
-                            [splitProp]: this.split(nextValueChangeProps),
+                            [splitProp]: this.split(nextValueChangeProps, nextProps.listKeysValue),
                             [onPopProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPop),
                             [onPushProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPush),
+                            [onRemoveProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onRemove),
                             [onSwapProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwap),
                             [onSwapNextProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwapNext),
                             [onSwapPrevProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwapPrev)
@@ -114,8 +118,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                             value: props[ii.get(0)],
                             valueLength: List(props[ii.get(0)]).size,
                             valueName: ii.get(0),
-                            onChangeName: ii.get(1),
-                            listKeys: props.listKeysValue
+                            onChangeName: ii.get(1)
                         }))
                         .reduce((map: ValueChangeProps, ii: Map<string,*>) => {
                             return map.set(ii.get('valueName'), ii);
@@ -148,7 +151,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     );
                 }
 
-                split(valueChangeProps: ValueChangeProps): List<*>|Array<*> {
+                split(valueChangeProps: ValueChangeProps, listKeys: List<string>): List<*>|Array<*> {
                     const length: number = valueChangeProps
                         .map(ii => ii.get('valueLength'))
                         .max();
@@ -159,8 +162,11 @@ const IndexedSplitterPipe: Function = ConfigureHock(
 
                     const pipes: List<*> = Range(0, length)
                         .toList()
-                        .map(index => ({
-                            ...this.createPipe(index, valueChangeProps)
+                        .map((index, kk, list) => ({
+                            ...this.createPipe(index, valueChangeProps, listKeys),
+                            key: listKeys ? List(listKeys).get(index) : index, // use keys from listKeys if provided
+                            isFirst: index === 0,
+                            isLast: index + 1 === list.size
                         }));
 
                     return isValueList
@@ -173,15 +179,12 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
                             const value: * = get(valueProp, index);
-
                             const onChange: Function = this.createPartialChange(index, valueChangeProp);
-                            const listKeys: Object = valueChangeProp.get('listKeys');
 
                             return {
                                 ...obj,
                                 [valueChangeProp.get('valueName')]: value,
-                                [valueChangeProp.get('onChangeName')]: onChange,
-                                key: listKeys ? List(listKeys).get(index) : index // use keys from listKeys if provided
+                                [valueChangeProp.get('onChangeName')]: onChange
                             };
                         }, {});
                 }
@@ -195,7 +198,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const updatedValue: * = set(existingValue, index, newPartialValue);
 
                     if(!changeFunction || typeof changeFunction !== "function") {
-                        console.warn(`IndexedSplitterPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
+                        console.warn(`SplitIndexPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
 
@@ -212,7 +215,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const modify: Function = (valueListUpdated: List<Map<string,*>>, updatedListKeys: List<Map<string,*>>) => {
 
                         // call onChange for each changeFunction
-                        IndexedSplitterPipe
+                        SplitIndexPipe
                             .unzipValues(valueListUpdated, valueNames)
                             .forEach((updatedValue: List<*>, valueName: string) => {
                                 const item: Map<string,*> = valueChangeProps.get(valueName);
@@ -220,7 +223,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                 const changeFunction: * = this.props[onChangeName];
 
                                 if(!changeFunction || typeof changeFunction !== "function") {
-                                    console.warn(`IndexedSplitterPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
+                                    console.warn(`SplitIndexPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
                                     return;
                                 }
 
@@ -235,7 +238,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         this.props.listKeysChange && this.props.listKeysChange(updatedListKeys);
                     };
 
-                    const zipped: List<Map<string,*>> = IndexedSplitterPipe.zipValues(unzipped);
+                    const zipped: List<Map<string,*>> = SplitIndexPipe.zipValues(unzipped);
                     if(!listKeys) {
                         listKeys = List();
                     }
@@ -258,7 +261,14 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                 value: payload
                             })
                         ),
-                        listKeys.push(listKeys.max() + 1)
+                        listKeys.push(listKeys.isEmpty() ? 0 : listKeys.max() + 1)
+                    );
+                };
+
+                onRemove: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number) => {
+                    modify(
+                        value.remove(index),
+                        listKeys.remove(index)
                     );
                 };
 
@@ -294,28 +304,28 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                 }
             }
 
-            return IndexedSplitterPipe;
+            return SplitIndexPipe;
         }
     },
     DEFAULT_PROPS
 );
 
-export default IndexedSplitterPipe;
+export default SplitIndexPipe;
 
 /**
- * @callback IndexedSplitterPipe
- * @param {IndexedSplitterPipeConfig} [config]
+ * @callback SplitIndexPipe
+ * @param {SplitIndexPipeConfig} [config]
  */
 
 /**
- * @callback IndexedSplitterPipeConfig
+ * @callback SplitIndexPipeConfig
  * @param {Object} props
- * @return {IndexedSplitterPipeConfigResult}
- * A function that accepts props and returns configuration for IndexedSplitterPipe.
+ * @return {SplitIndexPipeConfigResult}
+ * A function that accepts props and returns configuration for SplitIndexPipe.
  */
 
 /**
- * @typedef IndexedSplitterPipeConfigResult
+ * @typedef SplitIndexPipeConfigResult
  * @type {Object}
  * @property {Array<string>} paths
  * An array of strings indicating which nested properties should have pipes created for them.
@@ -327,11 +337,13 @@ export default IndexedSplitterPipe;
  * An array of value/onChange pairs to include in each pipe.
  *
  * @property {string} [splitProp = "split"]
- * Sets the name of the prop containing the new pipes that IndexedSplitterPipe created.
+ * Sets the name of the prop containing the new pipes that SplitIndexPipe created.
  *
  * @property {string} [onPushProp = "onPush"]
  *
  * @property {string} [onPopProp = "onPop"]
+ *
+ * @property {string} [onRemoveProp = "onRemove"]
  *
  * @property {string} [onSwapProp = "onSwap"]
  *

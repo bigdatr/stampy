@@ -2,29 +2,29 @@ import test from 'ava';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import React from 'react';
-import KeyedSplitterPipe from './KeyedSplitterPipe';
+import SplitKeyPipe from './SplitKeyPipe';
 import {Map} from 'immutable';
 
 //
 // hock tests
 //
 
-test(`KeyedSplitterPipe matches (config) => (Component) => Hock`, tt => {
+test(`SplitKeyPipe matches (config) => (Component) => Hock`, tt => {
     var Child = () => <div/>;
-    tt.is(typeof KeyedSplitterPipe, 'function');
-    tt.is(typeof KeyedSplitterPipe(), 'function');
-    tt.is(typeof KeyedSplitterPipe()(Child), 'function');
+    tt.is(typeof SplitKeyPipe, 'function');
+    tt.is(typeof SplitKeyPipe(), 'function');
+    tt.is(typeof SplitKeyPipe()(Child), 'function');
 });
 
-test(`KeyedSplitterPipe passes other props through`, tt => {
+test(`SplitKeyPipe passes other props through`, tt => {
     var Child = () => <div/>;
-    var Component = KeyedSplitterPipe()(Child);
+    var Component = SplitKeyPipe()(Child);
     tt.is(shallow(<Component dataValue={{}} foo="bar" />).props().foo, 'bar');
 });
 
-test(`KeyedSplitterPipe does not recreate props every render`, tt => {
+test(`SplitKeyPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitKeyPipe()(componentToWrap);
     const myWrappedComponent = new WrappedComponent({});
 
     var render1: Object = Map(myWrappedComponent.render().props);
@@ -36,9 +36,9 @@ test(`KeyedSplitterPipe does not recreate props every render`, tt => {
 });
 
 
-test(`KeyedSplitterPipe does not recreate props every render when using own config`, tt => {
+test(`SplitKeyPipe does not recreate props every render when using own config`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -60,9 +60,9 @@ test(`KeyedSplitterPipe does not recreate props every render when using own conf
     });
 });
 
-test(`KeyedSplitterPipe does not recreate props when changes happen to props to used in the updating of child props`, tt => {
+test(`SplitKeyPipe does not recreate props when changes happen to props to used in the updating of child props`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -86,12 +86,12 @@ test(`KeyedSplitterPipe does not recreate props when changes happen to props to 
 });
 
 //
-// keyedsplitterpipe tests
+// SplitKeyPipe tests
 //
 
-test('KeyedSplitterPipe provides correct values in split prop', tt => {
+test('SplitKeyPipe provides correct values in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -130,9 +130,9 @@ test('KeyedSplitterPipe provides correct values in split prop', tt => {
 });
 
 
-test('KeyedSplitterPipe should pass undefined values for paths that dont exist', tt => {
+test('SplitKeyPipe should pass undefined values for paths that dont exist', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange']
         ],
@@ -154,9 +154,9 @@ test('KeyedSplitterPipe should pass undefined values for paths that dont exist',
     tt.is(typeof value, "undefined");
 });
 
-test('KeyedSplitterPipe should pass undefined values if valueProp doesnt exist', tt => {
+test('SplitKeyPipe should pass undefined values if valueProp doesnt exist', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange']
         ],
@@ -171,9 +171,9 @@ test('KeyedSplitterPipe should pass undefined values if valueProp doesnt exist',
     tt.is(typeof value, "undefined");
 });
 
-test('KeyedSplitterPipe provides correct change functions in split prop', tt => {
+test('SplitKeyPipe provides correct change functions in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -241,9 +241,9 @@ test('KeyedSplitterPipe provides correct change functions in split prop', tt => 
     tt.deepEqual(expectedUpdatedValue2, errorChange.firstCall.args[0], 'errorChange is called with the correct arguments passed');
 });
 
-test('KeyedSplitterPipe should silently fail if change function prop not provided', tt => {
+test('SplitKeyPipe should silently fail if change function prop not provided', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange']
         ],
@@ -263,9 +263,9 @@ test('KeyedSplitterPipe should silently fail if change function prop not provide
     });
 });
 
-test('KeyedSplitterPipe should update childProps on componentWillReceiveProps if config changes', tt => {
+test('SplitKeyPipe should update childProps on componentWillReceiveProps if config changes', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe((props) => ({
+    const WrappedComponent = SplitKeyPipe((props) => ({
         valueChangePairs: [[props.valueField, 'onChange']],
         paths: [props.nameField]
     }))(componentToWrap);
@@ -292,9 +292,9 @@ test('KeyedSplitterPipe should update childProps on componentWillReceiveProps if
     );
 });
 
-test('KeyedSplitterPipe can set config.splitProp', tt => {
+test('SplitKeyPipe can set config.splitProp', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         paths: ['name'],
         splitProp: "splitt"
     }))(componentToWrap);
@@ -310,9 +310,9 @@ test('KeyedSplitterPipe can set config.splitProp', tt => {
 });
 
 
-test('KeyedSplitterPipe has a default config for valueChangePairs', tt => {
+test('SplitKeyPipe has a default config for valueChangePairs', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = KeyedSplitterPipe(() => ({
+    const WrappedComponent = SplitKeyPipe(() => ({
         paths: ['name']
     }))(componentToWrap);
 

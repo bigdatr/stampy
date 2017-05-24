@@ -3,7 +3,7 @@ import {fromJS} from 'immutable';
 import {
     StateHock,
     SpreadPipe,
-    IndexedSplitterPipe,
+    SplitIndexPipe,
     Input,
     Compose
 } from 'stampy';
@@ -49,8 +49,8 @@ const Example = (props: Object) => {
     </div>;
 }
 
-const withState = StateHock({
-    initialState: () => fromJS({
+const withState = StateHock((props) => ({
+    initialState: fromJS({
         value: [
             "A",
             "B",
@@ -66,7 +66,7 @@ const withState = StateHock({
             2
         ]
     })
-});
+}));
 
 const withSpread = SpreadPipe(() => ({
     valueChangePairs: [
@@ -76,7 +76,7 @@ const withSpread = SpreadPipe(() => ({
     ]
 }));
 
-const withPipes = IndexedSplitterPipe(() => ({
+const withPipes = SplitIndexPipe(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange'],

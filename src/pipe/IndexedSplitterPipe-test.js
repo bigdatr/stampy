@@ -106,6 +106,10 @@ test('IndexedSplitterPipe provides correct values in split prop', tt => {
     tt.is(split[1].errorValue, "?");
     tt.is(split[0].key, 0, 'default keys should be provided based off index');
     tt.is(split[1].key, 1, 'default keys should be provided based off index');
+    tt.true(split[0].isFirst, 'the first item should have isFirst = true');
+    tt.false(split[1].isFirst, 'the non-first items should have isFirst = false');
+    tt.false(split[0].isLast, 'the non-last items should have isLast = true');
+    tt.true(split[1].isLast, 'the last item should have isLast = false');
 });
 
 test('IndexedSplitterPipe provides key in split prop if listKeysValue prop is provided', tt => {
@@ -457,6 +461,40 @@ test('IndexedSplitterPipes onPush works correctly', tt => {
         is(
             listKeysChange.firstCall.args[0],
             List([10,11,12,13])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('IndexedSplitterPipes onPush gives an id when there are no items in value', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(),
+        listKeysValue: List(),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onPush("A");
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([0])
         ),
         'listKeysChange should passed correct update value'
     );

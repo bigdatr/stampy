@@ -98,7 +98,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         || !this.childProps
                     ) {
                         this.childProps = {
-                            [splitProp]: this.split(nextValueChangeProps),
+                            [splitProp]: this.split(nextValueChangeProps, nextProps.listKeysValue),
                             [onPopProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPop),
                             [onPushProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPush),
                             [onSwapProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwap),
@@ -114,8 +114,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                             value: props[ii.get(0)],
                             valueLength: List(props[ii.get(0)]).size,
                             valueName: ii.get(0),
-                            onChangeName: ii.get(1),
-                            listKeys: props.listKeysValue
+                            onChangeName: ii.get(1)
                         }))
                         .reduce((map: ValueChangeProps, ii: Map<string,*>) => {
                             return map.set(ii.get('valueName'), ii);
@@ -148,7 +147,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     );
                 }
 
-                split(valueChangeProps: ValueChangeProps): List<*>|Array<*> {
+                split(valueChangeProps: ValueChangeProps, listKeys: List<string>): List<*>|Array<*> {
                     const length: number = valueChangeProps
                         .map(ii => ii.get('valueLength'))
                         .max();
@@ -159,8 +158,11 @@ const IndexedSplitterPipe: Function = ConfigureHock(
 
                     const pipes: List<*> = Range(0, length)
                         .toList()
-                        .map(index => ({
-                            ...this.createPipe(index, valueChangeProps)
+                        .map((index, kk, list) => ({
+                            ...this.createPipe(index, valueChangeProps, listKeys),
+                            key: listKeys ? List(listKeys).get(index) : index, // use keys from listKeys if provided
+                            isFirst: index === 0,
+                            isLast: index + 1 === list.size
                         }));
 
                     return isValueList
@@ -173,15 +175,12 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
                             const value: * = get(valueProp, index);
-
                             const onChange: Function = this.createPartialChange(index, valueChangeProp);
-                            const listKeys: Object = valueChangeProp.get('listKeys');
 
                             return {
                                 ...obj,
                                 [valueChangeProp.get('valueName')]: value,
-                                [valueChangeProp.get('onChangeName')]: onChange,
-                                key: listKeys ? List(listKeys).get(index) : index // use keys from listKeys if provided
+                                [valueChangeProp.get('onChangeName')]: onChange
                             };
                         }, {});
                 }
@@ -258,7 +257,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                 value: payload
                             })
                         ),
-                        listKeys.push(listKeys.max() + 1)
+                        listKeys.push(listKeys.isEmpty() ? 0 : listKeys.max() + 1)
                     );
                 };
 

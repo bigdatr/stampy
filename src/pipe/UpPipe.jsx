@@ -120,7 +120,7 @@ export default ConfigureHock(
 
 /**
  * @typedef UpPipeConfigResult
- * @type Object
+ * @type {Object}
  *
  * If both payloadChange and payloadCallback are defined,
  * payloadCallback will be used.

@@ -76,7 +76,7 @@ test(`SplitIndexPipe does not recreate props when changes happen to props to use
 });
 
 //
-// keyedsplitterpipe tests
+// SplitKeyPipe tests
 //
 
 test('SplitIndexPipe provides correct values in split prop', tt => {

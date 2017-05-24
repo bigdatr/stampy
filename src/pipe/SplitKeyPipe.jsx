@@ -16,7 +16,7 @@ export default ConfigureHock(
             /**
              * @component
              *
-             * The KeyedSplitterPipe lets you split a pipe with Objects or Maps as a value
+             * The SplitKeyPipe lets you split a pipe with Objects or Maps as a value
              * into a series of smaller pipes.
              * Partial values and partial change functions are given to each pipe
              * so they can continue to be composed.
@@ -25,16 +25,16 @@ export default ConfigureHock(
              * into a series of pipes, one for each field.
              *
              * @childprop {Object} split
-             * The prop containing the new pipes that KeyedSplitterPipe created.
+             * The prop containing the new pipes that SplitKeyPipe created.
              * This prop's name can be changed in config.
              *
-             * @decorator {KeyedSplitterPipe}
+             * @decorator {SplitKeyPipe}
              * @decorator {HockApplier}
              *
              * @memberof module:Pipes
              */
 
-            class KeyedSplitterPipe extends Component {
+            class SplitKeyPipe extends Component {
 
                 childProps: Object;
 
@@ -58,8 +58,8 @@ export default ConfigureHock(
                     const prevValueChangePairs: List<ValueChangePairList> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<ValueChangePairList> = fromJS(nextConfig.valueChangePairs);
 
-                    const prevValueChangeProps: List<Map<string,*>> = KeyedSplitterPipe.getValueChangeProps(prevProps, prevValueChangePairs);
-                    const nextValueChangeProps: List<Map<string,*>> = KeyedSplitterPipe.getValueChangeProps(nextProps, nextValueChangePairs);
+                    const prevValueChangeProps: List<Map<string,*>> = SplitKeyPipe.getValueChangeProps(prevProps, prevValueChangePairs);
+                    const nextValueChangeProps: List<Map<string,*>> = SplitKeyPipe.getValueChangeProps(nextProps, nextValueChangePairs);
 
                     // check each prop to see if any values aren't strictly equal
                     // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
@@ -132,7 +132,7 @@ export default ConfigureHock(
                     const updatedValue: * = setIn(existingValue, pathArray, newPartialValue);
 
                     if(!changeFunction || typeof changeFunction !== "function") {
-                        console.warn(`KeyedSplitterPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
+                        console.warn(`SplitKeyPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
 
@@ -145,7 +145,7 @@ export default ConfigureHock(
                 }
             }
 
-            return KeyedSplitterPipe;
+            return SplitKeyPipe;
         }
     },
     (): Object => ({
@@ -157,19 +157,19 @@ export default ConfigureHock(
 
 
 /**
- * @callback KeyedSplitterPipe
- * @param {KeyedSplitterPipeConfig} [config]
+ * @callback SplitKeyPipe
+ * @param {SplitKeyPipeConfig} [config]
  */
 
 /**
- * @callback KeyedSplitterPipeConfig
+ * @callback SplitKeyPipeConfig
  * @param {Object} props
- * @return {KeyedSplitterPipeConfigResult}
- * A function that accepts props and returns configuration for KeyedSplitterPipe.
+ * @return {SplitKeyPipeConfigResult}
+ * A function that accepts props and returns configuration for SplitKeyPipe.
  */
 
 /**
- * @typedef KeyedSplitterPipeConfigResult
+ * @typedef SplitKeyPipeConfigResult
  * @type {Object}
  * @property {Array<string>} paths
  * An array of strings indicating which nested properties should have pipes created for them.
@@ -181,6 +181,6 @@ export default ConfigureHock(
  * An array of value/onChange pairs to include in each pipe.
  *
  * @property {string} [splitProp = "split"]
- * Sets the name of the prop containing the new pipes that KeyedSplitterPipe created.
+ * Sets the name of the prop containing the new pipes that SplitKeyPipe created.
  */
 

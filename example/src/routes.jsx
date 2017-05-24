@@ -21,7 +21,7 @@ import QueryStringHockExample from 'hock/QueryStringHockExample';
 import StateHockExample from 'hock/StateHockExample';
 
 import SpreadPipeExample from 'pipe/SpreadPipeExample';
-import KeyedSplitterPipeExample from 'pipe/KeyedSplitterPipeExample';
+import SplitKeyPipeExample from 'pipe/SplitKeyPipeExample';
 import SplitIndexPipeExample from 'pipe/SplitIndexPipeExample';
 import DownPipeExample from 'pipe/DownPipeExample';
 import UpPipeExample from 'pipe/UpPipeExample';
@@ -46,7 +46,7 @@ export const routesList = <Switch>
     <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
     <Route path="/hock/StateHock" component={StateHockExample}/>
     <Route path="/pipe/SpreadPipe" component={SpreadPipeExample}/>
-    <Route path="/pipe/KeyedSplitterPipe" component={KeyedSplitterPipeExample}/>
+    <Route path="/pipe/SplitKeyPipe" component={SplitKeyPipeExample}/>
     <Route path="/pipe/SplitIndexPipe" component={SplitIndexPipeExample}/>
     <Route path="/pipe/DownPipe" component={DownPipeExample}/>
     <Route path="/pipe/UpPipe" component={UpPipeExample}/>

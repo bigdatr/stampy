@@ -3,7 +3,7 @@ import {Map} from 'immutable';
 import {
     StateHock,
     SpreadPipe,
-    KeyedSplitterPipe,
+    SplitKeyPipe,
     Input,
     Compose
 } from 'stampy';
@@ -51,7 +51,7 @@ const withSpread = SpreadPipe(() => ({
     ]
 }));
 
-const withPipes = KeyedSplitterPipe(() => ({
+const withPipes = SplitKeyPipe(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange']

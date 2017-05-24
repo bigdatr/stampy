@@ -13,11 +13,11 @@ const Example = (props: Object) => {
     </div>;
 }
 
-const withState = StateHock({
-    initialState: () => "some data"
-});
+const withState = StateHock((props) => ({
+    initialState: "some data"
+}));
 
-const changePayload =(newValue) => `${newValue}!`;
+const changePayload = (newValue) => `${newValue}!`;
 
 const withUpPipe = UpPipe((props) => ({
     changePayload

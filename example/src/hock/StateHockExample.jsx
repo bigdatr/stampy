@@ -22,6 +22,8 @@ const Example = (props) => {
     </div>;
 }
 
-const withState = StateHock({initialState: () => Map()});
+const withState = StateHock((props) => ({
+    initialState: Map()
+}));
 
 export default withState(Example);

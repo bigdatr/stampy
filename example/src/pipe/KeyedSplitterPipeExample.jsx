@@ -25,8 +25,8 @@ const Example = (props: Object) => {
     </div>;
 }
 
-const withState = StateHock({
-    initialState: () => Map({
+const withState = StateHock((props) => ({
+    initialState: Map({
         value: {
             name: {
                 first: "Bob",
@@ -42,7 +42,7 @@ const withState = StateHock({
             age: null
         }
     })
-});
+}));
 
 const withSpread = SpreadPipe(() => ({
     valueChangePairs: [

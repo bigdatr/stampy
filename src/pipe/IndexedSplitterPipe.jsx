@@ -9,6 +9,8 @@ import {get, set} from '../util/CollectionUtils';
  * @module Pipes
  */
 
+type ValueChangeProps = Map<string,Map<string,*>>;
+
 const DEFAULT_PROPS: Function = (): Object => ({
     valueChangePairs: [['value', 'onChange']],
     splitProp: 'split',
@@ -71,8 +73,8 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const prevValueChangePairs: List<ValueChangePairList> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<ValueChangePairList> = fromJS(nextConfig.valueChangePairs);
 
-                    const prevValueChangeProps: Map<string,Map<string,*>> = IndexedSplitterPipe.getValueChangeProps(prevProps, prevValueChangePairs);
-                    const nextValueChangeProps: Map<string,Map<string,*>> = IndexedSplitterPipe.getValueChangeProps(nextProps, nextValueChangePairs);
+                    const prevValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(prevProps, prevValueChangePairs);
+                    const nextValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(nextProps, nextValueChangePairs);
 
                     // check each prop to see if any values aren't strictly equal
                     // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
@@ -106,7 +108,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     }
                 };
 
-                static getValueChangeProps(props: Object, valueChangePairs: List<ValueChangePairList>): Map<string,Map<string,*>> {
+                static getValueChangeProps(props: Object, valueChangePairs: List<ValueChangePairList>): ValueChangeProps {
                     return valueChangePairs
                         .map((ii) => Map({
                             value: props[ii.get(0)],
@@ -115,7 +117,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                             onChangeName: ii.get(1),
                             listKeys: props.listKeysValue
                         }))
-                        .reduce((map: Map<string,Map<string,*>>, ii: Map<string,*>) => {
+                        .reduce((map: ValueChangeProps, ii: Map<string,*>) => {
                             return map.set(ii.get('valueName'), ii);
                         }, Map());
                 }
@@ -146,7 +148,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     );
                 }
 
-                split(valueChangeProps: List<Map<string,*>>): List<*>|Array<*> {
+                split(valueChangeProps: ValueChangeProps): List<*>|Array<*> {
                     const length: number = valueChangeProps
                         .map(ii => ii.get('valueLength'))
                         .max();
@@ -166,7 +168,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         : pipes.toArray();
                 }
 
-                createPipe(index: number, valueChangeProps: List<Map<string,*>>): Object {
+                createPipe(index: number, valueChangeProps: ValueChangeProps): Object {
                     return valueChangeProps
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
@@ -200,18 +202,19 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     changeFunction(updatedValue);
                 };
 
-                onModify: Function = (valueChangeProps: List<Map<string,*>>, listKeys: ?List<number>, modifier: Function): Function => {
+                onModify: Function = (valueChangeProps: ValueChangeProps, listKeys: ?List<number>, modifier: Function): Function => {
 
-                    const unzipped: Map<string, List<*>|Array<*>> = valueChangeProps.map(ii => ii.get('value'));
+                    const unzipped: Map<string,*> = valueChangeProps.map(ii => ii.get('value'));
+                    const valueNames: List<string> = valueChangeProps
+                        .keySeq()
+                        .toList();
 
                     const modify: Function = (valueListUpdated: List<Map<string,*>>, updatedListKeys: List<Map<string,*>>) => {
 
                         // call onChange for each changeFunction
-                        const valueNames: List<string> = valueChangeProps.map(ii => ii.get('valueName'));
                         IndexedSplitterPipe
                             .unzipValues(valueListUpdated, valueNames)
                             .forEach((updatedValue: List<*>, valueName: string) => {
-                                // $FlowFixMe: flow's not clever enough to realize that item will always be found
                                 const item: Map<string,*> = valueChangeProps.get(valueName);
                                 const onChangeName: string = item.get('onChangeName');
                                 const changeFunction: * = this.props[onChangeName];

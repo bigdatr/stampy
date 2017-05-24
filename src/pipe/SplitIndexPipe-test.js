@@ -2,29 +2,29 @@ import test from 'ava';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import React from 'react';
-import IndexedSplitterPipe from './IndexedSplitterPipe';
+import SplitIndexPipe from './SplitIndexPipe';
 import {Map, fromJS, is, List} from 'immutable';
 
 //
 // hock tests
 //
 
-test(`IndexedSplitterPipe matches (config) => (Component) => Hock`, tt => {
+test(`SplitIndexPipe matches (config) => (Component) => Hock`, tt => {
     var Child = () => <div/>;
-    tt.is(typeof IndexedSplitterPipe, 'function');
-    tt.is(typeof IndexedSplitterPipe(), 'function');
-    tt.is(typeof IndexedSplitterPipe()(Child), 'function');
+    tt.is(typeof SplitIndexPipe, 'function');
+    tt.is(typeof SplitIndexPipe(), 'function');
+    tt.is(typeof SplitIndexPipe()(Child), 'function');
 });
 
-test(`IndexedSplitterPipe passes other props through`, tt => {
+test(`SplitIndexPipe passes other props through`, tt => {
     var Child = () => <div/>;
-    var Component = IndexedSplitterPipe()(Child);
+    var Component = SplitIndexPipe()(Child);
     tt.is(shallow(<Component dataValue={{}} foo="bar" />).props().foo, 'bar');
 });
 
-test(`IndexedSplitterPipe does not recreate props every render`, tt => {
+test(`SplitIndexPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
     const myWrappedComponent = new WrappedComponent({});
 
     var render1: Object = Map(myWrappedComponent.render().props);
@@ -36,9 +36,9 @@ test(`IndexedSplitterPipe does not recreate props every render`, tt => {
 });
 
 
-test(`IndexedSplitterPipe does not recreate props every render when using own config`, tt => {
+test(`SplitIndexPipe does not recreate props every render when using own config`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -55,9 +55,9 @@ test(`IndexedSplitterPipe does not recreate props every render when using own co
     });
 });
 
-test(`IndexedSplitterPipe does not recreate props when changes happen to props to used in the updating of child props`, tt => {
+test(`SplitIndexPipe does not recreate props when changes happen to props to used in the updating of child props`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -79,9 +79,9 @@ test(`IndexedSplitterPipe does not recreate props when changes happen to props t
 // keyedsplitterpipe tests
 //
 
-test('IndexedSplitterPipe provides correct values in split prop', tt => {
+test('SplitIndexPipe provides correct values in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -112,9 +112,9 @@ test('IndexedSplitterPipe provides correct values in split prop', tt => {
     tt.true(split[1].isLast, 'the last item should have isLast = false');
 });
 
-test('IndexedSplitterPipe provides key in split prop if listKeysValue prop is provided', tt => {
+test('SplitIndexPipe provides key in split prop if listKeysValue prop is provided', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -138,9 +138,9 @@ test('IndexedSplitterPipe provides key in split prop if listKeysValue prop is pr
     tt.is(split[1].key, 11, 'keys should be provided based off contents of listKeysProp');
 });
 
-test('IndexedSplitterPipe should pass undefined values when passed values of unequal length', tt => {
+test('SplitIndexPipe should pass undefined values when passed values of unequal length', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -162,9 +162,9 @@ test('IndexedSplitterPipe should pass undefined values when passed values of une
     tt.is(typeof errorValue, "undefined");
 });
 
-test('IndexedSplitterPipe provides correct change functions in split prop', tt => {
+test('SplitIndexPipe provides correct change functions in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange'],
             ['errorValue', 'errorChange']
@@ -195,9 +195,9 @@ test('IndexedSplitterPipe provides correct change functions in split prop', tt =
     tt.deepEqual(expectedUpdatedValue, onChange.firstCall.args[0], 'onChange is called with the correct arguments passed');
 });
 
-test('IndexedSplitterPipe should silently fail if change function prop not provided', tt => {
+test('SplitIndexPipe should silently fail if change function prop not provided', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         valueChangePairs: [
             ['value', 'onChange']
         ]
@@ -212,9 +212,9 @@ test('IndexedSplitterPipe should silently fail if change function prop not provi
     });
 });
 
-test('IndexedSplitterPipe should update childProps on componentWillReceiveProps if config changes', tt => {
+test('SplitIndexPipe should update childProps on componentWillReceiveProps if config changes', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe((props) => ({
+    const WrappedComponent = SplitIndexPipe((props) => ({
         valueChangePairs: [[props.valueField, 'onChange']]
     }))(componentToWrap);
 
@@ -238,9 +238,9 @@ test('IndexedSplitterPipe should update childProps on componentWillReceiveProps 
     );
 });
 
-test('IndexedSplitterPipe can set config.splitProp', tt => {
+test('SplitIndexPipe can set config.splitProp', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe(() => ({
+    const WrappedComponent = SplitIndexPipe(() => ({
         splitProp: "splitt"
     }))(componentToWrap);
 
@@ -253,9 +253,9 @@ test('IndexedSplitterPipe can set config.splitProp', tt => {
 });
 
 
-test('IndexedSplitterPipe has a default config for valueChangePairs', tt => {
+test('SplitIndexPipe has a default config for valueChangePairs', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const myWrappedComponent = new WrappedComponent({
         value: ["Tom"]
@@ -270,9 +270,9 @@ test('IndexedSplitterPipe has a default config for valueChangePairs', tt => {
 // static methods
 //
 
-test('IndexedSplitterPipe.zipValues works correctly', tt => {
+test('SplitIndexPipe.zipValues works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const {zipValues} = IndexedSplitterPipe()(componentToWrap);
+    const {zipValues} = SplitIndexPipe()(componentToWrap);
 
     const unzipped = fromJS({
         value: [1,2,3],
@@ -303,9 +303,9 @@ test('IndexedSplitterPipe.zipValues works correctly', tt => {
     );
 });
 
-test('IndexedSplitterPipe.unzipValues works correctly', tt => {
+test('SplitIndexPipe.unzipValues works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const {unzipValues} = IndexedSplitterPipe()(componentToWrap);
+    const {unzipValues} = SplitIndexPipe()(componentToWrap);
 
     const zipped = fromJS([
         {
@@ -341,9 +341,9 @@ test('IndexedSplitterPipe.unzipValues works correctly', tt => {
 // modify methods
 //
 
-test('IndexedSplitterPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
+test('SplitIndexPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
 
@@ -362,9 +362,9 @@ test('IndexedSplitterPipes modifier functions work correctly with value arrays (
     );
 });
 
-test('IndexedSplitterPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
+test('SplitIndexPipes modifier functions work correctly with value arrays (using onPop as example)', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
 
@@ -383,9 +383,9 @@ test('IndexedSplitterPipes modifier functions work correctly with value arrays (
     );
 });
 
-test('IndexedSplitterPipes modifier functions should fail silently if no onChange is given (using onPop as example)', tt => {
+test('SplitIndexPipes modifier functions should fail silently if no onChange is given (using onPop as example)', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
 
     const myWrappedComponent = new WrappedComponent({
@@ -398,9 +398,9 @@ test('IndexedSplitterPipes modifier functions should fail silently if no onChang
 });
 
 
-test('IndexedSplitterPipes onPop works correctly', tt => {
+test('SplitIndexPipes onPop works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -432,9 +432,9 @@ test('IndexedSplitterPipes onPop works correctly', tt => {
     );
 });
 
-test('IndexedSplitterPipes onPush works correctly', tt => {
+test('SplitIndexPipes onPush works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -466,9 +466,9 @@ test('IndexedSplitterPipes onPush works correctly', tt => {
     );
 });
 
-test('IndexedSplitterPipes onPush gives an id when there are no items in value', tt => {
+test('SplitIndexPipes onPush gives an id when there are no items in value', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -500,9 +500,9 @@ test('IndexedSplitterPipes onPush gives an id when there are no items in value',
     );
 });
 
-test('IndexedSplitterPipes onSwap works correctly', tt => {
+test('SplitIndexPipes onSwap works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -534,9 +534,9 @@ test('IndexedSplitterPipes onSwap works correctly', tt => {
     );
 });
 
-test('IndexedSplitterPipes onSwapNext works correctly', tt => {
+test('SplitIndexPipes onSwapNext works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -568,9 +568,9 @@ test('IndexedSplitterPipes onSwapNext works correctly', tt => {
     );
 });
 
-test('IndexedSplitterPipes onSwapNext does nothing if used on last item in array', tt => {
+test('SplitIndexPipes onSwapNext does nothing if used on last item in array', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -588,9 +588,9 @@ test('IndexedSplitterPipes onSwapNext does nothing if used on last item in array
     tt.false(listKeysChange.called, 'listKeysChange should not be called');
 });
 
-test('IndexedSplitterPipes onSwapPrev works correctly', tt => {
+test('SplitIndexPipes onSwapPrev works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();
@@ -623,9 +623,9 @@ test('IndexedSplitterPipes onSwapPrev works correctly', tt => {
 });
 
 
-test('IndexedSplitterPipes onSwapNext does nothing if used on last item in array', tt => {
+test('SplitIndexPipes onSwapNext does nothing if used on last item in array', tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const WrappedComponent = IndexedSplitterPipe()(componentToWrap);
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
 
     const onChange = sinon.spy();
     const listKeysChange = sinon.spy();

@@ -3,7 +3,7 @@ import {fromJS} from 'immutable';
 import {
     StateHock,
     SpreadPipe,
-    IndexedSplitterPipe,
+    SplitIndexPipe,
     Input,
     Compose
 } from 'stampy';
@@ -76,7 +76,7 @@ const withSpread = SpreadPipe(() => ({
     ]
 }));
 
-const withPipes = IndexedSplitterPipe(() => ({
+const withPipes = SplitIndexPipe(() => ({
     valueChangePairs: [
         ['value', 'onChange'],
         ['errorValue', 'errorChange'],

@@ -21,29 +21,29 @@ const DEFAULT_PROPS: Function = (): Object => ({
     onSwapNextProp: 'onSwapNext'
 });
 
-const IndexedSplitterPipe: Function = ConfigureHock(
+const SplitIndexPipe: Function = ConfigureHock(
     (config: Function): HockApplier => {
         return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
 
             /**
              * @component
              *
-             * The IndexedSplitterPipe lets you split a pipe with Arrays or Lists as a value
+             * The SplitIndexPipe lets you split a pipe with Arrays or Lists as a value
              * into a series of smaller pipes.
              * Partial values and partial change functions are given to each pipe
              * so they can continue to be composed.
              *
              * @childprop {Object} split
-             * The prop containing the new pipes that IndexedSplitterPipe created.
+             * The prop containing the new pipes that SplitIndexPipe created.
              * This prop's name can be changed in config.
              *
-             * @decorator {IndexedSplitterPipe}
+             * @decorator {SplitIndexPipe}
              * @decorator {HockApplier}
              *
              * @memberof module:Pipes
              */
 
-            class IndexedSplitterPipe extends Component {
+            class SplitIndexPipe extends Component {
 
                 childProps: Object;
 
@@ -73,8 +73,8 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const prevValueChangePairs: List<ValueChangePairList> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<ValueChangePairList> = fromJS(nextConfig.valueChangePairs);
 
-                    const prevValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(prevProps, prevValueChangePairs);
-                    const nextValueChangeProps: ValueChangeProps = IndexedSplitterPipe.getValueChangeProps(nextProps, nextValueChangePairs);
+                    const prevValueChangeProps: ValueChangeProps = SplitIndexPipe.getValueChangeProps(prevProps, prevValueChangePairs);
+                    const nextValueChangeProps: ValueChangeProps = SplitIndexPipe.getValueChangeProps(nextProps, nextValueChangePairs);
 
                     // check each prop to see if any values aren't strictly equal
                     // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
@@ -194,7 +194,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const updatedValue: * = set(existingValue, index, newPartialValue);
 
                     if(!changeFunction || typeof changeFunction !== "function") {
-                        console.warn(`IndexedSplitterPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
+                        console.warn(`SplitIndexPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
                         return;
                     }
 
@@ -211,7 +211,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                     const modify: Function = (valueListUpdated: List<Map<string,*>>, updatedListKeys: List<Map<string,*>>) => {
 
                         // call onChange for each changeFunction
-                        IndexedSplitterPipe
+                        SplitIndexPipe
                             .unzipValues(valueListUpdated, valueNames)
                             .forEach((updatedValue: List<*>, valueName: string) => {
                                 const item: Map<string,*> = valueChangeProps.get(valueName);
@@ -219,7 +219,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                                 const changeFunction: * = this.props[onChangeName];
 
                                 if(!changeFunction || typeof changeFunction !== "function") {
-                                    console.warn(`IndexedSplitterPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
+                                    console.warn(`SplitIndexPipe cannot call change on "${onChangeName}" prop. Expected function, got ${changeFunction}`);
                                     return;
                                 }
 
@@ -234,7 +234,7 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                         this.props.listKeysChange && this.props.listKeysChange(updatedListKeys);
                     };
 
-                    const zipped: List<Map<string,*>> = IndexedSplitterPipe.zipValues(unzipped);
+                    const zipped: List<Map<string,*>> = SplitIndexPipe.zipValues(unzipped);
                     if(!listKeys) {
                         listKeys = List();
                     }
@@ -293,28 +293,28 @@ const IndexedSplitterPipe: Function = ConfigureHock(
                 }
             }
 
-            return IndexedSplitterPipe;
+            return SplitIndexPipe;
         }
     },
     DEFAULT_PROPS
 );
 
-export default IndexedSplitterPipe;
+export default SplitIndexPipe;
 
 /**
- * @callback IndexedSplitterPipe
- * @param {IndexedSplitterPipeConfig} [config]
+ * @callback SplitIndexPipe
+ * @param {SplitIndexPipeConfig} [config]
  */
 
 /**
- * @callback IndexedSplitterPipeConfig
+ * @callback SplitIndexPipeConfig
  * @param {Object} props
- * @return {IndexedSplitterPipeConfigResult}
- * A function that accepts props and returns configuration for IndexedSplitterPipe.
+ * @return {SplitIndexPipeConfigResult}
+ * A function that accepts props and returns configuration for SplitIndexPipe.
  */
 
 /**
- * @typedef IndexedSplitterPipeConfigResult
+ * @typedef SplitIndexPipeConfigResult
  * @type {Object}
  * @property {Array<string>} paths
  * An array of strings indicating which nested properties should have pipes created for them.
@@ -326,7 +326,7 @@ export default IndexedSplitterPipe;
  * An array of value/onChange pairs to include in each pipe.
  *
  * @property {string} [splitProp = "split"]
- * Sets the name of the prop containing the new pipes that IndexedSplitterPipe created.
+ * Sets the name of the prop containing the new pipes that SplitIndexPipe created.
  *
  * @property {string} [onPushProp = "onPush"]
  *

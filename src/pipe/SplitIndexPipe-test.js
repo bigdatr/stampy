@@ -500,6 +500,40 @@ test('SplitIndexPipes onPush gives an id when there are no items in value', tt =
     );
 });
 
+test('SplitIndexPipes onRemove works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onRemove(1);
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A","C"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([10,12])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
 test('SplitIndexPipes onSwap works correctly', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = SplitIndexPipe()(componentToWrap);

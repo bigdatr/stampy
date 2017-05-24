@@ -16,6 +16,7 @@ const DEFAULT_PROPS: Function = (): Object => ({
     splitProp: 'split',
     onPopProp: 'onPop',
     onPushProp: 'onPush',
+    onRemoveProp: 'onRemove',
     onSwapProp: 'onSwap',
     onSwapPrevProp: 'onSwapPrev',
     onSwapNextProp: 'onSwapNext'
@@ -64,6 +65,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                         splitProp,
                         onPushProp,
                         onPopProp,
+                        onRemoveProp,
                         onSwapProp,
                         onSwapPrevProp,
                         onSwapNextProp
@@ -90,6 +92,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                         prevConfig.splitProp !== splitProp
                         || prevConfig.onPushProp !== onPushProp
                         || prevConfig.onPopProp !== onPopProp
+                        || prevConfig.onRemoveProp !== onRemoveProp
                         || prevConfig.onSwapProp !== onSwapProp
                         || prevConfig.onSwapPrevProp !== onSwapPrevProp
                         || prevConfig.onSwapNextProp !== onSwapNextProp
@@ -101,6 +104,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                             [splitProp]: this.split(nextValueChangeProps, nextProps.listKeysValue),
                             [onPopProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPop),
                             [onPushProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPush),
+                            [onRemoveProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onRemove),
                             [onSwapProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwap),
                             [onSwapNextProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwapNext),
                             [onSwapPrevProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onSwapPrev)
@@ -261,6 +265,13 @@ const SplitIndexPipe: Function = ConfigureHock(
                     );
                 };
 
+                onRemove: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number) => {
+                    modify(
+                        value.remove(index),
+                        listKeys.remove(index)
+                    );
+                };
+
                 onSwap: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (indexA: number, indexB: number) => {
                     const valueListUpdated: List<Map<string,*>> = value
                         .set(indexA, value.get(indexB))
@@ -331,6 +342,8 @@ export default SplitIndexPipe;
  * @property {string} [onPushProp = "onPush"]
  *
  * @property {string} [onPopProp = "onPop"]
+ *
+ * @property {string} [onRemoveProp = "onRemove"]
  *
  * @property {string} [onSwapProp = "onSwap"]
  *

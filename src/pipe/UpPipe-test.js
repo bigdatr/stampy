@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 import React from 'react';
 import UpPipe from './UpPipe';
 import {Map} from 'immutable';
+import sinon from 'sinon';
 
 //
 // hock tests
@@ -44,9 +45,9 @@ test(`UpPipe does not recreate props when changes happen to props to used in the
 
 test(`UpPipe does not recreate props when changes happen to props to used in the updating of child props, when using user-defined config`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
-    const changePayload = ii => `${ii}!`;
+    const payloadChange = ii => `${ii}!`;
     const WrappedComponent = UpPipe(() => ({
-        changePayload
+        payloadChange
     }))(componentToWrap);
     const myWrappedComponent = new WrappedComponent({unrelated: 123});
 
@@ -68,7 +69,7 @@ test('UpPipe will allow you to change onChange payload', tt => {
 
     var Child = () => <div/>;
     var Component = UpPipe(() => ({
-        changePayload: ii => `${ii}!`
+        payloadChange: ii => `${ii}!`
     }))(Child);
 
     shallow(<Component onChange={(payload) => tt.is(payload, "123!")} />)
@@ -88,16 +89,51 @@ test('UpPipe defaults to just passing through payload', tt => {
 });
 
 
-test('UpPipe will allow you to change onChange payload of other props', tt => {
+test('UpPipe will allow you to change onChange payload of other props using payloadChange', tt => {
     tt.plan(1);
 
     var Child = () => <div/>;
     var Component = UpPipe(() => ({
-        changePayload: ii => `${ii}!`,
+        payloadChange: ii => `${ii}!`,
         onChangeProp: "onSubmit"
     }))(Child);
 
     shallow(<Component onSubmit={(payload) => tt.is(payload, "123!")} />)
         .props()
         .onSubmit("123");
+});
+
+test('UpPipe will allow you to change onChange payload of other props using payloadCallback', tt => {
+    tt.plan(1);
+
+    var Child = () => <div/>;
+    var Component = UpPipe(() => ({
+        payloadCallback: (ii, onChange) => {
+            onChange(`${ii}!`);
+        },
+        onChangeProp: "onSubmit"
+    }))(Child);
+
+    shallow(<Component onSubmit={(payload) => tt.is(payload, "123!")} />)
+        .props()
+        .onSubmit("123");
+});
+
+test('UpPipe will prefer payloadCallback rather than payloadChange', tt => {
+    var payloadChange = sinon.spy();
+    var payloadCallback = sinon.spy();
+
+    var Child = () => <div/>;
+    var Component = UpPipe(() => ({
+        payloadChange,
+        payloadCallback,
+        onChangeProp: "onSubmit"
+    }))(Child);
+
+    shallow(<Component onSubmit={(payload) => tt.is(payload, "123!")} />)
+        .props()
+        .onSubmit("123");
+
+    tt.false(payloadChange.called, 'payloadChange should not be called');
+    tt.true(payloadCallback.calledOnce, 'onChange should be called once');
 });

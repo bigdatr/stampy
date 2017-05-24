@@ -17,10 +17,10 @@ const withState = StateHock((props) => ({
     initialState: "some data"
 }));
 
-const changePayload = (newValue) => `${newValue}!`;
+const payloadChange = (newValue) => `${newValue}!`;
 
 const withUpPipe = UpPipe((props) => ({
-    changePayload
+    payloadChange
 }));
 
 export default withState(withUpPipe(Example));

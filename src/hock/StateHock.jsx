@@ -58,11 +58,6 @@ export default ConfigureHock(
              * Callback whose return value will replace `props.value`.
              * This prop's name can be changed in config.
              *
-             * @childprop {*} initialValue
-             * The initial value that the StateHock is constructed with.
-             * This value does not change after construction.
-             * This prop's name can be changed in config.
-             *
              * @decorator {StateHock}
              * @decorator {HockApplier}
              *
@@ -75,8 +70,7 @@ export default ConfigureHock(
                     super(props);
                     const {initialState} = config(props);
                     this.state = {
-                        value: initialState,
-                        initialValue: initialState
+                        value: initialState
                     }
                 }
                 onChange: Function = (payload: Function) => {
@@ -87,14 +81,12 @@ export default ConfigureHock(
                 render(): React.Element<any> {
                     const {
                         valueProp,
-                        onChangeProp,
-                        initialValueProp
+                        onChangeProp
                     } = config(this.props);
 
                     const hockProps: Object = {
                         [valueProp]: this.state.value,
-                        [onChangeProp]: this.onChange,
-                        [initialValueProp]: this.state.initialValue
+                        [onChangeProp]: this.onChange
                     };
 
                     return <ComponentToDecorate
@@ -110,8 +102,7 @@ export default ConfigureHock(
     (): Object => ({
         initialState: undefined,
         valueProp: 'value',
-        onChangeProp: 'onChange',
-        initialValueProp: 'initialValue'
+        onChangeProp: 'onChange'
     })
 );
 
@@ -139,8 +130,5 @@ export default ConfigureHock(
  *
  * @property {string} [onChangeProp = "onChange"]
  * The name of the prop to pass the onChange down as.
- *
- * @property {string} [initialValueProp = "initialState"]
- * The name of the prop to pass the initialState down as.
  */
 

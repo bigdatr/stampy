@@ -39,13 +39,11 @@ test('StateHock will allow you to change valueProp, onChangeProp & initialState'
     var Component = StateHock((props) => ({
         initialState: 0,
         valueProp: 'foo',
-        onChangeProp: 'changeFoo',
-        initialValueProp: 'initialFoo'
+        onChangeProp: 'changeFoo'
     }))(Child);
 
     tt.is(shallow(<Component foo="bar" />).props().foo, 0);
     tt.is(typeof shallow(<Component value="bar" />).props().changeFoo, 'function');
-    tt.is(shallow(<Component foo="bar" />).props().initialFoo, 0);
 });
 
 //
@@ -69,6 +67,5 @@ test('StateHock props.onChange will replace value', tt => {
     var instance = shallow(<Component />);
     instance.props().onChange(1);
     tt.is(instance.props().value, 1);
-    tt.is(instance.props().initialValue, 0);
 });
 

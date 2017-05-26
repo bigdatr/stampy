@@ -292,6 +292,39 @@ test('SplitKeyPipe should update childProps on componentWillReceiveProps if conf
     );
 });
 
+
+test('SplitKeyPipe should not recreate onchange functions if paths and valueChangePairs dont change', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitKeyPipe((props) => ({
+        valueChangePairs: [
+            ['value', 'onChange']
+        ],
+        paths: props.paths
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        paths: ['age'],
+        value: {
+            age: 24,
+            height: 175
+        }
+    });
+
+    const {onChange} = myWrappedComponent.render().props.split.age;
+
+    const nextProps = {
+        paths: ['age'],
+        value: {
+            age: 123,
+            height: 175
+        }
+    };
+    myWrappedComponent.componentWillReceiveProps(nextProps);
+    myWrappedComponent.props = nextProps;
+
+    tt.true(onChange === myWrappedComponent.render().props.split.age.onChange, 'SplitKeyPipe should not recreate onchange functions if paths and valueChangePairs dont change');
+});
+
 test('SplitKeyPipe can set config.splitProp', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = SplitKeyPipe(() => ({

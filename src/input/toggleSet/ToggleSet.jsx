@@ -80,7 +80,12 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
             : Set();
 
     const toggles: Array<React.Element<any>> = List(options)
-        .map(({label, value, disabled}) => {
+        .map((option, index) => {
+            const {
+                label,
+                value,
+                disabled
+            } = option;
 
             const toggleOnChange = (added: boolean, meta: OnChangeMeta) => {
                 if(!onChange) {
@@ -109,7 +114,7 @@ function ToggleSet(props: ToggleSetProps): React.Element<any> {
                 onChange={toggleOnChange}
                 toggleProps={toggleProps}
                 spruceName={toggleSpruceName}
-                modifier={toggleModifier}
+                modifier={typeof toggleModifier == "function" ? toggleModifier(option, index) : toggleModifier}
                 value={selection.has(value)}
             />;
         })
@@ -135,7 +140,8 @@ ToggleSet.propTypes = {
     toggleSetProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
-    /** Set to true to allow the user to select more than one option at once. When `multi=true` the first argument of `onChange` will be an array of selected options. */
+    /** Set to true to allow the user to select more than one option at once. When `multi=true`
+    the first argument of `onChange` will be an array of selected options. */
     multi: PropTypes.bool,
     /** {OnChangeMulti} */
     onChange: StampyPropTypes.onChangeMulti,
@@ -150,8 +156,12 @@ ToggleSet.propTypes = {
     spruceName: StampyPropTypes.spruceName,
     /** {string} The spruce name used by each toggle in the toggle set */
     toggleSpruceName: StampyPropTypes.spruceName,
-    /** {SpruceModifier} The spruce modifier used by each toggle in the toggle set */
-    toggleModifier: StampyPropTypes.spruceModifier,
+    /** {SpruceModifier} The spruce modifier used by each toggle in the toggle set.
+    Can be a function that is passed the current option and returns the modifier */
+    toggleModifier: PropTypes.oneOfType([
+        StampyPropTypes.spruceModifier,
+        PropTypes.func
+    ]),
     /**
      * The values that have been selected. Under normal usage these should correspond to values in the `options` array.
      * When `multi=false` this expects a string or boolean, or when `multi=true` this expects an array of strings or booleans.
@@ -172,7 +182,7 @@ ToggleSet.defaultProps = {
     modifier: '',
     spruceName: 'ToggleSet',
     toggleSpruceName: 'ToggleSet_toggle'
-}
+};
 
 type ToggleSetProps = {
     className?: string,
@@ -188,6 +198,6 @@ type ToggleSetProps = {
     toggleSpruceName?: string,
     toggleModifier?: SpruceModifier,
     value?: string|Array<string>
-}
+};
 
 export default ToggleSet;

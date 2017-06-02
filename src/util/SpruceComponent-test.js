@@ -7,7 +7,7 @@ import SpruceComponent from './SpruceComponent';
 
 
 const Foo = SpruceComponent('Foo', 'li');
-const fooWrapper = shallow(<Foo modifier="red">Rad</Foo>);
+const fooWrapper = shallow(<Foo modifier="red" peer="Button">Rad</Foo>);
 
 test('the component renders the given type', tt => {
     tt.is(fooWrapper.type(), 'li');
@@ -18,8 +18,10 @@ test('the component renders the given type', tt => {
 });
 
 test('the component renders SpruceClassNames', tt => {
+    console.log(fooWrapper);
     tt.is(fooWrapper.hasClass('Foo'), true);
     tt.is(fooWrapper.hasClass('Foo-red'), true);
+    tt.is(fooWrapper.hasClass('Foo--Button'), true);
 });
 
 

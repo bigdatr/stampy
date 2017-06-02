@@ -4,7 +4,7 @@ import classnames from 'classnames';
 type ClassNameProps = {
     name?: string,
     modifier?: SpruceModifier,
-    peer?: SpruceModifier,
+    peer?: SprucePeer,
     className?: string
 };
 
@@ -39,6 +39,7 @@ type ClassNameProps = {
  * @param {Object} props An component's props.
  * @param {string} [props.name] The name of the components, which will be turned into a class name.
  * @param {SpruceModifier} [props.modifier]
+ * @param {SprucePeer} [props.peer]
  * @param {ClassName} [props.className] Class name strings passed to the component with React's prop convention.
  * @param {...any} args More arguments to pass into `classnames`.
  * @return {string} Complete class names string.

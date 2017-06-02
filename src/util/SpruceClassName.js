@@ -4,8 +4,9 @@ import classnames from 'classnames';
 type ClassNameProps = {
     name?: string,
     modifier?: SpruceModifier,
+    peer?: SprucePeer,
     className?: string
-}
+};
 
 /**
  * @module Utils
@@ -38,6 +39,7 @@ type ClassNameProps = {
  * @param {Object} props An component's props.
  * @param {string} [props.name] The name of the components, which will be turned into a class name.
  * @param {SpruceModifier} [props.modifier]
+ * @param {SprucePeer} [props.peer]
  * @param {ClassName} [props.className] Class name strings passed to the component with React's prop convention.
  * @param {...any} args More arguments to pass into `classnames`.
  * @return {string} Complete class names string.
@@ -53,9 +55,16 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
         // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
         .map(mm => `${name}-${mm}`)
 
+    const peers: string = classnames(props.peer)
+        .split(' ')
+        .filter(ii => ii != '')
+        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+        .map(pp => `${name}--${pp}`)
+
     return classnames(
         props.name,
         modifiers,
+        peers,
         args,
         props.className
     ).replace(/\s+/g, ' ');

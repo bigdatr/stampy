@@ -15,6 +15,8 @@ type ListOrArray = List<*> | Array<any>;
 
 type SpruceModifier = string | Object;
 
+type SprucePeer= string | Object;
+
 type OnChangeMeta = {
     event: Object,
     element: Object

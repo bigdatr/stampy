@@ -43,6 +43,7 @@ export default function SpruceComponent(name: string, defaultElement: ReactClass
             children,
             className,
             modifier,
+            peer,
             spruceName,
             element,
             ...otherProps
@@ -51,7 +52,7 @@ export default function SpruceComponent(name: string, defaultElement: ReactClass
         const Component = element || defaultElement;
 
         return <Component
-            className={SpruceClassName({className, modifier, name: spruceName || name})}
+            className={SpruceClassName({className, modifier, peer, name: spruceName || name})}
             children={children}
             {...otherProps}
         />;
@@ -64,6 +65,7 @@ export default function SpruceComponent(name: string, defaultElement: ReactClass
             PropTypes.string
         ]),
         modifier: PropTypes.string,
+        peer: PropTypes.string,
         spruceName: PropTypes.string
     }
 

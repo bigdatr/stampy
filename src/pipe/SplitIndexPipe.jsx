@@ -14,6 +14,7 @@ type ValueChangeProps = Map<string,Map<string,*>>;
 const DEFAULT_PROPS: Function = (): Object => ({
     valueChangePairs: [['value', 'onChange']],
     splitProp: 'split',
+    onInsertProp: 'onInsert',
     onPopProp: 'onPop',
     onPushProp: 'onPush',
     onRemoveProp: 'onRemove',
@@ -63,8 +64,9 @@ const SplitIndexPipe: Function = ConfigureHock(
 
                     const {
                         splitProp,
-                        onPushProp,
+                        onInsertProp,
                         onPopProp,
+                        onPushProp,
                         onRemoveProp,
                         onSwapProp,
                         onSwapPrevProp,
@@ -90,8 +92,9 @@ const SplitIndexPipe: Function = ConfigureHock(
                     // only update childProps when necessary
                     if(
                         prevConfig.splitProp !== splitProp
-                        || prevConfig.onPushProp !== onPushProp
+                        || prevConfig.onInsertProp !== onInsertProp
                         || prevConfig.onPopProp !== onPopProp
+                        || prevConfig.onPushProp !== onPushProp
                         || prevConfig.onRemoveProp !== onRemoveProp
                         || prevConfig.onSwapProp !== onSwapProp
                         || prevConfig.onSwapPrevProp !== onSwapPrevProp
@@ -102,6 +105,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                     ) {
                         this.childProps = {
                             [splitProp]: this.split(nextValueChangeProps, nextProps.listKeysValue),
+                            [onInsertProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onInsert),
                             [onPopProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPop),
                             [onPushProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onPush),
                             [onRemoveProp]: this.onModify(nextValueChangeProps, nextProps.listKeysValue, this.onRemove),
@@ -136,7 +140,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                         .toList()
                         .map((index: number) => Map(
                             unzipped.reduce((obj: Object, value: List<*>|Array<*>, valueName: string): Object => {
-                                obj[valueName] = get(value, index);
+                                obj[valueName] = value ? get(value, index) : undefined;
                                 return obj;
                             }, {})
                         ));
@@ -178,7 +182,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                     return valueChangeProps
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
-                            const value: * = get(valueProp, index);
+                            const value: * = valueProp ? get(valueProp, index) : undefined;
                             const onChange: Function = this.createPartialChange(index, valueChangeProp);
 
                             return {
@@ -245,6 +249,21 @@ const SplitIndexPipe: Function = ConfigureHock(
 
                     // call the modifying function, passing in a callback for the modifying function to provide is updated info
                     return modifier(zipped, listKeys, modify);
+                };
+
+                onInsert: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number, payload: *) => {
+                    modify(
+                        value.insert(
+                            index,
+                            Map({
+                                value: payload
+                            })
+                        ),
+                        listKeys.insert(
+                            index,
+                            listKeys.isEmpty() ? 0 : listKeys.max() + 1
+                        )
+                    );
                 };
 
                 onPop: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => () => {
@@ -338,6 +357,8 @@ export default SplitIndexPipe;
  *
  * @property {string} [splitProp = "split"]
  * Sets the name of the prop containing the new pipes that SplitIndexPipe created.
+ *
+ * @property {string} [onInsertProp = "onInsert"]
  *
  * @property {string} [onPushProp = "onPush"]
  *

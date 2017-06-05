@@ -162,6 +162,27 @@ test('SplitIndexPipe should pass undefined values when passed values of unequal 
     tt.is(typeof errorValue, "undefined");
 });
 
+test('SplitIndexPipe should pass undefined values when value is not defined', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitIndexPipe(() => ({
+        valueChangePairs: [
+            ['value', 'onChange'],
+            ['errorValue', 'errorChange']
+        ]
+    }))(componentToWrap);
+
+    const myWrappedComponent = new WrappedComponent({
+        value: [
+            1,
+            2
+        ],
+        errorValue: undefined
+    });
+
+    const {errorValue} = myWrappedComponent.render().props.split[0];
+    tt.is(typeof errorValue, "undefined");
+});
+
 test('SplitIndexPipe provides correct change functions in split prop', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = SplitIndexPipe(() => ({
@@ -276,22 +297,26 @@ test('SplitIndexPipe.zipValues works correctly', tt => {
 
     const unzipped = fromJS({
         value: [1,2,3],
-        errorValue: ["invalid name"]
+        errorValue: ["invalid name"],
+        undef: null
     });
 
     const zipped = zipValues(unzipped);
     const expectedOutput = fromJS([
         {
             value: 1,
-            errorValue: "invalid name"
+            errorValue: "invalid name",
+            undef: undefined
         },
         {
             value: 2,
-            errorValue: undefined
+            errorValue: undefined,
+            undef: undefined
         },
         {
             value: 3,
-            errorValue: undefined
+            errorValue: undefined,
+            undef: undefined
         }
     ]);
 
@@ -529,6 +554,75 @@ test('SplitIndexPipes onRemove works correctly', tt => {
         is(
             listKeysChange.firstCall.args[0],
             List([10,12])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+test('SplitIndexPipes onInsert works correctly', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(["A","B","C"]),
+        listKeysValue: List([10,11,12]),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onInsert(1, "D");
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["A","D","B","C"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([10,13,11,12])
+        ),
+        'listKeysChange should passed correct update value'
+    );
+});
+
+
+test('SplitIndexPipes onInsert works correctly on empty list', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
+
+    const onChange = sinon.spy();
+    const listKeysChange = sinon.spy();
+
+    const myWrappedComponent = new WrappedComponent({
+        value: List(),
+        listKeysValue: List(),
+        onChange,
+        listKeysChange
+    });
+
+    myWrappedComponent.render().props.onInsert(0, "D");
+
+    tt.true(onChange.calledOnce, 'onChange should be called once');
+    tt.true(
+        is(
+            onChange.firstCall.args[0],
+            List(["D"])
+        ),
+        'onChange should passed correct update value'
+    );
+    tt.true(listKeysChange.calledOnce, 'listKeysChange should be called once');
+    tt.true(
+        is(
+            listKeysChange.firstCall.args[0],
+            List([0])
         ),
         'listKeysChange should passed correct update value'
     );

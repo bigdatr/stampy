@@ -11,6 +11,16 @@ test('modifier splitting', tt => {
     );
 });
 
+test('peer splitting', tt => {
+    const className = SpruceClassName({name: 'Test', peer:'rad cool'});
+
+    tt.truthy(
+        className.match(/\bTest\b/) &&
+        className.match(/\bTest--rad\b/) &&
+        className.match(/\bTest--cool\b/)
+    );
+});
+
 test('extra classnames params', tt => {
     const className = SpruceClassName({name: 'Test'}, 'extra');
     tt.truthy(
@@ -34,3 +44,5 @@ test('modifier splitting with objects', tt => {
         !className.match(/\bTest-no\b/)
     );
 });
+
+

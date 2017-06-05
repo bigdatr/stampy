@@ -43,3 +43,8 @@ test('Textarea should apply textareaProps to outer element', tt => {
     const textarea = shallow(<Textarea textareaProps={{'data-test': "test"}} />);
     tt.is(textarea.render().children().first().get(0).attribs['data-test'], "test");
 });
+
+test('Textarea will cast a value of null and undefined to an empty string', tt => {
+    tt.is(shallow(<Textarea value={null} />).node.props.value, '');
+    tt.is(shallow(<Textarea value={undefined} />).node.props.value, '');
+});

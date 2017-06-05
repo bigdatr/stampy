@@ -34,7 +34,7 @@ function Textarea(props: TextareaProps): React.Element<any> {
         className={SpruceClassName({name: spruceName, modifier, className})}
         disabled={disabled}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
-        value={value}
+        value={(value == null) ? '' : value}
     />;
 }
 

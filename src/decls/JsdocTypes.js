@@ -18,6 +18,13 @@
  */
 
 /**
+ * Spruce peer modifiers. Pass a string to add modifiers (space-separated if multiple)
+ * or if you provide an object then only the names of the object's keys that evaluate to true will be added as modifiers.
+ *
+ * @typedef {(string|Object<string,boolean>)} SprucePeer
+ */
+
+/**
  * A callback that is called by input components to notify parents of changes in their values.
  *
  * @callback OnChange

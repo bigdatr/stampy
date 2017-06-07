@@ -43,6 +43,7 @@ export default ConfigureHock(
 /**
  * @callback DebouncePipe
  * @param {DebouncePipeConfig} [config]
+ * @param {DebouncePipeApplierConfig} [applierConfig]
  */
 
 /**
@@ -55,6 +56,13 @@ export default ConfigureHock(
 /**
  * @typedef DebouncePipeConfigResult
  * @type {Object}
- * @property {number} wait
- * The amount of time in milliseconds to wait before calling the change function.
+ * @property {string} onChangeProp
+ * The name of the prop to receive the onChange callback from.
+ */
+
+/**
+ * @callback DebouncePipeApplierConfig
+ * @param {Object} props
+ * @return {DebouncePipeConfigResult}
+ * A function that accepts props and returns configuration for DebouncePipe.
  */

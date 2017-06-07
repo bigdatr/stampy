@@ -69,6 +69,7 @@
   "dependencies": {
     "bruce": "^0.9.0",
     "classnames": "^2.2.5",
+    "debounce": "^1.0.2",
     "element-resize-detector": "^1.1.9",
     "immutable": "^3.8.1",
     "lru-memoize": "^1.0.2",

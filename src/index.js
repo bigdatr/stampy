@@ -28,3 +28,4 @@ export {default as SplitKeyPipe} from './pipe/SplitKeyPipe';
 export {default as SplitIndexPipe} from './pipe/SplitIndexPipe';
 export {default as DownPipe} from './pipe/DownPipe';
 export {default as UpPipe} from './pipe/UpPipe';
+export {default as DebouncePipe} from './pipe/DebouncePipe';

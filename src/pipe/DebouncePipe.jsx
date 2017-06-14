@@ -1,6 +1,5 @@
 // @flow
 
-import React, {Component} from 'react';
 import Debounce from 'debounce';
 import UpPipe from './UpPipe';
 import ConfigureHock from '../util/ConfigureHock';
@@ -32,12 +31,12 @@ export default ConfigureHock(
             onChangeProp: config(props).onChangeProp
         }));
     },
-    (props: Object): Object => ({
+    (): Object => ({
         onChangeProp: "onChange"
-    },
+    }),
     {
         wait: 100
-    })
+    }
 );
 
 /**

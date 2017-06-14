@@ -44,6 +44,9 @@
 
 export default function ConfigureHock(hockCreator: Function, defaultConfig: Function = () => ({}), defaultApplierConfig: Object = {}): Function {
     return (config: HockConfig = defaultConfig, applierConfig: Object = defaultApplierConfig): HockApplier => {
+        if(config === null) {
+            config = defaultConfig;
+        }
         if(typeof config !== "function") {
             throw new Error("config must be a function");
         }

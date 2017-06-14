@@ -11,16 +11,21 @@ import ConfigureHock from '../util/ConfigureHock';
 /**
  * @component
  *
- * The DebouncePipe is an up pipe that applies a debounce to
+ * The DebouncePipe is an up-pipe that applies a debounce to
  * a selected onChange function.
  *
  * @decorator {DebouncePipe}
  * @decorator {HockApplier}
  *
+ * @example
+ * const withDebouncePipe = DebouncePipe(props => ({
+ *    onChangeProp: "onSubmit"
+ * }), {wait: 500});
+ *
  * @memberof module:Pipes
  */
 
-export default ConfigureHock(
+const DebouncePipe = ConfigureHock(
     (config: HockConfig, applierConfig: Object): HockApplier => {
         var debounce = Debounce((thunk) => thunk(), applierConfig.wait);
 
@@ -38,6 +43,8 @@ export default ConfigureHock(
         wait: 100
     }
 );
+
+export default DebouncePipe;
 
 /**
  * @callback DebouncePipe
@@ -60,8 +67,8 @@ export default ConfigureHock(
  */
 
 /**
- * @callback DebouncePipeApplierConfig
- * @param {Object} props
- * @return {DebouncePipeConfigResult}
- * A function that accepts props and returns configuration for DebouncePipe.
+ * @typedef DebouncePipeApplierConfig
+ * @type {Object}
+ * @property {number} wait
+ * The amount of time to debounce in milliseconds.
  */

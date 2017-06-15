@@ -259,6 +259,29 @@ test('SplitIndexPipe should update childProps on componentWillReceiveProps if co
     );
 });
 
+test('SplitIndexPipe should not update partial onChange functions if there is no reason to', tt => {
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = SplitIndexPipe()(componentToWrap);
+
+    const anotherWrappedComponent = new WrappedComponent({
+        value: [1,2,3]
+    });
+
+    const firstOnChange = anotherWrappedComponent.render().props.split[0].onChange;
+
+    const nextProps = {
+        value: [1,2,3]
+    };
+
+    anotherWrappedComponent.componentWillReceiveProps(nextProps);
+    anotherWrappedComponent.props = nextProps;
+
+    tt.is(
+        firstOnChange,
+        anotherWrappedComponent.render().props.split[0].onChange
+    );
+});
+
 test('SplitIndexPipe can set config.splitProp', tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = SplitIndexPipe(() => ({
@@ -286,6 +309,8 @@ test('SplitIndexPipe has a default config for valueChangePairs', tt => {
     tt.is(split[0].value, "Tom", 'value is included in default valueChangePairs');
     tt.is(typeof split[0].onChange, "function", 'onChange is included in default valueChangePairs');
 });
+
+
 
 //
 // static methods

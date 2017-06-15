@@ -101,7 +101,7 @@ export default (config: ?Object = null): HockApplier => {
                 this.setQuery = this.setQuery.bind(this);
             }
 
-            /**
+            /*
              * Gets the query object
              * @param {Object} props Props to refer to.
              */
@@ -135,7 +135,7 @@ export default (config: ?Object = null): HockApplier => {
                     .merge(groupedParams);
             }
 
-            /**
+            /*
              * Partially updates the query.
              * Any keys on the objects passed in will be modified on the query object.
              * Keys set to empty strings or `null` will be removed from the query object.
@@ -156,7 +156,7 @@ export default (config: ?Object = null): HockApplier => {
                 this.setQuery(query, pathname);
             }
 
-            /**
+            /*
              * Replaces the current query string with the params defined in `query`.
              * Keys set to empty strings or `null` will be removed from the query object.
              *

@@ -159,7 +159,7 @@ export default ConfigureHock(
                     changeFunction(updatedValue);
                 };
 
-                // memoize the onCHange functions of a maximum of 100 different keys
+                // memoize the onChange functions of a maximum of 100 different keys
                 createPartialChangeMemoized: Function = memoize(100)(this.createPartialChange);
 
                 render(): React.Element<any> {

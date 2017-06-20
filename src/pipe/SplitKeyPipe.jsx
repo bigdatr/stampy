@@ -140,8 +140,8 @@ export default ConfigureHock(
 
                             return {
                                 ...obj,
-                                [valueChangeProp.get('valueName')]: value,
-                                [valueChangeProp.get('onChangeName')]: onChange
+                                [valueName]: value,
+                                [onChangeName]: onChange
                             };
                         }, {});
                 };
@@ -159,7 +159,8 @@ export default ConfigureHock(
                     changeFunction(updatedValue);
                 };
 
-                createPartialChangeMemoized: Function = memoize()(this.createPartialChange);
+                // memoize the onChange functions of a maximum of 100 different keys
+                createPartialChangeMemoized: Function = memoize(100)(this.createPartialChange);
 
                 render(): React.Element<any> {
                     var newProps: Object = Object.assign({}, this.props, this.childProps);

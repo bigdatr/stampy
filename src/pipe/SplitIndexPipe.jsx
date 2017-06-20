@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import {fromJS, List, Map, Range} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {get, set} from '../util/CollectionUtils';
+import memoize from 'lru-memoize';
 
 /**
  * @module Pipes
@@ -183,20 +184,20 @@ const SplitIndexPipe: Function = ConfigureHock(
                         .reduce((obj: Object, valueChangeProp: Map<string,*>): Object => {
                             const valueProp: * = valueChangeProp.get('value');
                             const value: * = valueProp ? get(valueProp, index) : undefined;
-                            const onChange: Function = this.createPartialChange(index, valueChangeProp);
+
+                            const valueName: string = valueChangeProp.get('valueName');
+                            const onChangeName: string = valueChangeProp.get('onChangeName');
+                            const onChange: Function = this.createPartialChangeMemoized(index, valueName, onChangeName);
 
                             return {
                                 ...obj,
-                                [valueChangeProp.get('valueName')]: value,
-                                [valueChangeProp.get('onChangeName')]: onChange
+                                [valueName]: value,
+                                [onChangeName]: onChange
                             };
                         }, {});
                 }
 
-                createPartialChange: Function = (index: number, valueChangeProp: Map<string,*>) => (newPartialValue: *) => {
-                    const valueName: string = valueChangeProp.get('valueName');
-                    const onChangeName: string = valueChangeProp.get('onChangeName');
-
+                createPartialChange: Function = (index: number, valueName: string, onChangeName: string) => (newPartialValue: *) => {
                     const existingValue: * = this.props[valueName];
                     const changeFunction: * = this.props[onChangeName];
                     const updatedValue: * = set(existingValue, index, newPartialValue);
@@ -208,6 +209,9 @@ const SplitIndexPipe: Function = ConfigureHock(
 
                     changeFunction(updatedValue);
                 };
+
+                // memoize the onChange functions of a maximum of 100 different indexes
+                createPartialChangeMemoized: Function = memoize(100)(this.createPartialChange);
 
                 onModify: Function = (valueChangeProps: ValueChangeProps, listKeys: ?List<number>, modifier: Function): Function => {
 

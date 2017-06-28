@@ -3,7 +3,7 @@
 import React, {Component} from 'react';
 import {fromJS} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
-import {get, set} from '../util/CollectionUtils';
+import {isKeyed, get, set} from '../util/CollectionUtils';
 
 /**
  * @module Pipes
@@ -64,7 +64,16 @@ export default ConfigureHock(
 
                 constructor(props: Object) {
                     super(props);
-                    this.updateChildProps({}, props);
+
+                    const nextConfig: Object = config(props);
+                    const nextValue: * = props[nextConfig.valueProp];
+                    if(!isKeyed(nextValue)) {
+                        throw new Error(`Expected prop "${nextConfig.valueProp}" to be keyed, got ${nextValue}`);
+                    }
+                    const nextValueChangePairs: List<string> = fromJS(nextConfig.valueChangePairs);
+
+                    this.childProps = this.generateChildProps(nextValue, nextValueChangePairs);
+                    this.upToDateValue = nextValue;
                 }
 
                 componentWillReceiveProps(nextProps: Object) {
@@ -77,6 +86,9 @@ export default ConfigureHock(
 
                     const prevValue: * = prevProps[prevConfig.valueProp];
                     const nextValue: * = nextProps[nextConfig.valueProp];
+                    if(!isKeyed(nextValue)) {
+                        throw new Error(`Expected prop "${nextConfig.valueProp}" to be keyed, got ${nextValue}`);
+                    }
 
                     const prevValueChangePairs: List<string> = fromJS(prevConfig.valueChangePairs);
                     const nextValueChangePairs: List<string> = fromJS(nextConfig.valueChangePairs);
@@ -91,22 +103,23 @@ export default ConfigureHock(
                     if(
                         prevValue !== nextValue
                         || valuesHaveChanged
-                        || !this.childProps
                     ) {
-
-                        this.childProps = nextValueChangePairs
-                            .reduce((props: Object, pair: ValueChangePairList) => {
-                                const [pairValue, pairChange] = pair.toArray();
-
-                                props[pairValue] = get(nextValue, pairValue);
-                                props[pairChange] = this.createPartialChange(pair);
-                                return props;
-                            }, {});
+                        this.childProps = this.generateChildProps(nextValue, nextValueChangePairs);
                     }
 
                     // cache the new value prop so we can cope with multiple onChange calls in a row
                     this.upToDateValue = nextValue;
                 };
+
+                generateChildProps(nextValue: *, valueChangePairs: List<string>): Object {
+                    return valueChangePairs
+                        .reduce((props: Object, pair: ValueChangePairList) => {
+                            const [pairValue, pairChange] = pair.toArray();
+                            props[pairValue] = get(nextValue, pairValue);
+                            props[pairChange] = this.createPartialChange(pair);
+                            return props;
+                        }, {});
+                }
 
                 createPartialChange: Function = (pair: ValueChangePairList) => (newPartialValue: *) => {
                     const {onChangeProp} = config(this.props);

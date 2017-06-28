@@ -81,21 +81,40 @@ test(`SpreadPipe does not recreate props when changes happen to props to used in
         ]
     }))(componentToWrap);
 
+    const value = {
+        aValue: '123',
+        bValue: '456'
+    };
+
     const myWrappedComponent = new WrappedComponent({
-        value: {
-            aValue: '123',
-            bValue: '456'
-        },
+        value,
         unrelatedProp: 123
     });
 
-    myWrappedComponent.props = myWrappedComponent.render().props;
-    myWrappedComponent.componentWillReceiveProps({unrelatedProp: 456});
+    var render1: Object = Map(myWrappedComponent.render().props);
+    myWrappedComponent.componentWillReceiveProps({
+        value,
+        unrelatedProp: 456
+    });
+
     var render2: Object = Map(myWrappedComponent.render().props);
 
-    Map(myWrappedComponent.props).forEach((prop, key) => {
+    render1.forEach((prop, key) => {
         tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal after unrelated props change`);
     });
+
+    myWrappedComponent.componentWillReceiveProps({
+        value: {
+            aValue: 'ABC',
+            bValue: '457'
+        },
+        unrelatedProp: 456
+    });
+
+    var render3: Object = Map(myWrappedComponent.render().props);
+
+    tt.true(render2.get('aValue') !== render3.get('aValue'), 'value props should update when vital props change');
+    tt.true(render2.get('aChange') !== render3.get('aChange'), 'change props should update when vital props change');
 });
 
 //
@@ -137,6 +156,23 @@ test('SpreadPipe should silently fail if change function prop not provided', tt 
             .props()
             .aChange(1);
     });
+});
+
+test('SpreadPipe should throw an error if value prop is not keyed', tt => {
+    var Child = () => <div/>;
+    var Component = SpreadPipe(() => ({
+        valueChangePairs: [
+            ['aValue', 'aChange']
+        ]
+    }))(Child);
+
+    tt.truthy(tt.throws(() => {
+        shallow(<Component value={null} />);
+    }));
+
+    tt.truthy(tt.throws(() => {
+        shallow(<Component value={{}} />).setProps({value: null});
+    }));
 });
 
 test('SpreadPipe will create correct props off config.valueChangePairs', tt => {

@@ -1,6 +1,32 @@
 import test from 'ava';
-import {fromJS, is} from 'immutable';
-import {has, get, getIn, set, setIn} from './CollectionUtils';
+import {fromJS, is, Map, List, Stack, OrderedMap} from 'immutable';
+import {isKeyed, isIndexed, has, get, getIn, set, setIn} from './CollectionUtils';
+
+test('isKeyed() works', tt => {
+    tt.true(isKeyed({}));
+    tt.true(isKeyed(Map()));
+    tt.true(isKeyed(OrderedMap()));
+
+    tt.false(isKeyed());
+    tt.false(isKeyed(1));
+    tt.false(isKeyed(null));
+    tt.false(isKeyed(() => {}));
+    tt.false(isKeyed([]));
+    tt.false(isKeyed(List()));
+    tt.false(isKeyed(Stack()));
+});
+
+test('isIndexed() works', tt => {
+    tt.true(isIndexed([]));
+    tt.true(isIndexed(List()));
+
+    tt.false(isIndexed());
+    tt.false(isIndexed(1));
+    tt.false(isIndexed(null));
+    tt.false(isIndexed(() => {}));
+    tt.false(isIndexed({}));
+    tt.false(isIndexed(Map()));
+});
 
 test('has() works with Objects', tt => {
     const obj = {

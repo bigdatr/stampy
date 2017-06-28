@@ -66,11 +66,11 @@ test(`SplitIndexPipe does not recreate props when changes happen to props to use
 
     const myWrappedComponent = new WrappedComponent({unrelated: 123});
 
-    myWrappedComponent.props = myWrappedComponent.render().props;
+    var render1: Object = Map(myWrappedComponent.render().props);
     myWrappedComponent.componentWillReceiveProps({unrelatedProp: 456});
     var render2: Object = Map(myWrappedComponent.render().props);
 
-    Map(myWrappedComponent.props).forEach((prop, key) => {
+    render1.forEach((prop, key) => {
         tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal after unrelated props change`);
     });
 });

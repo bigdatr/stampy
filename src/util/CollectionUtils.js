@@ -1,6 +1,11 @@
 /* eslint-disable */
 
-import {List, Map, Iterable} from 'immutable';
+import {
+    List,
+    Map,
+    Iterable
+} from 'immutable';
+import isPlainObject from 'is-plain-object';
 
 /**
  * @module Utils
@@ -9,6 +14,38 @@ import {List, Map, Iterable} from 'immutable';
 const clone: Function = (item: Object|Array<*>): Object|Array<*> => {
     return Array.isArray(item) ? item.slice() : Object.assign({}, item);
 };
+
+/**
+ * A function that returns true if the argument is keyed.
+ * @example
+ * console.log(isKeyed({})); // returns true
+ * console.log(isKeyed([])); // returns false
+ * console.log(isKeyed(Map())); // returns true
+ * console.log(isKeyed(List())); // returns false
+ *
+ * @param {*} collection The item to check
+ * @memberof module:Utils~CollectionUtils
+ */
+
+export function isKeyed(item: *): boolean {
+    return isPlainObject(item) || Iterable.isKeyed(item);
+}
+
+/**
+ * A function that returns true if the argument is indexed.
+ * @example
+ * console.log(isKeyed({})); // returns true
+ * console.log(isKeyed([])); // returns false
+ * console.log(isKeyed(Map())); // returns true
+ * console.log(isKeyed(List())); // returns false
+ *
+ * @param {*} collection The item to check
+ * @memberof module:Utils~CollectionUtils
+ */
+
+export function isIndexed(item: *): boolean {
+    return Array.isArray(item) || Iterable.isIndexed(item);
+}
 
 /**
  * A function that works like Immutable's `has`, but can also accept Objects and Arrays
@@ -157,6 +194,7 @@ export function setIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Arr
  */
 
 const CollectionUtils = {
+    isKeyed,
     has,
     get,
     getIn,

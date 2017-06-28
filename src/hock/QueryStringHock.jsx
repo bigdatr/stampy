@@ -107,7 +107,7 @@ export default (config: ?Object = null): HockApplier => {
              */
 
             getQuery(): Map<string, string|Array<string>> {
-                if(!this.props.location || !this.props.location.search) {
+                if(!this.props.location) {
                     return Map();
                 }
 

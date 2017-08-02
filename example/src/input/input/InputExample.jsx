@@ -12,7 +12,7 @@ export default class InputExample extends React.Component {
     render() {
         return <div>
             <h3>Input Controlling</h3>
-            <p>Uncontrolled Input</p>
+            <p>Uncontrolled Input (with placeholder)</p>
             <Input placeholder="uncontrolled"/>
 
             <p>Controlled Input says: {this.state.value}</p>
@@ -94,7 +94,6 @@ export default class InputExample extends React.Component {
 
             <p>week input</p>
             <Input type="week"/>
-
 
             <h3>Input Classes</h3>
 

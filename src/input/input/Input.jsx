@@ -27,7 +27,8 @@ function Input(props: InputProps): React.Element<any> {
         onChange,
         spruceName,
         type,
-        value
+        value,
+        placeholder
     } = props;
 
     return <input
@@ -37,6 +38,7 @@ function Input(props: InputProps): React.Element<any> {
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
         type={type}
         value={(value == null) ? '' : value}
+        placeholder={placeholder}
     />;
 }
 
@@ -56,7 +58,9 @@ Input.propTypes = {
     /** HTML type attribute for the input */
     type: PropTypes.string,
     /** The string to show in the input */
-    value: PropTypes.string
+    value: PropTypes.string,
+    /** The placeholder text to show in the input when there is no value */
+    placeholder: PropTypes.string
 };
 
 Input.defaultProps = {
@@ -77,7 +81,8 @@ type InputProps = {
     onChange?: OnChange,
     spruceName?: string,
     type?: string,
-    value?: string
+    value?: string,
+    placeholder?: string
 };
 
 export default Input;

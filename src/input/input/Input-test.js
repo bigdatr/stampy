@@ -61,3 +61,8 @@ test('Input will cast a value of null and undefined to an empty string', tt => {
     tt.is(shallow(<Input value={null} />).node.props.value, '');
     tt.is(shallow(<Input value={undefined} />).node.props.value, '');
 });
+
+test('Input will correctly apply placeholder attribute', tt => {
+    tt.is(shallow(<Input placeholder="place" />).node.props.placeholder, 'place');
+    tt.is(shallow(<Input />).node.props.placeholder, undefined);
+});

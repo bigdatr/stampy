@@ -8,7 +8,7 @@ type ElementQuery = {
     name: string,
     widthBounds: number[],
     heightBounds: number[]
-}
+};
 
 type ElementQueryHockProps = {
     eqWidth: number,
@@ -16,7 +16,7 @@ type ElementQueryHockProps = {
     eqActive: string[],
     eqInactive: string[],
     eqReady: boolean
-}
+};
 
 let erd = null;
 if(typeof window !== 'undefined') { // Don't try to detect resize events on server
@@ -85,16 +85,19 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
         class ElementQueryHock extends Component {
             handleResize: Function;
             state: Object;
+            mounted: boolean;
 
             constructor(props: ElementQueryHockProps) {
                 super(props);
                 this.handleResize = this.handleResize.bind(this);
+                this.mounted = false;
                 this.state = {
                     ready: false
                 };
             }
 
             componentDidMount() {
+                this.mounted = true;
                 if(erd) {
                     const container = findDOMNode(this).parentNode;
                     erd.listenTo(container, this.handleResize);
@@ -103,6 +106,7 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
             }
 
             componentWillUnmount() {
+                this.mounted = false;
                 if(erd) {
                     erd.removeListener(findDOMNode(this).parentNode, this.handleResize);
                 }
@@ -121,6 +125,10 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
             }
 
             handleResize(element: HTMLElement) {
+                if(!this.mounted) {
+                    return;
+                }
+
                 // This method uses native es3 js functionality for (admittedly minute) performance
                 // improvements. Seeing as this method is called alotta times it is (probably) worth it
                 var width = element.clientWidth;

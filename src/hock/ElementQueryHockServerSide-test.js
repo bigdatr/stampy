@@ -34,6 +34,6 @@ test('ElementQueryHockServerSide', tt => {
 
     const HockInstance = new ElementQueryHockExample();
 
-    tt.notThrows(HockInstance.componentDidMount, 'Doesn\'t throw errors when mounting without window global');
-    tt.notThrows(HockInstance.componentWillUnmount, 'Doesn\'t throw errors when unmounting without window global');
+    tt.notThrows(() => HockInstance.componentDidMount(), 'Doesn\'t throw errors when mounting without window global');
+    tt.notThrows(() => HockInstance.componentWillUnmount(), 'Doesn\'t throw errors when unmounting without window global');
 });

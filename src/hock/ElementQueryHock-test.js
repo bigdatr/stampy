@@ -114,4 +114,14 @@ test('ElementQueryHock', tt => {
         'doesn\'t call set state if neither width nor height changes'
     );
 
+    HockInstance.mounted = false;
+    HockInstance.handleResize();
+
+    tt.is(
+        HockInstance.setState.callCount,
+        1,
+        'exits early if mouted is false'
+    );
+
 });
+

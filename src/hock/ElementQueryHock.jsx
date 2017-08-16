@@ -125,6 +125,10 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
             }
 
             handleResize(element: HTMLElement) {
+                if(!this.mounted) {
+                    return;
+                }
+
                 // This method uses native es3 js functionality for (admittedly minute) performance
                 // improvements. Seeing as this method is called alotta times it is (probably) worth it
                 var width = element.clientWidth;
@@ -144,9 +148,7 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
                     }
                 }
 
-                if(this.mounted) {
-                    this.setState({width, height, active, inactive, ready: true});
-                }
+                this.setState({width, height, active, inactive, ready: true});
             }
 
             render(): React.Element<any> {

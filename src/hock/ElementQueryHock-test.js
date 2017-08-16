@@ -98,6 +98,7 @@ test('ElementQueryHock', tt => {
 
     const HockInstance = new ElementQueryHockExample();
     HockInstance.setState = sinon.spy(function() {});
+    HockInstance.mounted = true;
 
     HockInstance.state = {width: 300, height: 600}; // manually set state cos react won't do it without a mounted component
     HockInstance.handleResize({clientWidth: 300, clientHeight: 600});

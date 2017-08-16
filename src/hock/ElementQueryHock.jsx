@@ -8,7 +8,7 @@ type ElementQuery = {
     name: string,
     widthBounds: number[],
     heightBounds: number[]
-}
+};
 
 type ElementQueryHockProps = {
     eqWidth: number,
@@ -16,7 +16,7 @@ type ElementQueryHockProps = {
     eqActive: string[],
     eqInactive: string[],
     eqReady: boolean
-}
+};
 
 let erd = null;
 if(typeof window !== 'undefined') { // Don't try to detect resize events on server
@@ -85,16 +85,19 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
         class ElementQueryHock extends Component {
             handleResize: Function;
             state: Object;
+            mounted: boolean;
 
             constructor(props: ElementQueryHockProps) {
                 super(props);
                 this.handleResize = this.handleResize.bind(this);
+                this.mounted = false;
                 this.state = {
                     ready: false
                 };
             }
 
             componentDidMount() {
+                this.mounted = true;
                 if(erd) {
                     const container = findDOMNode(this).parentNode;
                     erd.listenTo(container, this.handleResize);
@@ -103,6 +106,7 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
             }
 
             componentWillUnmount() {
+                this.mounted = false;
                 if(erd) {
                     erd.removeListener(findDOMNode(this).parentNode, this.handleResize);
                 }
@@ -140,7 +144,9 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
                     }
                 }
 
-                this.setState({width, height, active, inactive, ready: true});
+                if(this.mounted) {
+                    this.setState({width, height, active, inactive, ready: true});
+                }
             }
 
             render(): React.Element<any> {

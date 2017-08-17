@@ -66,11 +66,19 @@ export default ConfigureHock(
 
             class StateHock extends Component {
                 state: Object;
+                initialState: *;
                 constructor(props: Object) {
                     super(props);
                     const {initialState} = config(props);
+                    this.initialState = initialState;
                     this.state = {
                         value: initialState
+                    }
+                }
+                componentWillReceiveProps(nextProps: Object) {
+                    const onPropChange = config(nextProps).onPropChange;
+                    if(onPropChange) {
+                        onPropChange(this.onChange, nextProps, this.state.value)
                     }
                 }
                 onChange: Function = (payload: Function) => {
@@ -112,6 +120,13 @@ export default ConfigureHock(
  */
 
 /**
+ * @callback onPropChange
+ * @param {function} onChange - Callback to update state with
+ * @param {object} nextProps - The new set of props
+ * @param {*} state - The current version of state
+ */
+
+/**
  * @callback StateHockConfig
  * @param {Object} props
  * @return {StateHockConfigResult}
@@ -124,6 +139,9 @@ export default ConfigureHock(
  *
  * @property {*} [initialState]
  * The initial state for the hock.
+ *
+ * @property {onPropChange} [onPropChange]
+ * Allows you to update the current value when props change.
  *
  * @property {string} [valueProp = "value"]
  * The name of the prop to pass the value down as.

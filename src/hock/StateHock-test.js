@@ -69,3 +69,28 @@ test('StateHock props.onChange will replace value', tt => {
     tt.is(instance.props().value, 1);
 });
 
+
+test('StateHock will call config.onPropChange if provided', tt => {
+    var Child = () => <div/>;
+    var Component = StateHock((props) => ({
+        initialState: 0,
+        onPropChange: (onChange, nextProps) => {
+            tt.is(nextProps, 'foo');
+            onChange(nextProps);
+        }
+    }))(Child);
+    var wrapper = shallow(<Component />);
+    wrapper.instance().componentWillReceiveProps('foo');
+    tt.is(wrapper.instance().state.value, 'foo');
+});
+
+test('StateHock config.onPropChange will not be called if not provied', tt => {
+    var Child = () => <div/>;
+    var Component = StateHock((props) => ({
+        initialState: 0
+    }))(Child);
+    var wrapper = shallow(<Component />);
+    wrapper.instance().componentWillReceiveProps('foo');
+    tt.is(wrapper.instance().state.value, 0);
+});
+

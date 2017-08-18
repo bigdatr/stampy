@@ -94,3 +94,18 @@ test('StateHock config.onPropChange will not be called if not provied', tt => {
     tt.is(wrapper.instance().state.value, 0);
 });
 
+test('StateHock config.onPropChange stores the updated value as previousValue', tt => {
+    var Child = () => <div/>;
+    var Component = StateHock((props) => ({
+        initialState: 'foo',
+        onPropChange: (onChange, nextProps, previousValue) => {
+            tt.is(previousValue, 'foo');
+            onChange(nextProps);
+        }
+    }))(Child);
+    var wrapper = shallow(<Component />);
+    wrapper.instance().componentWillReceiveProps('bar');
+    tt.is(wrapper.instance().state.value, 'bar');
+    tt.is(wrapper.instance().state.previousValue, 'bar');
+});
+

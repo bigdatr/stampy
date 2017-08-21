@@ -32,13 +32,13 @@ function Input(props: InputProps): React.Element<any> {
     } = props;
 
     return <input
+        disabled={disabled}
+        type={type}
+        placeholder={placeholder}
         {...inputProps}
         className={SpruceClassName({name: spruceName, modifier, className})}
-        disabled={disabled}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
-        type={type}
         value={(value == null) ? '' : value}
-        placeholder={placeholder}
     />;
 }
 

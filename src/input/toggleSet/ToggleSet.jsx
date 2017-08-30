@@ -148,7 +148,7 @@ ToggleSet.propTypes = {
     /** The options that the user can select. Each will appear as a toggle. */
     options: PropTypes.arrayOf(
         PropTypes.shape({
-            value: PropTypes.string,
+            value: PropTypes.any.isRequired,
             label: PropTypes.string
         })
     ).isRequired,

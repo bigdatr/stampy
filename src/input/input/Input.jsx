@@ -24,6 +24,7 @@ function Input(props: InputProps): React.Element<any> {
         disabled,
         inputProps,
         modifier,
+        name,
         onChange,
         spruceName,
         type,
@@ -33,8 +34,9 @@ function Input(props: InputProps): React.Element<any> {
 
     return <input
         disabled={disabled}
-        type={type}
+        name={name}
         placeholder={placeholder}
+        type={type}
         {...inputProps}
         className={SpruceClassName({name: spruceName, modifier, className})}
         onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
@@ -51,6 +53,8 @@ Input.propTypes = {
     inputProps: StampyPropTypes.htmlProps,
     /** {SpruceModifier} */
     modifier: StampyPropTypes.spruceModifier,
+    /** HTML name attribute for the input */
+    name: PropTypes.string,
     /** {OnChange} */
     onChange: StampyPropTypes.onChange,
     /** {SpruceName} */
@@ -68,6 +72,7 @@ Input.defaultProps = {
     disabled: false,
     inputProps: {},
     modifier: '',
+    name: '',
     spruceName: 'Input',
     type: 'text',
     value: ''
@@ -78,6 +83,7 @@ type InputProps = {
     disabled?: boolean,
     inputProps?: Object,
     modifier?: SpruceModifier,
+    name?: string,
     onChange?: OnChange,
     spruceName?: string,
     type?: string,

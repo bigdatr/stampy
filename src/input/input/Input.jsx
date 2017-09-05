@@ -83,6 +83,7 @@ type InputProps = {
     disabled?: boolean,
     inputProps?: Object,
     modifier?: SpruceModifier,
+    name?: string,
     onChange?: OnChange,
     spruceName?: string,
     type?: string,

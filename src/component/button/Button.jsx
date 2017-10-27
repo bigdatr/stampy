@@ -30,10 +30,15 @@ function Button(props: ButtonProps): React.Element<any> {
         type
     } = props;
 
+    const additionalClassNames: Object = {
+        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+        [`${spruceName}-disabled`]: disabled
+    };
+
     return <button
         {...buttonProps}
         children={children}
-        className={SpruceClassName({name: spruceName, modifier, className})}
+        className={SpruceClassName({name: spruceName, modifier, className}, additionalClassNames)}
         disabled={disabled}
         onClick={!disabled && onClick}
         type={type}

@@ -46,6 +46,11 @@ test('disabled button', tt => {
         'disabled buttons have a disabled attribute'
     );
 
+    tt.true(
+        wrapper.render().children().first().hasClass('Button-disabled'),
+        'disabled buttons have a Button-disabled className'
+    )
+
     wrapper.find('button').simulate('click');
     tt.false(
         onButtonClick.calledOnce,

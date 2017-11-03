@@ -1,6 +1,6 @@
 import test from 'ava';
 import {fromJS, is} from 'immutable';
-import RemoveProps from './RemoveProps';
+import RemoveProps from '../RemoveProps';
 
 test('removes props', tt => {
     tt.true(

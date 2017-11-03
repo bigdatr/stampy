@@ -13,7 +13,7 @@ global.navigator = window.navigator;
 global.getComputedStyle = window.getComputedStyle;
 
 
-const ElementQueryHock = require('./ElementQueryHock').default;
+const ElementQueryHock = require('../ElementQueryHock').default;
 
 const container = window.document.getElementById('container');
 container.clientWidth = 1280;

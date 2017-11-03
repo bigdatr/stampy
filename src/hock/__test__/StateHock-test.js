@@ -1,7 +1,7 @@
 import test from 'ava';
 import {shallow} from 'enzyme';
 import React from 'react';
-import StateHock from './StateHock';
+import StateHock from '../StateHock';
 import {Map} from 'immutable';
 
 //

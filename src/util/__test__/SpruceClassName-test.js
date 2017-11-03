@@ -1,5 +1,5 @@
 import test from 'ava';
-import SpruceClassName from './SpruceClassName';
+import SpruceClassName from '../SpruceClassName';
 
 test('modifier splitting', tt => {
     const className = SpruceClassName({name: 'Test', modifier:'rad cool'});

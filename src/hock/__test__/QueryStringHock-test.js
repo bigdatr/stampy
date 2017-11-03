@@ -1,7 +1,7 @@
 import React from 'react';
 import test from 'ava';
 import sinon from 'sinon';
-import QueryStringHock from './QueryStringHock';
+import QueryStringHock from '../QueryStringHock';
 import {fromJS} from 'immutable';
 
 test('QueryStringHock passes props straight through to children', tt => {

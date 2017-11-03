@@ -2,7 +2,7 @@ import test from 'ava';
 import React from 'react';
 import {renderToString} from 'react-dom/server'
 import cheerio from 'cheerio';
-import ElementQueryHock from './ElementQueryHock';
+import ElementQueryHock from '../ElementQueryHock';
 
 const example = () => {
     return <div>Hello World</div>;

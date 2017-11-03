@@ -1,7 +1,7 @@
 import test from 'ava';
 import {shallow} from 'enzyme';
 import React from 'react';
-import UpPipe from './UpPipe';
+import UpPipe from '../UpPipe';
 import {Map} from 'immutable';
 import sinon from 'sinon';
 

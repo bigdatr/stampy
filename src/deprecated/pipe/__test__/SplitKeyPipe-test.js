@@ -2,7 +2,7 @@ import test from 'ava';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import React from 'react';
-import SplitKeyPipe from './SplitKeyPipe';
+import SplitKeyPipe from '../SplitKeyPipe';
 import {Map} from 'immutable';
 
 //

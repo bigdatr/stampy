@@ -1,7 +1,7 @@
 import test from 'ava';
 import {shallow} from 'enzyme';
 import React from 'react';
-import DebouncePipe from './DebouncePipe';
+import DebouncePipe from '../DebouncePipe';
 import {Map} from 'immutable';
 
 //

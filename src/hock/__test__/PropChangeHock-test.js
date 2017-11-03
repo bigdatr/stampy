@@ -2,7 +2,7 @@ import React from 'react';
 import test from 'ava';
 import sinon from 'sinon';
 import {shallow} from 'enzyme';
-import PropChangeHock from './PropChangeHock';
+import PropChangeHock from '../PropChangeHock';
 
 test('PropChangeHock passes props straight through to children', tt => {
     const componentToWrap = () => <div>Example Component</div>;

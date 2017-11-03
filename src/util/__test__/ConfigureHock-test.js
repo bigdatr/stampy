@@ -1,5 +1,5 @@
 import test from 'ava';
-import ConfigureHock from './ConfigureHock';
+import ConfigureHock from '../ConfigureHock';
 
 test('ConfigureHock should return a function that returns the contents of hockcreator', tt => {
     tt.is(ConfigureHock(() => 123)(), 123);

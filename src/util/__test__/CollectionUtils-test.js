@@ -1,6 +1,6 @@
 import test from 'ava';
 import {fromJS, is, Map, List, Stack, OrderedMap} from 'immutable';
-import {isKeyed, isIndexed, has, get, getIn, set, setIn} from './CollectionUtils';
+import {isKeyed, isIndexed, has, get, getIn, set, setIn} from '../CollectionUtils';
 
 test('isKeyed() works', tt => {
     tt.true(isKeyed({}));

@@ -1,7 +1,7 @@
 // Code from redux: https://github.com/reactjs/redux/blob/master/LICENSE.md
 
 import test from 'ava';
-import Compose from './Compose';
+import Compose from '../Compose';
 
 test('Compose composes from right to left', tt => {
     const double = x => x * 2;

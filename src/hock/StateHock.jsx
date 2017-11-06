@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type {ComponentType, Element} from 'react';
-import ConfigureHock from '../util/ConfigureHock';
+import ConfigureHock from '../deprecated/util/ConfigureHock';
 
 /**
  * @module Hocks

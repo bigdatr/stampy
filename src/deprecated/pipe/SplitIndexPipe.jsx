@@ -2,8 +2,8 @@
 
 import React, {Component} from 'react';
 import {fromJS, List, Map, Range} from 'immutable';
-import ConfigureHock from '../../util/ConfigureHock';
-import {get, set} from '../../util/CollectionUtils';
+import ConfigureHock from '../util/ConfigureHock';
+import {get, set} from '../util/CollectionUtils';
 import memoize from 'lru-memoize';
 
 /**

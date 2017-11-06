@@ -2,7 +2,7 @@
 
 import Debounce from 'debounce';
 import UpPipe from './UpPipe';
-import ConfigureHock from '../../util/ConfigureHock';
+import ConfigureHock from '../util/ConfigureHock';
 
 /**
  * @module Pipes

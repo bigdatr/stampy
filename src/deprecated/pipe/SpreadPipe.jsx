@@ -2,8 +2,8 @@
 
 import React, {Component} from 'react';
 import {fromJS} from 'immutable';
-import ConfigureHock from '../../util/ConfigureHock';
-import {isKeyed, get, set} from '../../util/CollectionUtils';
+import ConfigureHock from '../util/ConfigureHock';
+import {isKeyed, get, set} from '../util/CollectionUtils';
 
 /**
  * @module Pipes

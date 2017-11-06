@@ -3,8 +3,8 @@
 import React from 'react';
 import type {ComponentType, Element} from 'react';
 import {is, List} from 'immutable';
-import ConfigureHock from '../util/ConfigureHock';
-import {getIn} from '../util/CollectionUtils';
+import ConfigureHock from '../deprecated/util/ConfigureHock';
+import {getIn} from '../deprecated/util/CollectionUtils';
 
 /**
  * @module Hocks

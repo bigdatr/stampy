@@ -3,7 +3,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 
-import ShowHide, {ShowHideStateful} from '../ShowHide';
+import ShowHide, {ShowHideState, ShowHideStateful} from '../ShowHide';
 
 
 const toggle = () => <div></div>;
@@ -32,22 +32,13 @@ test('ShowHide will show children based on props.show', tt => {
 test('ShowHideStateful default visibility off defaultShow', tt => {
     const show = shallow(<ShowHideStateful toggle={toggle} defaultShow={true}/>);
     const hide = shallow(<ShowHideStateful toggle={toggle} />);
-    tt.is(show.state('show'), true);
-    tt.is(hide.state('show'), false);
+    tt.deepEqual(show.state('value'), {show: true});
+    tt.deepEqual(hide.state('value'), {show: false});
 });
-
-
-test('ShowHideStateful will toggle visibility on toggle', tt => {
-    const showHide = shallow(<ShowHideStateful toggle={toggle} defaultShow={true}/>);
-    showHide.instance().toggle(false);
-    tt.is(showHide.state('show'), false);
-});
-
 
 test('ShowHideStateful will passthrough props.onClick', tt => {
     const onClick = sinon.spy();
     const showHide = shallow(<ShowHideStateful toggle={toggle} onClick={onClick}/>);
-    showHide.instance().toggle(false);
-    tt.is(onClick.firstCall.args[0], false);
+    showHide.dive().dive().find('.ShowHide_toggle').simulate('click');
+    tt.is(onClick.firstCall.args[0], true);
 });
-

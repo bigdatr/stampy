@@ -1,4 +1,4 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import Debounce from 'debounce';
 import UpPipe from './UpPipe';
@@ -30,7 +30,7 @@ const DebouncePipe = ConfigureHock(
         var debounce = Debounce((thunk) => thunk(), applierConfig.wait);
 
         return UpPipe((props) => ({
-            payloadCallback: (payload, onChange) => {
+            payloadCallback: (payload: *, onChange: Function) => {
                 debounce(() => onChange(payload));
             },
             onChangeProp: config(props).onChangeProp

@@ -1,9 +1,8 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {Element} from 'react';
 import {List, Set} from 'immutable';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 import Toggle from './Toggle';
 
 /**
@@ -56,148 +55,113 @@ import Toggle from './Toggle';
  * />
  */
 
-function ToggleSet(props: ToggleSetProps): React.Element<any> {
-    const {
-        className,
-        clearable,
-        disabled: componentDisabled,
-        toggleProps,
-        toggleSetProps,
-        modifier,
-        multi,
-        onChange,
-        options,
-        spruceName,
-        toggleSpruceName,
-        toggleModifier,
-        value
-    } = props;
+type ToggleOption = {
+    disabled?: boolean,
+    label: string,
+    value: string
+};
 
-    const selection: Set<string> = multi
-        ? Set(value)
-        : typeof value == "string" || typeof value == "boolean"
-            ? Set([value])
-            : Set();
-
-    const toggles: Array<React.Element<any>> = List(options)
-        .map((option, index) => {
-            const {
-                label,
-                value,
-                disabled
-            } = option;
-
-            const toggleOnChange = (added: boolean, meta: OnChangeMeta) => {
-                if(!onChange) {
-                    return;
-                }
-                if(multi) {
-                    const newSelection: Set<string> = added
-                        ? selection.add(value)
-                        : selection.delete(value);
-
-                    onChange(newSelection.toArray(), meta);
-                    return;
-                }
-                if(clearable && !added) {
-                    onChange("", meta);
-                    return;
-                }
-                if(added) {
-                    onChange(value, meta);
-                }
-            };
-
-            return <Toggle
-                children={label}
-                disabled={disabled || componentDisabled}
-                onChange={toggleOnChange}
-                toggleProps={toggleProps}
-                spruceName={toggleSpruceName}
-                modifier={typeof toggleModifier == "function" ? toggleModifier(option, index) : toggleModifier}
-                value={selection.has(value)}
-            />;
-        })
-        .toArray();
-
-    return <div
-        {...toggleSetProps}
-        className={SpruceClassName({name: spruceName, modifier, className})}
-        children={toggles}
-    />;
-}
-
-ToggleSet.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-    /** Controls if the selection is clearable i.e. the user can choose to select no items. */
-    clearable: PropTypes.bool,
-    /** Set to true to disable the toggle set. When disabled the user cannot change the state of the `ToggleSet` */
-    disabled: PropTypes.bool,
-    /** {Object} An object of attributes to be applied to the HTML tags of each of the toggles created by this component. */
-    toggleProps: StampyPropTypes.htmlProps,
-    /** {HtmlProps} */
-    toggleSetProps: StampyPropTypes.htmlProps,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    /** Set to true to allow the user to select more than one option at once. When `multi=true`
-    the first argument of `onChange` will be an array of selected options. */
-    multi: PropTypes.bool,
-    /** {OnChangeMulti} */
-    onChange: StampyPropTypes.onChangeMulti,
-    /** The options that the user can select. Each will appear as a toggle. */
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: PropTypes.any.isRequired,
-            label: PropTypes.string
-        })
-    ).isRequired,
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName,
-    /** {string} The spruce name used by each toggle in the toggle set */
-    toggleSpruceName: StampyPropTypes.spruceName,
-    /** {SpruceModifier} The spruce modifier used by each toggle in the toggle set.
-    Can be a function that is passed the current option and returns the modifier */
-    toggleModifier: PropTypes.oneOfType([
-        StampyPropTypes.spruceModifier,
-        PropTypes.func
-    ]),
-    /**
+type Props = {
+    className?: string, // {ClassName}
+    clearable: ?boolean, // Boolean indicating if the selection can be cleared
+    disabled: boolean, // Set to true to disable the toggle set. When disabled, `onChange` will no longer be called when the value changes
+    modifier?: SpruceModifier, // ${SpruceModifier}
+    multi: ?boolean, // Boolean indicating if more than one selected item at once
+    onChange: (newValues: Array<string>|string, meta: OnChangeMeta) => void, // ${OnChange}
+    options: ToggleOption[], // The options that the user can select. Each will appear as a toggle
+    peer?: string, // ${SprucePeer}
+    spruceName: string, // {SpruceName}
+    toggleProps?: Object, // Attributes applied to the component's <div> HTML element
+    toggleSetProps?: Object, // Attributes applied each toggle component's <button> HTML element
+    toggleSpruceName: string, // The spruce name used by each toggle in the toggle set
+    toggleModifier?: SpruceModifier, // The spruce modifiers applied to each toggle in the toggle set
+    value: string|Array<string> /**
      * The values that have been selected. Under normal usage these should correspond to values in the `options` array.
      * When `multi=false` this expects a string or boolean, or when `multi=true` this expects an array of strings or booleans.
      */
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.bool,
-        PropTypes.arrayOf(
-            PropTypes.string,
-            PropTypes.bool,
-        )
-    ])
+};
+
+
+export default class ToggleSet extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        disabled: false,
+        toggleSetProps: {},
+        modifier: '',
+        spruceName: 'ToggleSet',
+        toggleSpruceName: 'ToggleSet_toggle'
+    };
+
+    render(): Element<*> {
+        const {
+            className,
+            clearable,
+            disabled: componentDisabled,
+            toggleProps,
+            toggleSetProps,
+            modifier,
+            multi,
+            onChange,
+            options,
+            peer,
+            spruceName,
+            toggleSpruceName,
+            toggleModifier,
+            value
+        } = this.props;
+
+        const selection: Set<string> = multi
+            ? Set(value)
+            : typeof value == "string" || typeof value == "boolean"
+                ? Set([value])
+                : Set();
+
+        const toggles: Array<Element<*>> = List(options)
+            .map((option: ToggleOption, index: number): Element<*> => {
+                const {
+                    label,
+                    value,
+                    disabled
+                } = option;
+
+                const toggleOnChange = (added: boolean, meta: OnChangeMeta) => {
+                    if(!onChange) {
+                        return;
+                    }
+                    if(multi) {
+                        const newSelection: Set<string> = added
+                            ? selection.add(value)
+                            : selection.delete(value);
+
+                        onChange(newSelection.toArray(), meta);
+                        return;
+                    }
+                    if(clearable && !added) {
+                        onChange("", meta);
+                        return;
+                    }
+                    if(added) {
+                        onChange(value, meta);
+                    }
+                };
+
+                return <Toggle
+                    children={label}
+                    disabled={disabled || componentDisabled}
+                    onChange={toggleOnChange}
+                    toggleProps={toggleProps}
+                    spruceName={toggleSpruceName}
+                    modifier={typeof toggleModifier == "function" ? toggleModifier(option, index) : toggleModifier}
+                    value={selection.has(value)}
+                    key={index}
+                />;
+            })
+            .toArray();
+
+        return <div
+            {...toggleSetProps}
+            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            children={toggles}
+        />;
+    }
 }
-
-ToggleSet.defaultProps = {
-    className: '',
-    toggleSetProps: {},
-    modifier: '',
-    spruceName: 'ToggleSet',
-    toggleSpruceName: 'ToggleSet_toggle'
-};
-
-type ToggleSetProps = {
-    className?: string,
-    clearable?: boolean,
-    disabled?: boolean,
-    toggleProps?: Object,
-    toggleSetProps?: Object,
-    modifier?: SpruceModifier,
-    multi?: boolean,
-    onChange?: OnChangeMulti,
-    options: Object[],
-    spruceName?: string,
-    toggleSpruceName?: string,
-    toggleModifier?: SpruceModifier,
-    value?: string|Array<string>
-};
-
-export default ToggleSet;

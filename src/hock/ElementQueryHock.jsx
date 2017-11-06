@@ -1,6 +1,7 @@
 // @flow
 
-import React, {Component} from 'react';
+import React from 'react';
+import type {ComponentType, Element} from 'react';
 import {findDOMNode} from 'react-dom';
 import elementResizeDetectorMaker from 'element-resize-detector';
 
@@ -10,7 +11,9 @@ type ElementQuery = {
     heightBounds: number[]
 };
 
-type ElementQueryHockProps = {
+type Props = {};
+
+type ChildProps = {
     eqWidth: number,
     eqHeight: number,
     eqActive: string[],
@@ -28,7 +31,7 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  */
 
 const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
-    return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
+    return (ComposedComponent: ComponentType<Props>): ComponentType<ChildProps> => {
 
         /**
          * @component
@@ -82,12 +85,12 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
          * @memberof module:Hocks
          */
 
-        class ElementQueryHock extends Component {
+        class ElementQueryHock extends React.Component<Props> {
             handleResize: Function;
             state: Object;
             mounted: boolean;
 
-            constructor(props: ElementQueryHockProps) {
+            constructor(props: Object) {
                 super(props);
                 this.handleResize = this.handleResize.bind(this);
                 this.mounted = false;
@@ -151,7 +154,7 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
                 this.setState({width, height, active, inactive, ready: true});
             }
 
-            render(): React.Element<any> {
+            render(): Element<*> {
                 return <ComposedComponent
                     {...Object.assign({}, this.props, {
                         eqWidth: this.state.width,
@@ -165,8 +168,8 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
         }
 
         return ElementQueryHock;
-    }
-}
+    };
+};
 
 /**
  * Provides configuration for `ElementQueryHock`.

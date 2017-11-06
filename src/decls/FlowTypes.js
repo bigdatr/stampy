@@ -1,11 +1,12 @@
 /* @flow */
 /* eslint-disable no-unused-vars */
 
+import type {ComponentType} from 'react';
 import {List} from 'immutable';
 
 type ClassName = string;
 
-type HockApplier = (ComposedComponent: ReactClass<any>) => ReactClass<any>;
+type HockApplier = (ComposedComponent: ComponentType<any>) => ComponentType<any>;
 
 type HockConfig = (props: Object) => Object;
 

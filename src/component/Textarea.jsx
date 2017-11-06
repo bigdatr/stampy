@@ -1,8 +1,7 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 
 /**
  * @module Inputs
@@ -18,60 +17,51 @@ import StampyPropTypes from '../decls/PropTypes';
  * return <Textarea onChange={(val) => doStuff(val)}/>
  */
 
-function Textarea(props: TextareaProps): React.Element<any> {
-    const {
-        className,
-        disabled,
-        textareaProps,
-        modifier,
-        onChange,
-        spruceName,
-        value
-    } = props;
-
-    return <textarea
-        {...textareaProps}
-        className={SpruceClassName({name: spruceName, modifier, className})}
-        disabled={disabled}
-        onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
-        value={(value == null) ? '' : value}
-    />;
-}
-
-Textarea.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-    /** Set to true to disable the textarea. When disabled `onChange` will no longer be called when the textarea changes */
-    disabled: PropTypes.bool,
-    /** {HtmlProps} */
-    textareaProps: StampyPropTypes.htmlProps,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    /** {OnChange} */
-    onChange: StampyPropTypes.onChange,
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName,
-    /** The string to show in the textarea */
-    value: PropTypes.string
+type Props = {
+    className?: string, // {ClassName}
+    disabled?: boolean, // Set to true to disable the textarea. When disabled, `onChange` will no longer be called when the textarea changes
+    modifier?: SpruceModifier, // {SpruceModifier}
+    name?: string, // HTML name attribute for the textarea
+    onChange?: OnChange, // {OnChange}
+    peer: string, // {SprucePeer}
+    placeholder?: string, // The placeholder text to show in the textarea when there is no value
+    spruceName: string, // {SpruceName}
+    textareaProps?: Object, // {Placeholder}
+    value?: string // {Value}
 };
 
-Textarea.defaultProps = {
-    className: '',
-    disabled: false,
-    textareaProps: {},
-    modifier: '',
-    spruceName: 'Textarea',
-    value: ''
+export default class Textarea extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        disabled: false,
+        textareaProps: {},
+        modifier: '',
+        spruceName: 'Textarea',
+        value: ''
+    };
+
+    render(): Element<*> {
+        const {
+            className,
+            disabled,
+            modifier,
+            name,
+            onChange,
+            peer,
+            placeholder,
+            spruceName,
+            textareaProps,
+            value
+        } = this.props;
+
+        return <textarea
+            disabled={disabled}
+            name={name}
+            placeholder={placeholder}
+            {...textareaProps}
+            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
+            value={(value == null) ? '' : value}
+        />;
+    }
 }
-
-type TextareaProps = {
-    className?: string,
-    disabled?: boolean,
-    textareaProps?: Object,
-    modifier?: SpruceModifier,
-    onChange?: OnChange,
-    spruceName?: string,
-    value?: boolean
-};
-
-export default Textarea;

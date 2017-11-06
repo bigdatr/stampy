@@ -1,4 +1,4 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import React, {Component} from 'react';
 import {fromJS} from 'immutable';
@@ -113,7 +113,7 @@ export default ConfigureHock(
 
                 generateChildProps(nextValue: *, valueChangePairs: List<string>): Object {
                     return valueChangePairs
-                        .reduce((props: Object, pair: ValueChangePairList) => {
+                        .reduce((props: Object, pair: ValueChangePairList): Object => {
                             const [pairValue, pairChange] = pair.toArray();
                             props[pairValue] = get(nextValue, pairValue);
                             props[pairChange] = this.createPartialChange(pair);
@@ -149,7 +149,7 @@ export default ConfigureHock(
             }
 
             return SpreadPipe;
-        }
+        };
     },
     (): Object => ({
         valueChangePairs: [['value', 'onChange']],

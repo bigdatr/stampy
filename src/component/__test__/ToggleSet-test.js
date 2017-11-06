@@ -137,13 +137,6 @@ test('ToggleSet should call onChange with appropriate values', tt => {
 
 });
 
-test('ToggleSet should cope with no onChange', tt => {
-
-    const toggles = shallow(<ToggleSet options={options} />).children();
-    toggles.first().prop('onChange')(true);
-
-});
-
 test('ToggleSet should call onChange with appropriate values, when it already has a value', tt => {
 
     const onChange = sinon.spy();

@@ -24,12 +24,14 @@ const options = [
 
 test('Select returns value through onChange', tt => {
     const onChange = sinon.spy();
-    shallow(Select({onChange, options}));
+    const wrapper = shallow(<Select onChange={onChange} options={options} />);
+    wrapper.render();
     tt.is(onChange.getCall(0).args[0], 'foo');
 });
 
 test('Select multi returns array of value through onChange', tt => {
     const onChange = sinon.spy();
-    shallow(Select({onChange, options, multi: true}));
+    const wrapper = shallow(<Select onChange={onChange} options={options} multi />);
+    wrapper.render();
     tt.deepEqual(onChange.getCall(0).args[0], ['foo', 'bar']);
 });

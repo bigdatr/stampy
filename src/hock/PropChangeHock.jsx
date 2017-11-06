@@ -1,6 +1,7 @@
 // @flow
 
-import React, {Component} from 'react';
+import React from 'react';
+import type {ComponentType, Element} from 'react';
 import {is, List} from 'immutable';
 import ConfigureHock from '../util/ConfigureHock';
 import {getIn} from '../util/CollectionUtils';
@@ -11,7 +12,7 @@ import {getIn} from '../util/CollectionUtils';
 
 export default ConfigureHock(
     (config: Function): HockApplier => {
-        return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
+        return (ComponentToDecorate: ComponentType<*>): ComponentType<*> => {
 
             /**
              * @component
@@ -43,7 +44,7 @@ export default ConfigureHock(
              * @memberof module:Hocks
              */
 
-            class PropChangeHock extends Component {
+            class PropChangeHock extends React.Component<Object> {
                 onPropChange: Function;
                 constructor(props: Object) {
                     super(props);
@@ -54,7 +55,7 @@ export default ConfigureHock(
                 }
                 componentWillReceiveProps(nextProps: Object) {
                     const propsHaveChanged = List(config(nextProps).paths)
-                        .some(ii => {
+                        .some((ii: string): boolean => {
                             const keyPath = ii.split('.');
                             return !is(
                                 getIn(this.props, keyPath),
@@ -63,14 +64,14 @@ export default ConfigureHock(
                         });
 
                     if(propsHaveChanged) {
-                        this.onPropChange = config(nextProps).onPropChange
+                        this.onPropChange = config(nextProps).onPropChange,
                         this.onPropChange(nextProps);
                     }
                 }
-                render(): React.Element<any> {
+                render(): Element<*> {
                     const props = {
                         ...this.props
-                    }
+                    };
 
                     if(config(this.props).passOnPropChange) {
                         props.onPropChange = this.onPropChange;
@@ -81,7 +82,7 @@ export default ConfigureHock(
             }
 
             return PropChangeHock;
-        }
+        };
     },
     (): Object => ({
         paths: [],

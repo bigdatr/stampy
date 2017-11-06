@@ -1,15 +1,22 @@
 // @flow
 
-import React, {Component} from 'react';
+import React from 'react';
+import type {ComponentType, Element} from 'react';
 import ConfigureHock from '../util/ConfigureHock';
 
 /**
  * @module Hocks
  */
 
+type Props = {};
+type State = {
+    value: *
+};
+type ChildProps = {};
+
 export default ConfigureHock(
     (config: Function): HockApplier => {
-        return (ComponentToDecorate: ReactClass<any>): ReactClass<any> => {
+        return (ComponentToDecorate: ComponentType<Props>): ComponentType<ChildProps> => {
 
             /**
              * @component
@@ -64,7 +71,7 @@ export default ConfigureHock(
              * @memberof module:Hocks
              */
 
-            class StateHock extends Component {
+            class StateHock extends React.Component<Props, State> {
                 state: Object;
                 initialState: *;
                 constructor(props: Object) {
@@ -73,12 +80,12 @@ export default ConfigureHock(
                     this.initialState = initialState;
                     this.state = {
                         value: initialState
-                    }
+                    };
                 }
                 componentWillReceiveProps(nextProps: Object) {
                     const onPropChange = config(nextProps).onPropChange;
                     if(onPropChange) {
-                        onPropChange(this.onChange, nextProps, this.state.value)
+                        onPropChange(this.onChange, nextProps, this.state.value);
                     }
                 }
                 onChange: Function = (payload: Function) => {
@@ -86,7 +93,7 @@ export default ConfigureHock(
                         value: payload
                     });
                 }
-                render(): React.Element<any> {
+                render(): Element<*> {
                     const {
                         valueProp,
                         onChangeProp
@@ -105,7 +112,7 @@ export default ConfigureHock(
             }
 
             return StateHock;
-        }
+        };
     },
     (): Object => ({
         initialState: undefined,

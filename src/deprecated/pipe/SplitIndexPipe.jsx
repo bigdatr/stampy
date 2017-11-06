@@ -1,4 +1,4 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import React, {Component} from 'react';
 import {fromJS, List, Map, Range} from 'immutable';
@@ -85,7 +85,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                     // P.S. we don't care if onChange functions aren't equal as these aren't used in the creation of child props
                     // (they are only used when onChange is actually called)
                     const valuesHaveChanged: boolean = prevValueChangeProps
-                        .some((prev, key) => {
+                        .some((prev: *, key: *): * => {
                             return prev.get('valueLength') !== nextValueChangeProps.getIn([key, 'valueLength'])
                                 || prev.get('value') !== nextValueChangeProps.getIn([key, 'value']);
                         });
@@ -125,7 +125,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                             valueName: ii.get(0),
                             onChangeName: ii.get(1)
                         }))
-                        .reduce((map: ValueChangeProps, ii: Map<string,*>) => {
+                        .reduce((map: ValueChangeProps, ii: Map<string,*>): * => {
                             return map.set(ii.get('valueName'), ii);
                         }, Map());
                 }
@@ -149,7 +149,7 @@ const SplitIndexPipe: Function = ConfigureHock(
 
                 static unzipValues(zipped: List<Map<string,*>>, valueNames: List<string>): Map<string,List<*>> {
                     return Map(
-                        valueNames.reduce((obj: Object, valueName: string) => {
+                        valueNames.reduce((obj: Object, valueName: string): * => {
                             obj[valueName] = zipped.map(ii => ii.get(valueName));
                             return obj;
                         }, {})
@@ -243,6 +243,7 @@ const SplitIndexPipe: Function = ConfigureHock(
                             });
 
                         // call onChange for the list keys
+                        /* eslint-disable react/prop-types */
                         this.props.listKeysChange && this.props.listKeysChange(updatedListKeys);
                     };
 
@@ -307,14 +308,14 @@ const SplitIndexPipe: Function = ConfigureHock(
                     modify(valueListUpdated, listKeysUpdated);
                 };
 
-                onSwapNext: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number) => {
+                onSwapNext: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number): * => {
                     if(index >= value.size - 1) {
                         return;
                     }
                     return this.onSwap(value, listKeys, modify)(index, index + 1);
                 };
 
-                onSwapPrev: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number) => {
+                onSwapPrev: Function = (value: List<Map<string,*>>, listKeys: List<number>, modify: Function) => (index: number): * => {
                     if(index < 1) {
                         return;
                     }
@@ -328,7 +329,7 @@ const SplitIndexPipe: Function = ConfigureHock(
             }
 
             return SplitIndexPipe;
-        }
+        };
     },
     DEFAULT_PROPS
 );

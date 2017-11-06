@@ -1,4 +1,4 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import React, {Component} from 'react';
 import ConfigureHock from '../../util/ConfigureHock';
@@ -97,7 +97,7 @@ export default ConfigureHock(
             }
 
             return UpPipe;
-        }
+        };
     },
     (): Object => ({
         payloadChange: DEFAULT_PAYLOAD,

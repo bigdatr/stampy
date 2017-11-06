@@ -18,8 +18,7 @@ test(`DownPipe matches (config) => (Component) => Hock`, tt => {
 test(`DownPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = DownPipe()(componentToWrap);
-    const myWrappedComponent = new WrappedComponent();
-    myWrappedComponent.props = {};
+    const myWrappedComponent = new WrappedComponent({a: 1});
 
     var render1: Object = Map(myWrappedComponent.render().props);
     var render2: Object = Map(myWrappedComponent.render().props);

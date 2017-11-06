@@ -1,8 +1,7 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {ChildrenArray, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 
 /**
  * @module Inputs
@@ -23,71 +22,56 @@ import StampyPropTypes from '../decls/PropTypes';
  * @category ControlledComponent
  */
 
-function Toggle(props: ToggleProps): React.Element<any> {
-    const {
-        children,
-        className,
-        disabled,
-        modifier,
-        onChange,
-        spruceName,
-        toggleProps,
-        value
-    } = props;
+type Props = {
+    children?: ChildrenArray<*>,
+    className?: string, // {ClassName}
+    disabled: boolean, // Set to true to disable the input. When disabled, `onChange` will no longer be called when the input changes
+    modifier?: SpruceModifier, // {SpruceModifier}
+    onChange?: (newValue: boolean, meta: OnChangeMeta) => void, // {OnChange}
+    peer?: string, // {SprucePeer}
+    placeholder?: string, // {Placeholder}
+    spruceName: string, // {SpruceName}
+    toggleProps?: Object, // Attributes applied to the component's <button> HTML element
+    value?: boolean // Boolean indicating if the toggle should be active or not
+};
 
-    const additionalClassNames: Object = {
-        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        [`${spruceName}-active`]: !!value,
-        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        [`${spruceName}-disabled`]: disabled
-
+export default class Toggle extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        disabled: false,
+        toggleProps: {},
+        modifier: '',
+        spruceName: 'Toggle',
+        value: false
     };
 
-    return <button
-        {...toggleProps}
-        className={SpruceClassName({name: spruceName, modifier, className}, additionalClassNames)}
-        disabled={disabled}
-        onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
-        type="button"
-        children={children}
-    />;
+    render(): Element<*> {
+        const {
+            children,
+            className,
+            disabled,
+            modifier,
+            onChange,
+            peer,
+            spruceName,
+            toggleProps,
+            value
+        } = this.props;
+
+        const additionalClassNames: Object = {
+            // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+            [`${spruceName}-active`]: !!value,
+            // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+            [`${spruceName}-disabled`]: disabled
+        };
+
+        return <button
+            {...toggleProps}
+            className={SpruceClassName({name: spruceName, modifier, className, peer}, additionalClassNames)}
+            disabled={disabled}
+            onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
+            type="button"
+            children={children}
+        />;
+    }
 }
-
-Toggle.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-    /** Set to true to disable the toggle. When disabled `onChange` will no longer be called when clicked */
-    disabled: PropTypes.bool,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    /** {OnChangeBoolean} */
-    onChange: StampyPropTypes.onChangeBoolean,
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName,
-    /** {HtmlProps} */
-    toggleProps: StampyPropTypes.htmlProps,
-    /** Boolean indicating if the toggle should be active or not */
-    value: PropTypes.bool
-};
-
-Toggle.defaultProps = {
-    className: '',
-    disabled: false,
-    toggleProps: {},
-    modifier: '',
-    spruceName: 'Toggle',
-    value: false
-};
-
-type ToggleProps = {
-    children?: React.Element<*>,
-    className?: string,
-    disabled?: boolean,
-    modifier?: SpruceModifier,
-    onChange?: OnChangeBoolean,
-    spruceName?: string,
-    toggleProps?: Object,
-    value?: boolean
-};
-
-export default Toggle;

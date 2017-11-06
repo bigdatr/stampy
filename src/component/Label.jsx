@@ -1,8 +1,7 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {ChildrenArray, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 
 /**
  * @module Components
@@ -17,51 +16,40 @@ import StampyPropTypes from '../decls/PropTypes';
  * return <Label htmlFor='something'>Label for thing</Label>
  */
 
-function Label(props: LabelProps): React.Element<any> {
-    const {
-        children,
-        className,
-        htmlFor,
-        labelProps,
-        modifier,
-        spruceName
-    } = props;
+type Props = {
+    children?: ChildrenArray<*>,
+    className?: string, // {ClassName}
+    htmlFor?: string, // The id of the input HTML element this label corresponds to
+    labelProps?: Object, // Attributes applied to the component's <label> HTML element
+    modifier?: SpruceModifier, // {SpruceModifier}
+    peer: string, // {SprucePeer}
+    spruceName: string // {SpruceName}
+};
 
-    return <label
-        {...labelProps}
-        htmlFor={htmlFor}
-        className={SpruceClassName({name: spruceName, modifier, className})}
-        children={children}
-    />;
+export default class Label extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        labelProps: {},
+        modifier: '',
+        spruceName: 'Label'
+    };
+
+    render(): Element<*> {
+        const {
+            children,
+            className,
+            htmlFor,
+            labelProps,
+            modifier,
+            peer,
+            spruceName
+        } = this.props;
+
+        return <label
+            {...labelProps}
+            htmlFor={htmlFor}
+            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            children={children}
+        />;
+    }
 }
-
-Label.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-    /** The id of the input HTML element this label corresponds to. */
-    htmlFor: PropTypes.string,
-    /** {HtmlProps} */
-    labelProps: StampyPropTypes.htmlProps,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName
-};
-
-Label.defaultProps = {
-    className: '',
-    labelProps: {},
-    modifier: '',
-    spruceName: 'Label'
-};
-
-type LabelProps = {
-    children?: React.Element<*>,
-    className?: string,
-    htmlFor?: string,
-    labelProps?: Object,
-    modifier?: SpruceModifier,
-    spruceName?: string
-};
-
-export default Label;

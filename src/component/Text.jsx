@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import type {ChildrenArray, Element} from 'react';
+import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
 
 // peer dependencies
@@ -32,21 +32,25 @@ let moment = require('moment');
 
 type Props = {
     children?: ChildrenArray<*>,
-    className?: string, // {ClassName}
+    className: string, // {ClassName}
     dateFormat?: string, // Moment format string. Will cause children to be cast to a Date and passed through [moment.format](https://momentjs.com/docs/#/displaying/)
-    element: string, // Name of the HTML element to render as
-    modifier?: SpruceModifier, // {SpruceModifier}
+    element: ComponentType<*>, // Name of the HTML element to render as
+    modifier: SpruceModifier, // {SpruceModifier}
     numberFormat?: string, // Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/)
     onClick?: OnClick, // {OnClick}
-    peer?: string, // {SprucePeer}
+    peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
     style: Object // React style object to apply to the rendered HTML element
 };
 
 export default class Text extends React.Component<Props> {
     static defaultProps = {
-        element: "span",
-        spruceName: "Text"
+        className: '',
+        element: 'span',
+        modifier: '',
+        peer: '',
+        spruceName: 'Text',
+        style: {}
     };
 
     render(): Element<*> {
@@ -63,13 +67,13 @@ export default class Text extends React.Component<Props> {
             style
         } = this.props;
 
-        let isNumberOrString = typeof children === "string" || typeof children === "number";
-
-        if(isNumberOrString && numberFormat) {
+        if((typeof children === "string" || typeof children === "number") && numberFormat) {
             children = numeral(children).format(numberFormat);
         }
 
-        if(isNumberOrString && dateFormat) {
+        // this typeof check must happen in this if, statement
+        // because otherwise flow 0.54.1 cant work out that children would only be a number or a string
+        if((typeof children === "string" || typeof children === "number") && dateFormat) {
             children = moment(new Date(children)).format(dateFormat);
         }
 

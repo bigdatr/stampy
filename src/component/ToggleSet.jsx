@@ -62,20 +62,21 @@ type ToggleOption = {
 };
 
 type Props = {
-    className?: string, // {ClassName}
-    clearable: ?boolean, // Boolean indicating if the selection can be cleared
+    className: string, // {ClassName}
+    clearable: boolean, // Boolean indicating if the selection can be cleared
     disabled: boolean, // Set to true to disable the toggle set. When disabled, `onChange` will no longer be called when the value changes
-    modifier?: SpruceModifier, // ${SpruceModifier}
-    multi: ?boolean, // Boolean indicating if more than one selected item at once
-    onChange: (newValues: Array<string>|string, meta: OnChangeMeta) => void, // ${OnChange}
+    modifier: SpruceModifier, // ${SpruceModifier}
+    multi: boolean, // Boolean indicating if more than one selected item at once
+    onChange?: (newValues: Array<string>|string, meta: OnChangeMeta) => void, // ${OnChange}
     options: ToggleOption[], // The options that the user can select. Each will appear as a toggle
-    peer?: string, // ${SprucePeer}
+    peer: string, // ${SprucePeer}
     spruceName: string, // {SpruceName}
-    toggleProps?: Object, // Attributes applied to the component's <div> HTML element
+    style: Object, // React style object to apply to the rendered HTML element
+    toggleProps: Object, // Attributes applied to the component's <div> HTML element
     toggleSetProps?: Object, // Attributes applied each toggle component's <button> HTML element
     toggleSpruceName: string, // The spruce name used by each toggle in the toggle set
-    toggleModifier?: SpruceModifier, // The spruce modifiers applied to each toggle in the toggle set
-    value: string|Array<string> /**
+    toggleModifier: SpruceModifier, // The spruce modifiers applied to each toggle in the toggle set
+    value?: string|Array<string> /**
      * The values that have been selected. Under normal usage these should correspond to values in the `options` array.
      * When `multi=false` this expects a string or boolean, or when `multi=true` this expects an array of strings or booleans.
      */
@@ -85,11 +86,17 @@ type Props = {
 export default class ToggleSet extends React.Component<Props> {
     static defaultProps = {
         className: '',
+        clearable: false,
         disabled: false,
-        toggleSetProps: {},
         modifier: '',
+        multi: false,
+        peer: '',
         spruceName: 'ToggleSet',
-        toggleSpruceName: 'ToggleSet_toggle'
+        style: {},
+        toggleProps: {},
+        toggleSetProps: {},
+        toggleSpruceName: 'ToggleSet_toggle',
+        toggleModifier: ''
     };
 
     render(): Element<*> {
@@ -105,6 +112,7 @@ export default class ToggleSet extends React.Component<Props> {
             options,
             peer,
             spruceName,
+            style,
             toggleSpruceName,
             toggleModifier,
             value
@@ -162,6 +170,7 @@ export default class ToggleSet extends React.Component<Props> {
             {...toggleSetProps}
             className={SpruceClassName({name: spruceName, modifier, className, peer})}
             children={toggles}
+            style={style}
         />;
     }
 }

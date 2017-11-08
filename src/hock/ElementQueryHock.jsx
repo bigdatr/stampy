@@ -13,6 +13,14 @@ type ElementQuery = {
 
 type Props = {};
 
+type State = {
+    ready: boolean,
+    active: string[],
+    inactive: [],
+    width?: number,
+    height?: number
+};
+
 type ChildProps = {
     eqWidth: number,
     eqHeight: number,
@@ -87,10 +95,11 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
          * @memberof module:Hocks
          */
 
-        class ElementQueryHock extends React.Component<Props> {
+        class ElementQueryHock extends React.Component<Props, State> {
             handleResize: Function;
-            state: Object;
             mounted: boolean;
+            state: Object;
+            wrapper: ?HTMLElement;
 
             constructor(props: Object) {
                 super(props);

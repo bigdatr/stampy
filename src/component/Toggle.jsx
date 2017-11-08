@@ -24,14 +24,15 @@ import SpruceClassName from '../util/SpruceClassName';
 
 type Props = {
     children?: ChildrenArray<*>,
-    className?: string, // {ClassName}
+    className: string, // {ClassName}
     disabled: boolean, // Set to true to disable the input. When disabled, `onChange` will no longer be called when the input changes
-    modifier?: SpruceModifier, // {SpruceModifier}
+    modifier: SpruceModifier, // {SpruceModifier}
     onChange?: (newValue: boolean, meta: OnChangeMeta) => void, // {OnChange}
-    peer?: string, // {SprucePeer}
+    peer: string, // {SprucePeer}
     placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
-    toggleProps?: Object, // Attributes applied to the component's <button> HTML element
+    style: Object, // React style object to apply to the rendered HTML element
+    toggleProps: Object, // Attributes applied to the component's <button> HTML element
     value?: boolean // Boolean indicating if the toggle should be active or not
 };
 
@@ -39,9 +40,11 @@ export default class Toggle extends React.Component<Props> {
     static defaultProps = {
         className: '',
         disabled: false,
-        toggleProps: {},
         modifier: '',
+        peer: '',
         spruceName: 'Toggle',
+        style: {},
+        toggleProps: {},
         value: false
     };
 
@@ -54,6 +57,7 @@ export default class Toggle extends React.Component<Props> {
             onChange,
             peer,
             spruceName,
+            style,
             toggleProps,
             value
         } = this.props;
@@ -72,6 +76,7 @@ export default class Toggle extends React.Component<Props> {
             onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
             type="button"
             children={children}
+            style={style}
         />;
     }
 }

@@ -18,24 +18,27 @@ import SpruceClassName from '../util/SpruceClassName';
  */
 
 type Props = {
-    buttonProps?: Object, // {HtmlProps}
+    buttonProps: Object, // {HtmlProps}
     children?: ChildrenArray<*>,
-    className?: string, // {ClassName}
-    disabled?: boolean, // Set to true to disable the button, and `onClick` calls will no longer be called when clicked.
-    modifier?: SpruceModifier, // {SpruceModifier}
+    className: string, // {ClassName}
+    disabled: boolean, // Set to true to disable the button, and `onClick` calls will no longer be called when clicked.
+    modifier: SpruceModifier, // {SpruceModifier}
     onClick?: OnClick, // {OnClick}
-    peer?: string, // {SprucePeer}
+    peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
-    type: ?string // HTML button type
+    style: Object, // React style object to apply to the rendered HTML element
+    type: string // HTML button type
 };
 
 export default class Button extends React.Component<Props> {
     static defaultProps = {
+        buttonProps: {},
         className: '',
         disabled: false,
-        buttonProps: {},
         modifier: '',
+        peer: '',
         spruceName: 'Button',
+        style: {},
         type: 'button'
     };
 
@@ -49,6 +52,7 @@ export default class Button extends React.Component<Props> {
             onClick,
             peer,
             spruceName,
+            style,
             type
         } = this.props;
 
@@ -64,6 +68,7 @@ export default class Button extends React.Component<Props> {
             disabled={disabled}
             onClick={!disabled && onClick}
             type={type}
+            style={style}
         />;
     }
 }

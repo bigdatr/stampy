@@ -12,7 +12,7 @@ import SpruceClassName from '../util/SpruceClassName';
 // Th
 
 type ThProps = {
-    schemaItem: Map<any,any>
+    schemaItem: Map<string,*>
 };
 
 function Th(props: ThProps): Element<*> {
@@ -38,8 +38,8 @@ function Th(props: ThProps): Element<*> {
 // Td
 
 type TdProps = {
-    row: Map<any,any>,
-    schemaItem: Map<any,any>
+    row: Map<string,*>,
+    schemaItem: Map<string,*>
 };
 
 function Td(props: TdProps): Element<*> {
@@ -133,17 +133,17 @@ function Td(props: TdProps): Element<*> {
 type Schema = List<SchemaItem> | Array<SchemaItem> | Function;
 
 type SchemaItem = {
-    value: string | (row: Map<any>) => Element<*>,
-    heading: string | () => Element<*>,
-    render: (row: Map<any>) => Element<*>,
-    width: string
+    value?: string | (row: Map<string,*>) => string|Element<*>,
+    heading?: string | () => string|Element<*>,
+    render?: (row: Map<string,*>) => Element<*>,
+    width?: string | number
 };
 
 type TableProps = {
-    className?: string, // {ClassName}
+    className: string, // {ClassName}
     data: List<Object|Map<string,*>>|Array<Object|Map<string,*>>, // Collection of data to display in the table.
-    modifier?: SpruceModifier, // {SpruceModifier}
-    peer?: string, // {SprucePeer}
+    modifier: SpruceModifier, // {SpruceModifier}
+    peer: string, // {SprucePeer}
     rowProps: (row: Object) => Object, // {TableRowProps}
     schema: Schema, /**
          * {Array<TableSchemaColumn>|List<TableSchemaColumn>|Function}
@@ -151,6 +151,7 @@ type TableProps = {
          * or a function that receives the current data row and should return a schema.
          */
     spruceName: string, // {SpruceName}
+    style: Object, // React style object to apply to the rendered HTML element
     tableProps?: Object // Attributes applied to the component's <table> HTML element
 };
 
@@ -159,9 +160,11 @@ export default class Table extends React.Component<TableProps> {
         className: '',
         data: List(),
         modifier: '',
+        peer: '',
         rowProps: () => ({}),
         schema: List(),
         spruceName: 'Table',
+        style: {},
         tableProps: {}
     };
 
@@ -179,6 +182,7 @@ export default class Table extends React.Component<TableProps> {
             rowProps,
             schema,
             spruceName,
+            style,
             tableProps
         } = this.props;
 
@@ -196,7 +200,11 @@ export default class Table extends React.Component<TableProps> {
             })
             .toArray();
 
-        return <table {...tableProps} className={SpruceClassName({name: spruceName, modifier, className, peer})}>
+        return <table
+            {...tableProps}
+            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            style={style}
+        >
             <thead><tr>{tableHead}</tr></thead>
             <tbody>{tableBody}</tbody>
         </table>;

@@ -22,21 +22,26 @@ import Compose from '../util/Compose';
  */
 
 type Props = {
-    children: ChildrenArray<*>,
-    className?: string,
-    modifier?: SpruceModifier,
+    children?: ChildrenArray<*>,
+    className: string,
+    modifier: SpruceModifier,
     onClick: (show: boolean) => void,
-    peer?: string,
-    show?: boolean,
+    peer: string,
+    show: boolean,
     spruceName: string,
+    style: Object, // React style object to apply to the rendered HTML element
     toggle: ComponentType<*>
 };
 
 export default class ShowHide extends React.Component<Props> {
     static defaultProps = {
+        className: '',
+        modifier: '',
         onClick: (data) => data,
+        peer: '',
         show: false,
-        spruceName: 'ShowHide'
+        spruceName: 'ShowHide',
+        style: {}
     };
 
     render(): Element<*> {
@@ -48,10 +53,11 @@ export default class ShowHide extends React.Component<Props> {
             peer,
             show,
             spruceName: name,
+            style,
             toggle: Toggle
         } = this.props;
 
-        return <div className={SpruceClassName({name, modifier, className, peer})}>
+        return <div className={SpruceClassName({name, modifier, className, peer})} style={style}>
             <div className={`${name}_toggle`} onClick={() => onClick(!show)}>
                 <Toggle value={show} show={show} />
             </div>
@@ -73,14 +79,14 @@ export default class ShowHide extends React.Component<Props> {
  */
 
 type ShowHideStateProps = {
-    children: ChildrenArray<*>,
+    children?: ChildrenArray<*>,
     className?: string,
-    defaultShow: boolean,
+    defaultShow?: boolean,
     modifier?: SpruceModifier,
-    onClick: (show: boolean) => void,
+    onClick?: (show: boolean) => void,
     peer?: string,
-    spruceName: string,
-    toggle: ComponentType<*>
+    spruceName?: string,
+    toggle?: ComponentType<*>
 };
 
 type StatefulChildProps = {

@@ -93,9 +93,13 @@ test('disabled button', (tt: Object) => {
     );
 
     tt.true(
-        wrapper.render().children().first().hasClass('Button-disabled'),
+        wrapper
+            .render()
+            .children()
+            .first()
+            .hasClass('Button-disabled'),
         'disabled buttons have a Button-disabled className'
-    )
+    );
 
     wrapper.find('button').simulate('click');
     tt.false(
@@ -106,5 +110,13 @@ test('disabled button', (tt: Object) => {
 
 test('Button should apply buttonProps to outer element', (tt: Object) => {
     const button = shallow(<Button buttonProps={{'data-test': "test"}} />);
-    tt.is(button.render().children().first().get(0).attribs['data-test'], "test");
+    tt.is(
+        button
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test'],
+        "test"
+    );
 });

@@ -18,17 +18,18 @@ import SpruceClassName from '../util/SpruceClassName';
  */
 
 type Props = {
-    className?: string, // {ClassName}
-    disabled?: boolean, // Set to true to disable the input. When disabled, `onChange` will no longer be called when the input changes
-    inputProps?: Object, // Attributes applied to the component's <input> HTML element
-    modifier?: SpruceModifier, // {SpruceModifier}
+    className: string, // {ClassName}
+    disabled: boolean, // Set to true to disable the input. When disabled, `onChange` will no longer be called when the input changes
+    inputProps: Object, // Attributes applied to the component's <input> HTML element
+    modifier: SpruceModifier, // {SpruceModifier}
     name?: string, // HTML name attribute for the input
     onChange?: OnChange, // {OnChange}
     peer: string, // {SprucePeer}
     placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
+    style: Object, // React style object to apply to the rendered HTML element
     type?: string, // HTML type attribute for the input
-    value?: string // {Value}
+    value?: ?string // {Value}
 };
 
 export default class Input extends React.Component<Props> {
@@ -37,8 +38,9 @@ export default class Input extends React.Component<Props> {
         disabled: false,
         inputProps: {},
         modifier: '',
-        name: '',
+        peer: '',
         spruceName: 'Input',
+        style: {},
         type: 'text',
         value: ''
     };
@@ -53,6 +55,7 @@ export default class Input extends React.Component<Props> {
             onChange,
             peer,
             spruceName,
+            style,
             type,
             value,
             placeholder
@@ -67,6 +70,7 @@ export default class Input extends React.Component<Props> {
             className={SpruceClassName({name: spruceName, modifier, className, peer})}
             onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
             value={(value == null) ? '' : value}
+            style={style}
         />;
     }
 }

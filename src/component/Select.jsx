@@ -13,17 +13,18 @@ type SelectOption = {
 };
 
 type Props = {
-    className?: string, // {ClassName}
-    clearable: ?boolean, // Boolean indicating if the selection can be cleared
-    disabled: ?boolean, // Set to true to disable the select. When disabled, `onChange` will no longer be called when the value changes
-    modifier?: SpruceModifier, // ${SpruceModifier}
-    multi: ?boolean, // Boolean indicating if more than one selected item at once
-    onChange: OnChangeMulti, // ${OnChange}
+    className: string, // {ClassName}
+    clearable?: boolean, // Boolean indicating if the selection can be cleared
+    disabled?: boolean, // Set to true to disable the select. When disabled, `onChange` will no longer be called when the value changes
+    modifier: SpruceModifier, // ${SpruceModifier}
+    multi?: boolean, // Boolean indicating if more than one selected item at once
+    onChange?: OnChangeMulti, // ${OnChange}
     options: SelectOption[], // Array of options that the user can select from
-    peer?: string, // ${SprucePeer}
-    placeholder: ?string, // {Placeholder}
+    peer: string, // ${SprucePeer}
+    placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
-    value: string|Array<string> // {Value}
+    style: Object, // React style object to apply to the rendered HTML element
+    value?: string|Array<string> // {Value}
 };
 
 /**
@@ -64,7 +65,11 @@ type Props = {
 
 export default class Select extends React.Component<Props> {
     static defaultProps = {
-        spruceName: 'Select'
+        className: '',
+        modifier: '',
+        peer: '',
+        spruceName: 'Select',
+        style: {}
     };
 
     render(): Element<*> {
@@ -74,17 +79,19 @@ export default class Select extends React.Component<Props> {
             className,
             modifier,
             peer,
-            spruceName: name
+            spruceName: name,
+            style
         } = this.props;
 
         const modifiedOnChange: Function = multi
-            ? (options, meta) => onChange(options.map(ii => ii.value), meta)
-            : (option, meta) => onChange(option && option.value, meta);
+            ? (options, meta) => onChange && onChange(options.map(ii => ii.value), meta)
+            : (option, meta) => onChange && onChange(option && option.value, meta);
 
         return <ReactSelect
             {...this.props}
             className={SpruceClassName({name, modifier, className, peer})}
             onChange={modifiedOnChange}
+            style={style}
         />;
     }
 }

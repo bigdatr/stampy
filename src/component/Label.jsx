@@ -18,12 +18,13 @@ import SpruceClassName from '../util/SpruceClassName';
 
 type Props = {
     children?: ChildrenArray<*>,
-    className?: string, // {ClassName}
+    className: string, // {ClassName}
     htmlFor?: string, // The id of the input HTML element this label corresponds to
     labelProps?: Object, // Attributes applied to the component's <label> HTML element
-    modifier?: SpruceModifier, // {SpruceModifier}
+    modifier: SpruceModifier, // {SpruceModifier}
     peer: string, // {SprucePeer}
-    spruceName: string // {SpruceName}
+    spruceName: string, // {SpruceName}
+    style: Object // React style object to apply to the rendered HTML element
 };
 
 export default class Label extends React.Component<Props> {
@@ -31,7 +32,9 @@ export default class Label extends React.Component<Props> {
         className: '',
         labelProps: {},
         modifier: '',
-        spruceName: 'Label'
+        peer: '',
+        spruceName: 'Label',
+        style: {}
     };
 
     render(): Element<*> {
@@ -42,7 +45,8 @@ export default class Label extends React.Component<Props> {
             labelProps,
             modifier,
             peer,
-            spruceName
+            spruceName,
+            style
         } = this.props;
 
         return <label
@@ -50,6 +54,7 @@ export default class Label extends React.Component<Props> {
             htmlFor={htmlFor}
             className={SpruceClassName({name: spruceName, modifier, className, peer})}
             children={children}
+            style={style}
         />;
     }
 }

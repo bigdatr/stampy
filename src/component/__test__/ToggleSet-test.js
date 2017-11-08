@@ -1,3 +1,4 @@
+// @flow
 import test from 'ava';
 import React from 'react';
 import {shallow} from 'enzyme';
@@ -10,42 +11,60 @@ const options = [
     {value: "3", label: "three"}
 ];
 
-test('ToggleSet should have a class of ToggleSet', tt => {
-    const toggleSet = shallow(<ToggleSet options={options} />);
-    tt.true(toggleSet.render().children().first().hasClass('ToggleSet'));
-});
-
-test('ToggleSet should apply spruceName as class on ToggleSet', tt => {
-    const toggleSet = shallow(<ToggleSet options={options} spruceName="NewName" />);
-    tt.true(toggleSet.render().children().first().hasClass('NewName'));
-});
-
-test('ToggleSet should apply a class of ToggleSet_toggle to all toggles by default', tt => {
+test('ToggleSet should apply a class of ToggleSet_toggle to all toggles by default', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} />).children();
+
     tt.deepEqual(
-        toggles.map(ii => /\ToggleSet_toggle\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        toggles.map((ii: Object): boolean => {
+            const classes = ii
+                .render()
+                .children()
+                .first()
+                .get(0)
+                .attribs['class'];
+
+            return /\bToggleSet_toggle\b/.test(classes);
+        }),
         [true, true, true]
     );
 });
 
-test('ToggleSet should apply toggleSpruceName to all toggles', tt => {
+test('ToggleSet should apply toggleSpruceName to all toggles', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} toggleSpruceName="NewName" />).children();
     tt.deepEqual(
-        toggles.map(ii => /\bNewName\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        toggles.map((ii: Object): boolean => {
+            const classes = ii
+                .render()
+                .children()
+                .first()
+                .get(0)
+                .attribs['class'];
+
+            return /\bNewName\b/.test(classes);
+        }),
         [true, true, true]
     );
 });
 
-test('ToggleSet should apply toggleModifier to all toggles', tt => {
+test('ToggleSet should apply toggleModifier to all toggles', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} toggleSpruceName="NewName" toggleModifier="big" />).children();
     tt.deepEqual(
-        toggles.map(ii => /\bNewName-big\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        toggles.map((ii: Object): boolean => {
+            const classes = ii
+                .render()
+                .children()
+                .first()
+                .get(0)
+                .attribs['class'];
+
+            return /\bNewName-big\b/.test(classes);
+        }),
         [true, true, true]
     );
 });
 
-test('ToggleSet should apply toggleModifier function to all toggles', tt => {
-    const toggleModifier = (ii, index) => {
+test('ToggleSet should apply toggleModifier function to all toggles', (tt: Object) => {
+    const toggleModifier = (ii: Object, index: number): string => {
         tt.is(ii, options[index], 'toggleModifier function is passed correct args');
         return "big";
     };
@@ -53,18 +72,34 @@ test('ToggleSet should apply toggleModifier function to all toggles', tt => {
     tt.plan(4);
     const toggles = shallow(<ToggleSet options={options} toggleSpruceName="NewName" toggleModifier={toggleModifier} />).children();
     tt.deepEqual(
-        toggles.map(ii => /\bNewName-big\b/.test(ii.render().children().first().get(0).attribs['class'])),
+        toggles.map((ii: Object): boolean => {
+            const classes = ii
+                .render()
+                .children()
+                .first()
+                .get(0)
+                .attribs['class'];
+
+            return /\bNewName-big\b/.test(classes);
+        }),
         [true, true, true]
     );
 });
 
-
-test('ToggleSet should apply toggleSetProps to outer element', tt => {
+test('ToggleSet should apply toggleSetProps to outer element', (tt: Object) => {
     const toggleSet = shallow(<ToggleSet options={options} toggleSetProps={{'data-test': "test"}} />);
-    tt.is(toggleSet.render().children().first().get(0).attribs['data-test'], "test");
+    tt.is(
+        toggleSet
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test'],
+        "test"
+    );
 });
 
-test('ToggleSet should render toggle with labels according to options', tt => {
+test('ToggleSet should render toggle with labels according to options', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} />).children();
     tt.deepEqual(
         toggles.map(ii => ii.prop('children')),
@@ -72,15 +107,21 @@ test('ToggleSet should render toggle with labels according to options', tt => {
     );
 });
 
-test('ToggleSet should apply toggleProps to all toggles', tt => {
+test('ToggleSet should apply toggleProps to all toggles', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} toggleProps={{'data-test': "test"}} />).children();
     tt.deepEqual(
-        toggles.map(ii => ii.render().children().first().get(0).attribs['data-test']),
+        toggles.map(ii => ii
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test']
+        ),
         ["test", "test", "test"]
     );
 });
 
-test('ToggleSet should render active toggles according to value', tt => {
+test('ToggleSet should render active toggles according to value', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} />).children();
     tt.deepEqual(
         toggles.map(ii => ii.prop('value')),
@@ -100,7 +141,7 @@ test('ToggleSet should render active toggles according to value', tt => {
     );
 });
 
-test('ToggleSet should render active toggles according to value with multi=true', tt => {
+test('ToggleSet should render active toggles according to value with multi=true', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} multi />).children();
     tt.deepEqual(
         toggles.map(ii => ii.prop('value')),
@@ -126,7 +167,7 @@ test('ToggleSet should render active toggles according to value with multi=true'
     );
 });
 
-test('ToggleSet should call onChange with appropriate values', tt => {
+test('ToggleSet should call onChange with appropriate values', (tt: Object) => {
 
     const onChange = sinon.spy();
     const toggles = shallow(<ToggleSet options={options} onChange={onChange} />).children();
@@ -137,7 +178,7 @@ test('ToggleSet should call onChange with appropriate values', tt => {
 
 });
 
-test('ToggleSet should call onChange with appropriate values, when it already has a value', tt => {
+test('ToggleSet should call onChange with appropriate values, when it already has a value', (tt: Object) => {
 
     const onChange = sinon.spy();
     const toggles = shallow(<ToggleSet options={options} onChange={onChange} value="2" />).children();
@@ -148,7 +189,7 @@ test('ToggleSet should call onChange with appropriate values, when it already ha
 
 });
 
-test('ToggleSet should not call onChange with current value when not clearable and user clicks active toggle', tt => {
+test('ToggleSet should not call onChange with current value when not clearable and user clicks active toggle', (tt: Object) => {
 
     const onChange = sinon.spy();
     const toggles = shallow(<ToggleSet options={options} onChange={onChange} value="1" />).children();
@@ -157,7 +198,7 @@ test('ToggleSet should not call onChange with current value when not clearable a
 
 });
 
-test('ToggleSet should call onChange with empty string when clearable and user clicks active toggle', tt => {
+test('ToggleSet should call onChange with empty string when clearable and user clicks active toggle', (tt: Object) => {
 
     const onChange = sinon.spy();
     const toggles = shallow(<ToggleSet options={options} onChange={onChange} value="1" clearable />).children();
@@ -167,7 +208,7 @@ test('ToggleSet should call onChange with empty string when clearable and user c
     tt.is(onChange.firstCall.args[0], "");
 });
 
-test('ToggleSet should call onChange with appropriate values when multi=true', tt => {
+test('ToggleSet should call onChange with appropriate values when multi=true', (tt: Object) => {
 
     const onChange = sinon.spy();
     const toggles = shallow(<ToggleSet options={options} onChange={onChange} multi />).children();
@@ -187,3 +228,60 @@ test('ToggleSet should call onChange with appropriate values when multi=true', t
     tt.true(onChange3.calledOnce, 'onChange should be called once');
     tt.deepEqual(onChange3.firstCall.args[0], []);
 });
+
+test('toggleset classes', (tt: Object) => {
+    tt.truthy(
+        shallow(<ToggleSet options={options}/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('ToggleSet'),
+        'toggleset should have a class of ToggleSet'
+    );
+
+    tt.truthy(
+        shallow(<ToggleSet options={options} spruceName="Thing"/>)
+            .render().
+            children()
+            .first()
+            .hasClass('Thing'),
+        'toggleset should change class if given a spruceName prop'
+    );
+
+    tt.truthy(
+        shallow(<ToggleSet options={options} modifier="large"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('ToggleSet-large'),
+        'togglesets with modifiers should be rendered with that modifier class'
+    );
+
+    tt.truthy(
+        shallow(<ToggleSet options={options} peer="Thing"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('ToggleSet--Thing'),
+        'togglesets with peers should be rendered with that peer class'
+    );
+
+    tt.truthy(
+        shallow(<ToggleSet options={options} className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('foo'),
+        'togglesets with className should append className'
+    );
+
+    tt.truthy(
+        shallow(<ToggleSet options={options} className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('ToggleSet'),
+        'togglesets with className should not replace other class names'
+    );
+});
+

@@ -1,3 +1,4 @@
+// @flow
 import test from 'ava';
 import React from 'react';
 import {shallow} from 'enzyme';
@@ -45,16 +46,16 @@ const data = [
     }
 ];
 
-const renderAt = (wrapper, find, index) => {
+const renderAt = (wrapper: *, find: *, index: number): * => {
     return wrapper
         .find(find)
         .at(index)
         .render();
-}
+};
 
-test('th content rendering', tt => {
+test('th content rendering', (tt: Object) => {
     const wrapper = shallow(<Table data={data} schema={schema} />);
-    const ThList = (num) => {
+    const ThList = (num: number): * => {
         return wrapper
             .find('Th')
             .at(num)
@@ -70,7 +71,7 @@ test('th content rendering', tt => {
 });
 
 
-test('td content rendering', tt => {
+test('td content rendering', (tt: Object) => {
     const wrapper = shallow(<Table data={data} schema={schema} />);
 
     const firstRow = wrapper
@@ -89,7 +90,7 @@ test('td content rendering', tt => {
     tt.is(renderAt(firstRow, 'Td', 4).html(), '<td class="azt">9</td>');
 });
 
-const functionSchema = (row) => {
+const functionSchema = (): Array<Object> => {
     return [
         {
             heading: 'Col 1',
@@ -102,7 +103,7 @@ const functionSchema = (row) => {
     ];
 };
 
-test('rendering with schema as a function', tt => {
+test('rendering with schema as a function', (tt: Object) => {
     const wrapper = shallow(<Table data={data} schema={functionSchema} />);
 
     const firstRow = wrapper
@@ -113,8 +114,71 @@ test('rendering with schema as a function', tt => {
     tt.is(renderAt(firstRow, 'Td', 1).text(), '2');
 });
 
-test('Table should apply tableProps to outer element', tt => {
+test('Table should apply tableProps to outer element', (tt: Object) => {
     const table = shallow(<Table tableProps={{'data-test': "test"}} />);
-    tt.is(table.render().children().first().get(0).attribs['data-test'], "test");
+    tt.is(
+        table
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test'],
+        "test"
+    );
 });
 
+test('table classes', (tt: Object) => {
+    tt.truthy(
+        shallow(<Table data={data} schema={schema}/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Table'),
+        'table should have a class of Table'
+    );
+
+    tt.truthy(
+        shallow(<Table data={data} schema={schema} spruceName="Thing"/>)
+            .render().
+            children()
+            .first()
+            .hasClass('Thing'),
+        'table should change class if given a spruceName prop'
+    );
+
+    tt.truthy(
+        shallow(<Table data={data} schema={schema} modifier="large"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Table-large'),
+        'tables with modifiers should be rendered with that modifier class'
+    );
+
+    tt.truthy(
+        shallow(<Table data={data} schema={schema} peer="Thing"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Table--Thing'),
+        'tables with peers should be rendered with that peer class'
+    );
+
+    tt.truthy(
+        shallow(<Table data={data} schema={schema} className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('foo'),
+        'tables with className should append className'
+    );
+
+    tt.truthy(
+        shallow(<Table data={data} schema={schema} className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Table'),
+        'tables with className should not replace other class names'
+    );
+});

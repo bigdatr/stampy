@@ -70,15 +70,23 @@ export default ConfigureHock(
                 constructor(props: Object) {
                     super(props);
                     const {initialState} = config(props);
-                    this.initialState = initialState;
                     this.state = {
-                        value: initialState
+                        value: initialState,
+                        previousValue: initialState
                     }
                 }
                 componentWillReceiveProps(nextProps: Object) {
                     const onPropChange = config(nextProps).onPropChange;
                     if(onPropChange) {
-                        onPropChange(this.onChange, nextProps, this.state.value)
+                        // Call on prop change to check if the value should be updated.
+                        // Storing the value on previousValue allows for checking against
+                        // changes in props not state.
+                        onPropChange(
+                            (value) => this.setState({value, previousValue: value}),
+                            nextProps,
+                            this.state.previousValue,
+                            this.state.value
+                        );
                     }
                 }
                 onChange: Function = (payload: Function) => {
@@ -123,6 +131,7 @@ export default ConfigureHock(
  * @callback onPropChange
  * @param {function} onChange - Callback to update state with
  * @param {object} nextProps - The new set of props
+ * @param {*} previousState - The previous version of state (Either InitialState or the last onPropChange)
  * @param {*} state - The current version of state
  */
 

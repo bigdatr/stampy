@@ -23,7 +23,7 @@ const example = sinon.spy(() => {
     return <div>Example Component</div>;
 });
 
-const ElementQueryHockExample = ElementQueryHock([
+const ElementQueryHockExample = ElementQueryHock(() => [
     {
         name: 'medium',
         widthBounds: [1000, 1600],
@@ -100,11 +100,11 @@ test('ElementQueryHock', tt => {
     HockInstance.setState = sinon.spy(function() {});
     HockInstance.mounted = true;
 
-    HockInstance.state = {width: 300, height: 600}; // manually set state cos react won't do it without a mounted component
+    HockInstance.state = {width: 300, height: 600, active: [], inactive: []}; // manually set state cos react won't do it without a mounted component
     HockInstance.handleResize({clientWidth: 300, clientHeight: 600});
-    HockInstance.state = {width: 300, height: 600};
+    HockInstance.state = {width: 300, height: 600, active: [], inactive: []};
     HockInstance.handleResize({clientWidth: 600, clientHeight: 600});
-    HockInstance.state = {width: 600, height: 600};
+    HockInstance.state = {width: 600, height: 600, active: [], inactive: []};
     HockInstance.handleResize({clientWidth: 600, clientHeight: 600});
 
 

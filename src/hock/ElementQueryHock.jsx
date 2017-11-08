@@ -97,7 +97,9 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
                 this.handleResize = this.handleResize.bind(this);
                 this.mounted = false;
                 this.state = {
-                    ready: false
+                    ready: false,
+                    active: [],
+                    inactive: []
                 };
             }
 
@@ -141,6 +143,7 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
 
                 if(width === this.state.width && height === this.state.height) return;
 
+                var updated = false;
                 var active = [];
                 var inactive = [];
                 const eqList = eqs();
@@ -148,10 +151,22 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
                 for (var i = 0; i < eqList.length; i++) {
                     var eq = eqList[i];
                     if(this.checkIfActive(eq.widthBounds, eq.heightBounds, width, height)) {
+                        if(this.state.active.indexOf(eq.name) === -1) {
+                            updated = true;
+                        }
                         active.push(eq.name);
                     } else {
+                        if(this.state.inactive.indexOf(eq.name) === -1) {
+                            updated = true;
+                        }
                         inactive.push(eq.name);
                     }
+                }
+
+                // Don't change active and inactive arrays if nothing changed (stops unnecessary rerenders)
+                if(!updated) {
+                    active = this.state.active;
+                    inactive = this.state.inactive;
                 }
 
                 this.setState({width, height, active, inactive, ready: true});

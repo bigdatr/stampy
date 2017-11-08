@@ -1,5 +1,5 @@
 import React from 'react';
-import {SpruceComponent} from 'stampy';
+import SpruceComponent from 'stampy/lib/util/SpruceComponent';
 
 const Table = SpruceComponent('Table', 'table');
 export default () => {

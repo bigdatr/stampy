@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input} from 'stampy';
+import Input from 'stampy/lib/component/Input';
 
 export default class InputExample extends React.Component {
     constructor(props) {

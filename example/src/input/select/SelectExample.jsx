@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Select} from 'stampy';
+import Select from 'stampy/lib/component/Select';
 
 class SelectExample extends Component {
     constructor(props) {

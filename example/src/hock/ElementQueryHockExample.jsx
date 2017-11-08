@@ -1,5 +1,5 @@
 import React from 'react';
-import {ElementQueryHock} from 'stampy';
+import ElementQueryHock from 'stampy/lib/hock/ElementQueryHock';
 
 const example = (props) => {
     if(!props.eqReady) return <div>No data yet</div>;

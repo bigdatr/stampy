@@ -1,5 +1,5 @@
 import React from 'react';
-import {SpruceClassName} from 'stampy';
+import SpruceClassName from 'stampy/lib/util/SpruceClassName';
 
 export default () => {
     return <div>

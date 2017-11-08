@@ -1,5 +1,5 @@
 import React from 'react';
-import {StateHock} from 'stampy';
+import StateHock from 'stampy/lib/hock/StateHock';
 import {Map} from 'immutable';
 
 const Example = (props) => {

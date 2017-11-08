@@ -67,54 +67,9 @@ test('StateHock config.onPropChange should not be called if not provided', (tt: 
     tt.is(wrapper.instance().state.value, 0);
 });
 
-
-
-
-//
-// Hock Tests
-//
-
-// test('StateHock matches (config) => (Component) => Hock', (tt: Object) => {
-//     var Child = () => <div/>;
-//     tt.is(typeof StateHock, 'function');
-//     tt.is(typeof StateHock(), 'function');
-//     tt.is(typeof StateHock()(Child), 'function');
-// });
-
-// test('StateHock passes other props through', (tt: Object) => {
-//     var Child = () => <div/>;
-//     var Component = StateHock()(Child);
-//     tt.is(shallow(<Component foo="bar" />).props().foo, 'bar');
-//     tt.is(shallow(<Component value="bar" />).props().value, undefined);
-// });
-
-// test('StateHock does not recreate props every render', (tt: Object) => {
-//     const WrappedComponent = StateHock()(() => <div>Example Component</div>);
-//     const myWrappedComponent = new WrappedComponent({
-//         a: 1,
-//         b: 2
-//     });
-
-//     var render1: Object = Map(myWrappedComponent.render().props);
-//     var render2: Object = Map(myWrappedComponent.render().props);
-
-//     render1.forEach((prop, key) => {
-//         tt.is(prop, render2.get(key), `Prop "${key}" must be strictly equal on re-render`);
-//     });
-// });
-
-// test('StateHock will allow you to change valueProp, onChangeProp & initialState', (tt: Object) => {
-//     var Child = () => <div/>;
-//     var Component = StateHock((props) => ({
-//         initialState: 0,
-//         valueProp: 'foo',
-//         onChangeProp: 'changeFoo'
-//     }))(Child);
-
-//     tt.is(shallow(<Component foo="bar" />).props().foo, 0);
-//     tt.is(typeof shallow(<Component value="bar" />).props().changeFoo, 'function');
-// });
-
-//
-// Functionality
-//
+test('StateHock should be transparent, passes other props through', (tt: Object) => {
+    var Child = () => <div/>;
+    var Component = StateHock()(Child);
+    tt.is(shallow(<Component foo="bar" />).props().foo, 'bar');
+    tt.is(shallow(<Component value="bar" />).props().value, undefined);
+});

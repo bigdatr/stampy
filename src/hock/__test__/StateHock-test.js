@@ -43,8 +43,6 @@ test('StateHock props.onChange should replace value', (tt: Object) => {
     tt.is(instance.props().value, 1);
 });
 
-// onPropChange ???
-
 test('StateHock should call config.onPropChange if provided', (tt: Object) => {
     var Child = () => <div/>;
     var Component = StateHock({

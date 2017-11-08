@@ -104,11 +104,10 @@ export default Hock({
         };
     },
     defaultConfig: {
-        initialState: () => undefined,
-        valueProp: () => 'value',
-        onChangeProp: () => 'onChange',
-        /* eslint-disable no-unused-vars */
-        onPropChange: (onChange: Function, nextProps: Object, value: Object) => {}
+        initialState: (/* props: Object */) => undefined,
+        valueProp: (/* props: Object */) => 'value',
+        onChangeProp: (/* props: Object */) => 'onChange',
+        onPropChange: (/* onChange: Function, nextProps: Object, value: Object */) => {}
     },
     shorthandKey: "initialState"
 });

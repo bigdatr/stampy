@@ -183,7 +183,7 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
                             eqReady: this.state.ready
                         })}
                     />
-                </span>
+                </span>;
             }
         }
 

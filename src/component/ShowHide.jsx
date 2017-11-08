@@ -92,9 +92,7 @@ type StatefulChildProps = {
 
 export const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
     StateHock(({defaultShow = false}: ShowHideStateProps): Object => ({
-        initialState: {
-            show: defaultShow
-        }
+        show: defaultShow
     })),
     (Component) => (props: StatefulChildProps): Element<*> => {
         return <Component

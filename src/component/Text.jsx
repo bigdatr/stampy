@@ -45,7 +45,8 @@ type Props = {
 
 export default class Text extends React.Component<Props> {
     static defaultProps = {
-        element: 'span'
+        element: "span",
+        spruceName: "Text"
     };
 
     render(): Element<*> {

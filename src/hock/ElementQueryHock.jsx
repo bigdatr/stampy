@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type {ComponentType, Element} from 'react';
-import {findDOMNode} from 'react-dom';
+import Hock from '../util/Hock';
 import elementResizeDetectorMaker from 'element-resize-detector';
 
 type ElementQuery = {
@@ -30,7 +30,9 @@ if(typeof window !== 'undefined') { // Don't try to detect resize events on serv
  * @module Hocks
  */
 
-const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
+
+const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier => {
+    const eqs = config.eqs;
     return (ComposedComponent: ComponentType<Props>): ComponentType<ChildProps> => {
 
         /**
@@ -101,8 +103,8 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
 
             componentDidMount() {
                 this.mounted = true;
-                if(erd) {
-                    const container = findDOMNode(this).parentNode;
+                if(erd && this.wrapper) {
+                    const container = this.wrapper.parentNode;
                     erd.listenTo(container, this.handleResize);
                     this.handleResize(container);
                 }
@@ -110,8 +112,8 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
 
             componentWillUnmount() {
                 this.mounted = false;
-                if(erd) {
-                    erd.removeListener(findDOMNode(this).parentNode, this.handleResize);
+                if(erd && this.wrapper) {
+                    erd.removeListener(this.wrapper.parentNode, this.handleResize);
                 }
             }
 
@@ -141,9 +143,10 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
 
                 var active = [];
                 var inactive = [];
+                const eqList = eqs();
 
-                for (var i = 0; i < eqs.length; i++) {
-                    var eq = eqs[i];
+                for (var i = 0; i < eqList.length; i++) {
+                    var eq = eqList[i];
                     if(this.checkIfActive(eq.widthBounds, eq.heightBounds, width, height)) {
                         active.push(eq.name);
                     } else {
@@ -155,15 +158,17 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
             }
 
             render(): Element<*> {
-                return <ComposedComponent
-                    {...Object.assign({}, this.props, {
-                        eqWidth: this.state.width,
-                        eqHeight: this.state.height,
-                        eqActive: this.state.active,
-                        eqInactive: this.state.inactive,
-                        eqReady: this.state.ready
-                    })}
-                />;
+                return <span ref={(ii) => this.wrapper = ii}>
+                    <ComposedComponent
+                        {...Object.assign({}, this.props, {
+                            eqWidth: this.state.width,
+                            eqHeight: this.state.height,
+                            eqActive: this.state.active,
+                            eqInactive: this.state.inactive,
+                            eqReady: this.state.ready
+                        })}
+                    />
+                </span>
             }
         }
 
@@ -210,5 +215,12 @@ const ElementQueryDecorator = (eqs: ElementQuery[]): HockApplier => {
  * assumed that there is no maximum.
  */
 
-export default ElementQueryDecorator;
+export default Hock({
+    hock: ElementQueryHock,
+    defaultConfig: {
+        eqs: () => []
+    },
+    shorthandKey: "eqs"
+});
+
 

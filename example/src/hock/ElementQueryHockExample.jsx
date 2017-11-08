@@ -11,7 +11,7 @@ const example = (props) => {
     </div>
 }
 
-const ElementQueryHockExample = ElementQueryHock([
+const ElementQueryHockExample = ElementQueryHock(() => [
     {
         name: 'medium',
         widthBounds: [300, 600],

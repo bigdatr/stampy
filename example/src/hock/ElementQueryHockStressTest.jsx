@@ -15,7 +15,7 @@ const example = (props) => {
     </div>
 }
 
-const ElementQueryHockExample = ElementQueryHock([
+const ElementQueryHockExample = ElementQueryHock(() => [
     {
         name: 'tiny',
         widthBounds: [0, 100]

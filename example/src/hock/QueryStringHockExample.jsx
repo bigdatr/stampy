@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {QueryStringHock} from 'stampy';
+import QueryStringHock from 'stampy/lib/hock/QueryStringHock';
 
 const Example = (props) => {
     const {

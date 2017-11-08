@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table} from 'stampy';
+import Table from 'stampy/lib/component/Table';
 
 export default () => {
     const schema = [

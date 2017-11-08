@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ToggleSet} from 'stampy';
+import ToggleSet from 'stampy/lib/component/ToggleSet';
 
 class ToggleSetExample extends Component {
     constructor(props) {

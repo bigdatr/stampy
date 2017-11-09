@@ -96,9 +96,9 @@ const ElementQueryHock = (config: {eqs: () => Array<ElementQuery>}): HockApplier
          */
 
         class ElementQueryHock extends React.Component<Props, State> {
+
             handleResize: Function;
             mounted: boolean;
-            state: Object;
             wrapper: ?HTMLElement;
 
             constructor(props: Object) {

@@ -1,3 +1,5 @@
+/* eslint-disable flowtype/require-valid-file-annotation */
+
 /**
  * HTML class names to be added to the rendered component.
  *

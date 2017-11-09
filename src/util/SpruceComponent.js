@@ -1,6 +1,6 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from './SpruceClassName';
 
 /**
@@ -36,9 +36,18 @@ import SpruceClassName from './SpruceClassName';
  * }
  */
 
-export default function SpruceComponent(name: string, defaultElement: ReactClass<any>|string): Function {
+type SpruceComponentProps = {
+    children?: ChildrenArray<*>,
+    className?: string, // {ClassName}
+    element?: ComponentType<*>|string, // React component to render as, or name of the HTML element to render as
+    modifier?: SpruceModifier, // {SpruceModifier}
+    peer?: string, // {SprucePeer}
+    spruceName: string // {SpruceName}
+};
 
-    function spruceComponent(props: Object): React.Element<any> {
+export default function SpruceComponent(name: string, defaultElement: ComponentType<*>|string): Function {
+
+    function spruceComponent(props: SpruceComponentProps): Element<*> {
         const {
             children,
             className,
@@ -56,17 +65,6 @@ export default function SpruceComponent(name: string, defaultElement: ReactClass
             children={children}
             {...otherProps}
         />;
-    }
-
-    spruceComponent.propTypes = {
-        className: PropTypes.string,
-        element: PropTypes.oneOfType([
-            PropTypes.func,
-            PropTypes.string
-        ]),
-        modifier: PropTypes.string,
-        peer: PropTypes.string,
-        spruceName: PropTypes.string
     }
 
     spruceComponent.displayName = name;

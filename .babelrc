@@ -2,14 +2,5 @@
     "presets": [
         ["blueflag", {"browser": true}]
     ],
-    "ignore": [
-        "**/*-test.js"
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          "istanbul"
-        ]
-      }
-    }
+    "ignore": ["./lib"]
 }

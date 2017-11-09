@@ -1,10 +1,6 @@
 @import '~bruce/bruce';
-@import '~stampy/lib/style/base';
 
 @include bruce-reset;
-
-// @include SelectBase;
-@include Select;
 
 body, html {
     margin: 1rem;

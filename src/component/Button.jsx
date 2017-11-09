@@ -1,8 +1,7 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
+import type {ChildrenArray, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 
 /**
  * @module Components
@@ -18,68 +17,58 @@ import StampyPropTypes from '../decls/PropTypes';
  * return <Button>Button text</Button>
  */
 
-function Button(props: ButtonProps): React.Element<any> {
-    const {
-        buttonProps,
-        children,
-        className,
-        disabled,
-        modifier,
-        onClick,
-        spruceName,
-        type
-    } = props;
+type Props = {
+    buttonProps: Object, // {HtmlProps}
+    children?: ChildrenArray<*>,
+    className: string, // {ClassName}
+    disabled: boolean, // Set to true to disable the button, and `onClick` calls will no longer be called when clicked.
+    modifier: SpruceModifier, // {SpruceModifier}
+    onClick?: OnClick, // {OnClick}
+    peer: string, // {SprucePeer}
+    spruceName: string, // {SpruceName}
+    style: Object, // React style object to apply to the rendered HTML element
+    type: string // HTML button type
+};
 
-    const additionalClassNames: Object = {
-        // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        [`${spruceName}-disabled`]: disabled
+export default class Button extends React.Component<Props> {
+    static defaultProps = {
+        buttonProps: {},
+        className: '',
+        disabled: false,
+        modifier: '',
+        peer: '',
+        spruceName: 'Button',
+        style: {},
+        type: 'button'
     };
 
-    return <button
-        {...buttonProps}
-        children={children}
-        className={SpruceClassName({name: spruceName, modifier, className}, additionalClassNames)}
-        disabled={disabled}
-        onClick={!disabled && onClick}
-        type={type}
-    />;
+    render(): Element<any> {
+        const {
+            buttonProps,
+            children,
+            className,
+            disabled,
+            modifier,
+            onClick,
+            peer,
+            spruceName,
+            style,
+            type
+        } = this.props;
+
+        const additionalClassNames: Object = {
+            // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+            [`${spruceName}-disabled`]: disabled
+        };
+
+        return <button
+            {...buttonProps}
+            children={children}
+            className={SpruceClassName({name: spruceName, modifier, className, peer}, additionalClassNames)}
+            disabled={disabled}
+            onClick={!disabled && onClick}
+            type={type}
+            style={style}
+        />;
+    }
 }
-
-Button.propTypes = {
-    /** {HtmlProps} */
-    buttonProps: StampyPropTypes.htmlProps,
-    /** {ClassName} */
-    className: PropTypes.string,
-    /** Set to true to disable the button, and `onClick` calls will no longer be called when clicked. */
-    disabled: PropTypes.bool,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    /** {OnClick} */
-    onClick: PropTypes.func,
-    /** {SpruceName} */
-    spruceName: PropTypes.string,
-    /** HTML button type */
-    type: PropTypes.string
-};
-
-Button.defaultProps = {
-    className: '',
-    disabled: false,
-    buttonProps: {},
-    modifier: '',
-    spruceName: 'Button',
-    type: 'button'
-};
-
-type ButtonProps = {
-    buttonProps?: Object,
-    children?: React.Element<*>,
-    className?: string,
-    disabled?: boolean,
-    modifier?: SpruceModifier,
-    onClick?: OnClick,
-    spruceName?: string,
-    type: ?string
-};
-
-export default Button;

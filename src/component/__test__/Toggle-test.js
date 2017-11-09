@@ -1,10 +1,11 @@
+// @flow
 import test from 'ava';
 import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import Toggle from '../Toggle';
 
-test('toggle', tt => {
+test('toggle', (tt: Object) => {
 
     const trueToggleOnChange = sinon.spy();
     const falseToggleOnChange = sinon.spy();
@@ -28,17 +29,20 @@ test('toggle', tt => {
     );
 
     tt.true(
-        trueToggle.render().children().first().hasClass('Toggle'),
-        'toggle has a class of Toggle'
-    );
-
-    tt.true(
-        trueToggle.render().children().first().hasClass('Toggle-active'),
+        trueToggle
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle-active'),
         'toggle has a class of Toggle-active when value is true'
     );
 
     tt.false(
-        falseToggle.render().children().first().hasClass('Toggle-active'),
+        falseToggle
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle-active'),
         'toggle has not a class of Toggle-active when value is false'
     );
 
@@ -61,7 +65,7 @@ test('toggle', tt => {
 });
 
 
-test('disabled toggle', tt => {
+test('disabled toggle', (tt: Object) => {
     const toggleOnChange = sinon.spy();
     const wrapper = shallow(<Toggle disabled onChange={toggleOnChange}>Toggle</Toggle>);
 
@@ -78,7 +82,72 @@ test('disabled toggle', tt => {
 });
 
 
-test('Toggle should apply toggleProps to outer element', tt => {
+test('Toggle should apply toggleProps to outer element', (tt: Object) => {
     const toggle = shallow(<Toggle toggleProps={{'data-test': "test"}} />);
-    tt.is(toggle.render().children().first().get(0).attribs['data-test'], "test");
+    tt.is(
+        toggle
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test'],
+        "test"
+    );
 });
+
+test('toggle classes', (tt: Object) => {
+    tt.truthy(
+        shallow(<Toggle/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle'),
+        'toggle should have a class of Toggle'
+    );
+
+    tt.truthy(
+        shallow(<Toggle spruceName="Thing"/>)
+            .render().
+            children()
+            .first()
+            .hasClass('Thing'),
+        'toggle should change class if given a spruceName prop'
+    );
+
+    tt.truthy(
+        shallow(<Toggle modifier="large"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle-large'),
+        'toggles with modifiers should be rendered with that modifier class'
+    );
+
+    tt.truthy(
+        shallow(<Toggle peer="Thing"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle--Thing'),
+        'toggles with peers should be rendered with that peer class'
+    );
+
+    tt.truthy(
+        shallow(<Toggle className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('foo'),
+        'toggles with className should append className'
+    );
+
+    tt.truthy(
+        shallow(<Toggle className="foo"/>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Toggle'),
+        'toggles with className should not replace other class names'
+    );
+});
+

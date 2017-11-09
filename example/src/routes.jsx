@@ -20,12 +20,6 @@ import ElementQueryHockStressTest from 'hock/ElementQueryHockStressTest';
 import QueryStringHockExample from 'hock/QueryStringHockExample';
 import StateHockExample from 'hock/StateHockExample';
 
-import SpreadPipeExample from 'pipe/SpreadPipeExample';
-import SplitKeyPipeExample from 'pipe/SplitKeyPipeExample';
-import SplitIndexPipeExample from 'pipe/SplitIndexPipeExample';
-import DownPipeExample from 'pipe/DownPipeExample';
-import UpPipeExample from 'pipe/UpPipeExample';
-import DebouncePipeExample from 'pipe/DebouncePipeExample';
 
 import SpruceClassNameExample from 'util/SpruceClassNameExample';
 import SpruceComponentExample from 'util/SpruceComponentExample';
@@ -46,12 +40,6 @@ export const routesList = <Switch>
     <Route path="/hock/ElementQueryHockStressTest" component={ElementQueryHockStressTest}/>
     <Route path="/hock/QueryStringHock" component={QueryStringHockExample}/>
     <Route path="/hock/StateHock" component={StateHockExample}/>
-    <Route path="/pipe/SpreadPipe" component={SpreadPipeExample}/>
-    <Route path="/pipe/SplitKeyPipe" component={SplitKeyPipeExample}/>
-    <Route path="/pipe/SplitIndexPipe" component={SplitIndexPipeExample}/>
-    <Route path="/pipe/DownPipe" component={DownPipeExample}/>
-    <Route path="/pipe/UpPipe" component={UpPipeExample}/>
-    <Route path="/pipe/DebouncePipe" component={DebouncePipeExample}/>
     <Route component={ErrorHandler} />
 </Switch>;
 

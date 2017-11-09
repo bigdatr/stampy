@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ShowHide, ShowHideStateful} from 'stampy';
+import ShowHide, {ShowHideStateful} from 'stampy/lib/component/ShowHide';
 
 class ShowHideExample extends Component {
     constructor(props) {

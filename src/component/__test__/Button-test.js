@@ -1,10 +1,11 @@
+// @flow
 import test from 'ava';
 import React from 'react';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import Button from '../Button';
 
-test('basic button', tt => {
+test('basic button', (tt: Object) => {
     const onButtonClick = sinon.spy();
     const wrapper = shallow(<Button onClick={onButtonClick}>Button</Button>);
 
@@ -19,16 +20,6 @@ test('basic button', tt => {
         'modifier prop is not passed to HTML element'
     );
 
-    tt.truthy(
-        wrapper.render().children().first().hasClass('Button'),
-        'button has a class of button'
-    );
-
-    tt.truthy(
-        shallow(<Button modifier="large">Button</Button>).render().children().first().hasClass('Button-large'),
-        'buttons with modifiers are rendered with that modifier class'
-    );
-
     wrapper.find('button').simulate('click');
     tt.true(
         onButtonClick.calledOnce,
@@ -36,8 +27,63 @@ test('basic button', tt => {
     );
 });
 
+test('button classes', (tt: Object) => {
+    tt.truthy(
+        shallow(<Button>Button</Button>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Button'),
+        'button should have a class of Button'
+    );
 
-test('disabled button', tt => {
+    tt.truthy(
+        shallow(<Button spruceName="Thing">Button</Button>)
+            .render().
+            children()
+            .first()
+            .hasClass('Thing'),
+        'button should change class if given a spruceName prop'
+    );
+
+    tt.truthy(
+        shallow(<Button modifier="large">Button</Button>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Button-large'),
+        'buttons with modifiers should be rendered with that modifier class'
+    );
+
+    tt.truthy(
+        shallow(<Button peer="Thing">Button</Button>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Button--Thing'),
+        'buttons with peers should be rendered with that peer class'
+    );
+
+    tt.truthy(
+        shallow(<Button className="foo">Button</Button>)
+            .render()
+            .children()
+            .first()
+            .hasClass('foo'),
+        'buttons with className should append className'
+    );
+
+    tt.truthy(
+        shallow(<Button className="foo">Button</Button>)
+            .render()
+            .children()
+            .first()
+            .hasClass('Button'),
+        'buttons with className should not replace other class names'
+    );
+});
+
+test('disabled button', (tt: Object) => {
     const onButtonClick = sinon.spy();
     const wrapper = shallow(<Button disabled onClick={onButtonClick}>Button</Button>);
 
@@ -47,9 +93,13 @@ test('disabled button', tt => {
     );
 
     tt.true(
-        wrapper.render().children().first().hasClass('Button-disabled'),
+        wrapper
+            .render()
+            .children()
+            .first()
+            .hasClass('Button-disabled'),
         'disabled buttons have a Button-disabled className'
-    )
+    );
 
     wrapper.find('button').simulate('click');
     tt.false(
@@ -58,7 +108,15 @@ test('disabled button', tt => {
     );
 });
 
-test('Button should apply buttonProps to outer element', tt => {
+test('Button should apply buttonProps to outer element', (tt: Object) => {
     const button = shallow(<Button buttonProps={{'data-test': "test"}} />);
-    tt.is(button.render().children().first().get(0).attribs['data-test'], "test");
+    tt.is(
+        button
+            .render()
+            .children()
+            .first()
+            .get(0)
+            .attribs['data-test'],
+        "test"
+    );
 });

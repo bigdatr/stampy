@@ -1,15 +1,27 @@
 // @flow
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React from 'react';
+import type {ComponentType, Element} from 'react';
 import {fromJS, List, Map} from 'immutable';
 import URLSearchParams from 'url-search-params';
+
 
 /**
  * @module Hocks
  */
 
+type Props = {
+    location: Object,
+    history?: Object
+};
+
+type ChildProps = {
+    setQuery: Function,
+    updateQuery: Function
+};
+
 export default (config: ?Object = null): HockApplier => {
-    return (ComposedComponent: ReactClass<any>): ReactClass<any> => {
+    return (ComposedComponent: ComponentType<Props>): ComponentType<ChildProps> => {
 
         const replaceState: boolean = !!(config && config.replaceState);
         const queryPropName: string = (config && config.queryPropName) || "query";
@@ -17,9 +29,9 @@ export default (config: ?Object = null): HockApplier => {
 
         // default all array params to empty lists
         const defaultArrayParams: Map<string, List<string>> = arrayParams
-            .reduce((defaultQuery: Map<string, List<string>>, arrayParam: string) => {
+            .reduce((defaultQuery: Map<string, List<string>>, arrayParam: string): Map<string, List<string>> => {
                 return defaultQuery.set(arrayParam, List());
-            }, Map())
+            }, Map());
 
         // default query is comprised of the default array param lists,
         // with config.defaultQuery merged on top of it
@@ -88,25 +100,14 @@ export default (config: ?Object = null): HockApplier => {
          * @memberof module:Hocks
          */
 
-        class QueryStringHock extends Component {
-
-            updateQuery: Function;
-            setQuery: Function;
-
-            constructor(props: Object) {
-                super(props);
-
-                // explicit bind until es7
-                this.updateQuery = this.updateQuery.bind(this);
-                this.setQuery = this.setQuery.bind(this);
-            }
+        class QueryStringHock extends React.Component<Props> {
 
             /*
              * Gets the query object
              * @param {Object} props Props to refer to.
              */
 
-            getQuery(): Map<string, string|Array<string>> {
+            getQuery = (): Map<string, string|Array<string>> => {
                 if(!this.props.location) {
                     return Map();
                 }
@@ -122,7 +123,7 @@ export default (config: ?Object = null): HockApplier => {
                     .groupBy(ii => ii.get(0))
                     .toMap()
                     .map(param => param.map(ii => ii.get(1)))
-                    .map((value, key) => {
+                    .map((value: *, key: string): * => {
                         // if an array param, return list as is
                         if(arrayParams.contains(key)) {
                             return value;
@@ -133,7 +134,7 @@ export default (config: ?Object = null): HockApplier => {
 
                 return defaultQuery
                     .merge(groupedParams);
-            }
+            };
 
             /*
              * Partially updates the query.
@@ -149,12 +150,12 @@ export default (config: ?Object = null): HockApplier => {
              * An optional string that will replace the current pathname.
              */
 
-            updateQuery(queryParamsToUpdate: Object, pathname?: string) {
+            updateQuery = (queryParamsToUpdate: Object, pathname?: string) => {
                 const query = this.getQuery()
                     .merge(fromJS(queryParamsToUpdate))
                     .toJS();
                 this.setQuery(query, pathname);
-            }
+            };
 
             /*
              * Replaces the current query string with the params defined in `query`.
@@ -169,7 +170,7 @@ export default (config: ?Object = null): HockApplier => {
              * An optional string that will replace the current pathname.
              */
 
-            setQuery(query: Object, pathname?: string) {
+            setQuery = (query: Object, pathname?: string) => {
                 if(!this.props.location || !this.props.location.pathname) {
                     console.warn("Cannot call setQuery, QueryStringHock has not been given a react-router location.pathname prop");
                     return;
@@ -183,7 +184,7 @@ export default (config: ?Object = null): HockApplier => {
                 const newQuery: Object = fromJS(query)
                     .filter(ii => ii !== "" && ii != null); // non strict null comparison to catch undefined & null
 
-                if(!this.context.router) {
+                if(!this.context.router && this.props.history) {
                     // react router v1
                     this.props.history[`${routerMethod}State`](
                         null,
@@ -218,7 +219,7 @@ export default (config: ?Object = null): HockApplier => {
                             // $FlowFixMe: flow doesnt seem to know that List.isList() returns false for strings
                             return list.push(`${key}=${value}`);
                         }, List())
-                        .join("&")
+                        .join("&");
 
                     newPath += `?${newQueryString}`;
                 }
@@ -229,7 +230,7 @@ export default (config: ?Object = null): HockApplier => {
                 }
             }
 
-            render(): React.Element<any> {
+            render(): Element<*> {
                 const newProps: Object = {
                     [queryPropName]: this.getQuery().toJS(), // TODO memoize this!
                     setQuery: this.setQuery,
@@ -239,17 +240,12 @@ export default (config: ?Object = null): HockApplier => {
             }
         }
 
-        QueryStringHock.propTypes = {
-            location: PropTypes.object.isRequired,
-            history: PropTypes.object
-        };
-
         QueryStringHock.contextTypes = {
             router: PropTypes.object
         };
 
         return QueryStringHock;
-    }
+    };
 };
 
 /**

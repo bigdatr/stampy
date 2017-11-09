@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
-import numeral from 'numeral';
-import moment from 'moment';
+import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
+
+// peer dependencies
+let numeral = require('numeral');
+let moment = require('moment');
 
 /**
  * @module Components
@@ -29,58 +30,58 @@ import StampyPropTypes from '../decls/PropTypes';
  * </Text>
  */
 
-export default function Text(props: Object): React.Element<any> {
-    const {
-        spruceName = 'Text',
-        modifier,
-        numberFormat,
-        dateFormat,
-        className,
-        onClick,
-        style,
-        element: Element = 'span'
-    } = props;
-
-    var children = props.children;
-
-    if(numberFormat) {
-        children = numeral(children).format(numberFormat);
-    }
-
-    if(dateFormat) {
-        children = moment(new Date(children)).format(dateFormat);
-    }
-
-    return <Element
-        className={SpruceClassName({name: spruceName, modifier, className})}
-        style={style}
-        onClick={onClick}
-        children={children}
-    />;
-}
-
-Text.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-
-    /** {ReactElement} */
-    element: StampyPropTypes.element,
-
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-
-    /** Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/) */
-    numberFormat: PropTypes.string,
-
-    /** Moment format string. Will cause children to be cast to a Date and passed through [moment.format](https://momentjs.com/docs/#/displaying/) */
-    dateFormat: PropTypes.string,
-
-    /** {OnClick} */
-    onClick: StampyPropTypes.onClick,
-
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName,
-
-    /** {Style} */
-    style: StampyPropTypes.style
+type Props = {
+    children?: ChildrenArray<*>,
+    className: string, // {ClassName}
+    dateFormat?: string, // Moment format string. Will cause children to be cast to a Date and passed through [moment.format](https://momentjs.com/docs/#/displaying/)
+    element: ComponentType<*>, // Name of the HTML element to render as
+    modifier: SpruceModifier, // {SpruceModifier}
+    numberFormat?: string, // Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/)
+    onClick?: OnClick, // {OnClick}
+    peer: string, // {SprucePeer}
+    spruceName: string, // {SpruceName}
+    style: Object // React style object to apply to the rendered HTML element
 };
+
+export default class Text extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        element: 'span',
+        modifier: '',
+        peer: '',
+        spruceName: 'Text',
+        style: {}
+    };
+
+    render(): Element<*> {
+        let {
+            children,
+            className,
+            dateFormat,
+            element: TextElement,
+            modifier,
+            numberFormat,
+            onClick,
+            peer,
+            spruceName,
+            style
+        } = this.props;
+
+        if((typeof children === "string" || typeof children === "number") && numberFormat) {
+            children = numeral(children).format(numberFormat);
+        }
+
+        // this typeof check must happen in this if, statement
+        // because otherwise flow 0.54.1 cant work out that children would only be a number or a string
+        if((typeof children === "string" || typeof children === "number") && dateFormat) {
+            children = moment(new Date(children)).format(dateFormat);
+        }
+
+        return <TextElement
+            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            style={style}
+            onClick={onClick}
+            children={children}
+        />;
+    }
+}

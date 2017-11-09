@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'stampy';
+import Button from 'stampy/lib/component/Button';
 
 export default () => {
     return <div>

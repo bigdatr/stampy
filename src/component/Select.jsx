@@ -1,21 +1,30 @@
 // @flow
-import PropTypes from 'prop-types';
 import React from 'react';
-import ReactSelect from 'react-select';
+import type {Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import StampyPropTypes from '../decls/PropTypes';
 
-type SelectProps = {
-    className?: string,
-    clearable: ?boolean,
-    disabled: ?boolean,
-    modifier?: SpruceModifier,
-    multi: ?boolean,
-    onChange: OnChangeMulti,
-    options: Object[],
-    placeholder: ?string,
-    spruceName?: string,
-    value: any
+// peer dependencies
+let ReactSelect = require('react-select');
+
+type SelectOption = {
+    disabled?: boolean,
+    label: string,
+    value: string
+};
+
+type Props = {
+    className: string, // {ClassName}
+    clearable?: boolean, // Boolean indicating if the selection can be cleared
+    disabled?: boolean, // Set to true to disable the select. When disabled, `onChange` will no longer be called when the value changes
+    modifier: SpruceModifier, // ${SpruceModifier}
+    multi?: boolean, // Boolean indicating if more than one selected item at once
+    onChange?: OnChangeMulti, // ${OnChange}
+    options: SelectOption[], // Array of options that the user can select from
+    peer: string, // ${SprucePeer}
+    placeholder?: string, // {Placeholder}
+    spruceName: string, // {SpruceName}
+    style: Object, // React style object to apply to the rendered HTML element
+    value?: string|Array<string> // {Value}
 };
 
 /**
@@ -54,49 +63,35 @@ type SelectProps = {
  * return <Select onChange={(val) => doStuff(val)} options={options}/>
  */
 
-function Select(props: SelectProps): React.Element<any> {
-    const {
-        multi,
-        onChange,
-        className,
-        modifier,
-        spruceName: name
-    } = props;
+export default class Select extends React.Component<Props> {
+    static defaultProps = {
+        className: '',
+        modifier: '',
+        peer: '',
+        spruceName: 'Select',
+        style: {}
+    };
 
-    const modifiedOnChange: Function = multi
-        ? (options, meta) => onChange(options.map(ii => ii.value), meta)
-        : (option, meta) => onChange(option && option.value, meta);
+    render(): Element<*> {
+        const {
+            multi,
+            onChange,
+            className,
+            modifier,
+            peer,
+            spruceName: name,
+            style
+        } = this.props;
 
-    return <ReactSelect
-        {...props}
-        className={SpruceClassName({name, modifier, className})}
-        onChange={modifiedOnChange}
-    />;
+        const modifiedOnChange: Function = multi
+            ? (options, meta) => onChange && onChange(options.map(ii => ii.value), meta)
+            : (option, meta) => onChange && onChange(option && option.value, meta);
+
+        return <ReactSelect
+            {...this.props}
+            className={SpruceClassName({name, modifier, className, peer})}
+            onChange={modifiedOnChange}
+            style={style}
+        />;
+    }
 }
-
-Select.propTypes = {
-    /** {ClassName} */
-    className: StampyPropTypes.className,
-    clearable: PropTypes.bool,
-    disabled: PropTypes.bool,
-    /** {SpruceModifier} */
-    modifier: StampyPropTypes.spruceModifier,
-    multi: PropTypes.bool,
-    onChange: PropTypes.func,
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: PropTypes.string,
-            label: PropTypes.string
-        })
-    ),
-    placeholder: PropTypes.string,
-    /** {SpruceName} */
-    spruceName: StampyPropTypes.spruceName,
-    value: PropTypes.any
-};
-
-Select.defaultProps = {
-    spruceName: 'Select'
-};
-
-export default Select;

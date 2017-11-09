@@ -53,7 +53,7 @@ export default function ConfigureHock(hockCreator: Function, defaultConfig: Func
         if(typeof applierConfig !== "object") {
             throw new Error("applierConfig must be an object");
         }
-        const configWithDefaults: Function = (props: Object, ...otherArgs: *) => {
+        const configWithDefaults: Function = (props: Object, ...otherArgs: *): Object => {
             const configObject = config(props, ...otherArgs);
             if(typeof configObject !== "object") {
                 throw new Error("result of config function must be an object");

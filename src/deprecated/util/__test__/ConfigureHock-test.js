@@ -20,7 +20,7 @@ test('ConfigureHock should default config to a function that returns an empty ob
     ConfigureHock((config) => {
         tt.is(typeof config, "function", 'config is function');
         tt.deepEqual(config(), {}, 'config should return empty object');
-    });
+    })();
 });
 
 test('ConfigureHock should default config to a function that returns an empty object if passed null', tt => {
@@ -35,7 +35,7 @@ test('ConfigureHock should default config to a function that returns an empty ob
 test('ConfigureHock should default applierConfig to an empty object', tt => {
     ConfigureHock((config, applierConfig) => {
         tt.deepEqual(applierConfig, {}, 'applierConfig should be empty object');
-    }, () => ({}));
+    }, () => ({}))();
 });
 
 test('ConfigureHock should aplly defaults to individual config keys', tt => {

@@ -53,13 +53,13 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
         .split(' ')
         .filter(ii => ii != '')
         // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        .map(mm => `${name}-${mm}`)
+        .map(mm => `${name}-${mm}`);
 
     const peers: string = classnames(props.peer)
         .split(' ')
         .filter(ii => ii != '')
         // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
-        .map(pp => `${name}--${pp}`)
+        .map(pp => `${name}--${pp}`);
 
     return classnames(
         props.name,

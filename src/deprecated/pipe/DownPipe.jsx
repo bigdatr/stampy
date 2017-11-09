@@ -1,7 +1,7 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import React, {Component} from 'react';
-import ConfigureHock from '../../util/ConfigureHock';
+import ConfigureHock from '../util/ConfigureHock';
 
 /**
  * @module Pipes
@@ -51,7 +51,7 @@ export default ConfigureHock(
             }
 
             return DownPipe;
-        }
+        };
     },
     (props: Object): Object => ({
         childProps: props

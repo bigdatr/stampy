@@ -19,7 +19,7 @@ test(`UpPipe matches (config) => (Component) => Hock`, tt => {
 test(`UpPipe does not recreate props every render`, tt => {
     const componentToWrap = () => <div>Example Component</div>;
     const WrappedComponent = UpPipe()(componentToWrap);
-    const myWrappedComponent = new WrappedComponent({});
+    const myWrappedComponent = new WrappedComponent({a: 1});
 
     var render1: Object = Map(myWrappedComponent.render().props);
     var render2: Object = Map(myWrappedComponent.render().props);

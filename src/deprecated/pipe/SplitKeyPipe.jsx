@@ -1,9 +1,9 @@
-// @flow
+/* eslint-disable flowtype/require-valid-file-annotation */
 
 import React, {Component} from 'react';
 import {fromJS, List, Map, is} from 'immutable';
-import ConfigureHock from '../../util/ConfigureHock';
-import {getIn, setIn} from '../../util/CollectionUtils';
+import ConfigureHock from '../util/ConfigureHock';
+import {getIn, setIn} from '../util/CollectionUtils';
 import memoize from 'lru-memoize';
 
 /**
@@ -118,10 +118,10 @@ export default ConfigureHock(
                             return flatPipes.set(path, null);
                         }, Map())
                         // assign an object with value/change pairs to each
-                        .map((pipe: *, path: string) => {
+                        .map((pipe: *, path: string): * => {
                             return this.createPipe(path, valueChangeProps);
                         })
-                        .reduce((pipes: Object, pipe: Object, path: string) => {
+                        .reduce((pipes: Object, pipe: Object, path: string): * => {
                             return setIn(pipes, path.split("."), pipe);
                         }, {});
                 };
@@ -169,7 +169,7 @@ export default ConfigureHock(
             }
 
             return SplitKeyPipe;
-        }
+        };
     },
     (): Object => ({
         paths: [],

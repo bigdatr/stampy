@@ -1,5 +1,6 @@
 import React from 'react';
-import {Label, Input} from 'stampy';
+import Label from 'stampy/lib/component/Label';
+import Input from 'stampy/lib/component/Input';
 
 export default () => {
     return <div>

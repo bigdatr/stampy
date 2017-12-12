@@ -71,7 +71,7 @@ export default class Select extends React.Component<Props> {
         modifier: '',
         peer: '',
         spruceName: 'Select',
-        valueKey: 'id',
+        valueKey: 'value',
         style: {}
     };
 

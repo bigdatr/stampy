@@ -17,10 +17,12 @@ const Select = proxyquire('../Select', {'react-select': FakeSelect}).default;
 
 const options = [
     {
-        value: 'foo'
+        id: 'foo',
+        name: 'FOO'
     },
     {
-        value: 'bar'
+        id: 'bar',
+        name: 'BAR'
     }
 ];
 
@@ -36,4 +38,11 @@ test('Select multi returns array of value through onChange', (tt: Object) => {
     const wrapper = shallow(<Select onChange={onChange} options={options} multi />);
     wrapper.render();
     tt.deepEqual(onChange.getCall(0).args[0], ['foo', 'bar']);
+});
+
+test('Select can choose any value', (tt: Object) => {
+    const onChange = sinon.spy();
+    const wrapper = shallow(<Select onChange={onChange} options={options} valueKey="name" multi />);
+    wrapper.render();
+    tt.deepEqual(onChange.getCall(0).args[0], ['FOO', 'BAR']);
 });

@@ -8,8 +8,8 @@
  * `Hock` creates hocks for you.
  *
  * @example
- * export default Hock(
- *     (config) => {
+ * export default Hock({
+ *     hock: (config) => {
  *         return (ComponentToDecorate) => {
  *             class CoolHock extends Component {
  *                 render() {
@@ -22,10 +22,11 @@
  *             return CoolHock;
  *         }
  *     },
- *     () => ({
- *         name: "default name"
- *     })
- * );
+ *     defaultConfig: {
+ *         name: () => "default name"
+ *     }
+ *     shorthandKey: 'name'
+ * });
  *
  * @name Hock
  * @kind function

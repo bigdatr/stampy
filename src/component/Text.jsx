@@ -4,8 +4,8 @@ import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
 
 // peer dependencies
-let numeral = require('numeral');
-let moment = require('moment');
+import numeral from 'numeral';
+import moment from 'moment';
 
 /**
  * @module Components

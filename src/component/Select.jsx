@@ -2,9 +2,7 @@
 import React from 'react';
 import type {Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-
-// peer dependencies
-let ReactSelect = require('react-select');
+import ReactSelect from 'react-select';
 
 type SelectOption = {
     disabled?: boolean,

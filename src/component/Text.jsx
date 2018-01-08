@@ -35,6 +35,7 @@ type Props = {
     className: string, // {ClassName}
     dateFormat?: string, // Moment format string. Will cause children to be cast to a Date and passed through [moment.format](https://momentjs.com/docs/#/displaying/)
     element: ComponentType<*>, // Name of the HTML element to render as
+    htmlProps: Object, // Object of HTML attributes to apply to the rendered element
     modifier: SpruceModifier, // {SpruceModifier}
     numberFormat?: string, // Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/)
     onClick?: OnClick, // {OnClick}
@@ -47,6 +48,7 @@ export default class Text extends React.Component<Props> {
     static defaultProps = {
         className: '',
         element: 'span',
+        htmlProps: {},
         modifier: '',
         peer: '',
         spruceName: 'Text',
@@ -59,6 +61,7 @@ export default class Text extends React.Component<Props> {
             className,
             dateFormat,
             element: TextElement,
+            htmlProps,
             modifier,
             numberFormat,
             onClick,
@@ -82,6 +85,7 @@ export default class Text extends React.Component<Props> {
             style={style}
             onClick={onClick}
             children={children}
+            {...htmlProps}
         />;
     }
 }

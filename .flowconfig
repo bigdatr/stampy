@@ -8,3 +8,4 @@ src/decls/FlowTypes.js
 
 [ignore]
 .*/node_modules/fbjs/.*
+.*/node_modules/unmutable/.*

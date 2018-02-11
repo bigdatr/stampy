@@ -3375,6 +3375,12 @@ is-plain-object@^2.0.3:
   dependencies:
     isobject "^3.0.0"
 
+is-plain-object@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-2.0.4.tgz#2c163b3fafb1b606d9d17928f05c2a1c38e07677"
+  dependencies:
+    isobject "^3.0.1"
+
 is-posix-bracket@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz#3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
@@ -3466,6 +3472,10 @@ isobject@^2.0.0:
 isobject@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.0.tgz#39565217f3661789e8a0a0c080d5f7e6bc46e1a0"
+
+isobject@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
 isomorphic-fetch@^2.1.1:
   version "2.2.1"
@@ -5565,6 +5575,13 @@ unique-temp-dir@^1.0.0:
 universalify@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
+
+unmutable@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/unmutable/-/unmutable-0.19.0.tgz#d76847880c46d93767ba572b2ce9a8b59e31613d"
+  dependencies:
+    fast-deep-equal "^1.0.0"
+    is-plain-object "^2.0.4"
 
 unzip-response@^2.0.1:
   version "2.0.1"

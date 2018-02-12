@@ -6,8 +6,8 @@ import set from 'unmutable/lib/pa/set';
 import pipeWith from 'unmutable/lib/util/pipeWith';
 
 // peer dependencies
-let numeral = require('numeral');
-let moment = require('moment');
+import numeral from 'numeral';
+import moment from 'moment';
 
 /**
  * @module Components

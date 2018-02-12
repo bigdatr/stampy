@@ -5577,8 +5577,8 @@ universalify@^0.1.0:
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
 
 unmutable@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/unmutable/-/unmutable-0.19.0.tgz#d76847880c46d93767ba572b2ce9a8b59e31613d"
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/unmutable/-/unmutable-0.19.2.tgz#d62d90f5630f4685e8eac9da06c6b78aa068b626"
   dependencies:
     fast-deep-equal "^1.0.0"
     is-plain-object "^2.0.4"

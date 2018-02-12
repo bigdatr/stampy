@@ -23,6 +23,11 @@ test('Text will format dates', (tt: Object) => {
     tt.is(shallow(<Text dateFormat="DD-MM-YYYY" children={'1970-01-01'}/>).node.props.children, '01-01-1970');
 });
 
+test('Text will format dates for title attribute', (tt: Object) => {
+    tt.is(shallow(<Text titleDateFormat="YYYY-MM-DD" children={0}/>).node.props.title, '1970-01-01');
+    tt.is(shallow(<Text titleDateFormat="DD-MM-YYYY" children={'1970-01-01'}/>).node.props.title, '01-01-1970');
+});
+
 test('text classes', (tt: Object) => {
     tt.truthy(
         shallow(<Text/>)
@@ -35,8 +40,8 @@ test('text classes', (tt: Object) => {
 
     tt.truthy(
         shallow(<Text spruceName="Thing"/>)
-            .render().
-            children()
+            .render()
+            .children()
             .first()
             .hasClass('Thing'),
         'text should change class if given a spruceName prop'

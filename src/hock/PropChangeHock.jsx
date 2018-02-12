@@ -2,9 +2,9 @@
 
 import React from 'react';
 import type {ComponentType, Element} from 'react';
-import {is, List} from 'immutable';
+import {is} from 'immutable';
 import ConfigureHock from '../deprecated/util/ConfigureHock';
-import {getIn} from '../deprecated/util/CollectionUtils';
+import getIn from 'unmutable/lib/pa/getIn';
 
 /**
  * @module Hocks
@@ -54,12 +54,15 @@ export default ConfigureHock(
                     this.onPropChange(this.props);
                 }
                 componentWillReceiveProps(nextProps: Object) {
-                    const propsHaveChanged = List(config(nextProps).paths)
+                    const propsHaveChanged = config(nextProps)
+                        .paths
                         .some((ii: string): boolean => {
                             const keyPath = ii.split('.');
+                            const getKeyPath = getIn(keyPath);
+
                             return !is(
-                                getIn(this.props, keyPath),
-                                getIn(nextProps, keyPath)
+                                getKeyPath(this.props),
+                                getKeyPath(nextProps)
                             );
                         });
 

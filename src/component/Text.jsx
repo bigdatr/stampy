@@ -2,6 +2,8 @@
 import React from 'react';
 import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
+import set from 'unmutable/lib/pa/set';
+import pipeWith from 'unmutable/lib/util/pipeWith';
 
 // peer dependencies
 import numeral from 'numeral';
@@ -41,7 +43,8 @@ type Props = {
     onClick?: OnClick, // {OnClick}
     peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
-    style: Object // React style object to apply to the rendered HTML element
+    style: Object, // React style object to apply to the rendered HTML element
+    titleDateFormat?: string // Moment format string like `dateFormat`, but will be rendered as a title attribute.
 };
 
 export default class Text extends React.Component<Props> {
@@ -52,7 +55,8 @@ export default class Text extends React.Component<Props> {
         modifier: '',
         peer: '',
         spruceName: 'Text',
-        style: {}
+        style: {},
+        titleDateFormat: ''
     };
 
     render(): Element<*> {
@@ -67,24 +71,36 @@ export default class Text extends React.Component<Props> {
             onClick,
             peer,
             spruceName,
-            style
+            style,
+            titleDateFormat
         } = this.props;
 
+        let childrenToRender = children;
+
         if((typeof children === "string" || typeof children === "number") && numberFormat) {
-            children = numeral(children).format(numberFormat);
+            childrenToRender = numeral(children).format(numberFormat);
         }
 
         // this typeof check must happen in this if, statement
         // because otherwise flow 0.54.1 cant work out that children would only be a number or a string
         if((typeof children === "string" || typeof children === "number") && dateFormat) {
-            children = moment(new Date(children)).format(dateFormat);
+            childrenToRender = moment(new Date(children)).format(dateFormat);
+        }
+
+        // this typeof check must happen in this if, statement
+        // because otherwise flow 0.54.1 cant work out that children would only be a number or a string
+        if((typeof children === "string" || typeof children === "number") && titleDateFormat) {
+            htmlProps = pipeWith(
+                htmlProps,
+                set('title', moment(new Date(children)).format(titleDateFormat))
+            );
         }
 
         return <TextElement
             className={SpruceClassName({name: spruceName, modifier, className, peer})}
             style={style}
             onClick={onClick}
-            children={children}
+            children={childrenToRender}
             {...htmlProps}
         />;
     }

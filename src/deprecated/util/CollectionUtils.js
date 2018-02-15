@@ -7,6 +7,14 @@ import {
 } from 'immutable';
 import isPlainObject from 'is-plain-object';
 
+import unmutableGet from 'unmutable/lib/pa/get';
+import unmutableSet from 'unmutable/lib/pa/set';
+import unmutableGetIn from 'unmutable/lib/pa/getIn';
+import unmutableSetIn from 'unmutable/lib/pa/setIn';
+import unmutableHas from 'unmutable/lib/pa/has';
+import unmutableIsKeyed from 'unmutable/lib/util/isKeyed';
+import unmutableIsIndexed from 'unmutable/lib/util/isIndexed';
+
 /**
  * @module Utils
  */
@@ -28,7 +36,7 @@ const clone: Function = (item: Object|Array<*>): Object|Array<*> => {
  */
 
 export function isKeyed(item: *): boolean {
-    return isPlainObject(item) || Iterable.isKeyed(item);
+    return unmutableIsKeyed(item);
 }
 
 /**
@@ -44,7 +52,7 @@ export function isKeyed(item: *): boolean {
  */
 
 export function isIndexed(item: *): boolean {
-    return Array.isArray(item) || Iterable.isIndexed(item);
+    return unmutableIsIndexed(item);
 }
 
 /**
@@ -90,13 +98,7 @@ export function has(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  */
 
 export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, notFoundValue: * = undefined): * {
-    if(!has(collection, key)) {
-        return notFoundValue;
-    }
-    if(Iterable.isIterable(collection)) {
-        return collection.get(key, notFoundValue);
-    }
-    return collection[key];
+    return unmutableGet(key, notFoundValue)(collection);
 }
 
 /**
@@ -117,14 +119,7 @@ export function get(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  */
 
 export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string>, notFoundValue: * = undefined): * {
-    var item: * = collection;
-    for(let key of keyPath) {
-        if(!has(item, key)) {
-            return notFoundValue;
-        }
-        item = get(item, key);
-    }
-    return item;
+    return unmutableGetIn(keyPath, notFoundValue)(collection);
 }
 
 /**
@@ -141,16 +136,7 @@ export function getIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Arr
  */
 
 export function set(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|number, value: *): List<*>|Map<*,*>|Object|Array<*> {
-    if(Iterable.isIterable(collection)) {
-        return collection.set(key, value);
-    }
-
-    var newCollection: Array<*>|Object = collection
-        ? clone(collection)
-        : {};
-
-    newCollection[key] = value;
-    return newCollection;
+    return unmutableSet(key, value)(collection);
 }
 
 /**
@@ -173,19 +159,7 @@ export function set(collection: List<*>|Map<*,*>|Object|Array<*>, key: string|nu
  */
 
 export function setIn(collection: List<*>|Map<*,*>|Object|Array<*>, keyPath: Array<string|number>, value: *): List<*>|Map<*,*>|Object|Array<*> {
-    if(Iterable.isIterable(collection)) {
-        return collection.setIn(keyPath, value);
-    }
-
-    for(var i = keyPath.length - 1; i >= 0; i--) {
-        value = set(
-            getIn(collection, keyPath.slice(0, i)),
-            keyPath[i],
-            value
-        );
-    }
-
-    return value;
+    return unmutableSetIn(keyPath, value)(collection);
 }
 
 /**

@@ -91,6 +91,7 @@ type ShowHideStateProps = {
 
 type StatefulChildProps = {
     onChange: (newState: Object) => {},
+    onClick?: (show: boolean) => void,
     value: {
         show: boolean
     }
@@ -104,7 +105,10 @@ export const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
         return <Component
             {...props}
             show={props.value.show}
-            onChange={(show) => props.onChange({show})}
+            onClick={(show: boolean) => {
+                props.onClick && props.onClick(show);
+                props.onChange({show});
+            }}
         />;
     }
 );

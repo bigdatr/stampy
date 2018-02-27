@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import type {Element} from 'react';
-import {List, Set} from 'immutable';
+import {List, OrderedSet} from 'immutable';
+import {Set} from 'immutable';
 import SpruceClassName from '../util/SpruceClassName';
 import Toggle from './Toggle';
 
@@ -118,11 +119,11 @@ export default class ToggleSet extends React.Component<Props> {
             value
         } = this.props;
 
-        const selection: Set<string> = multi
-            ? Set(value)
+        const selection: Set<*> = multi
+            ? OrderedSet(value)
             : typeof value == "string" || typeof value == "boolean"
-                ? Set([value])
-                : Set();
+                ? OrderedSet([value])
+                : OrderedSet();
 
         const toggles: Array<Element<*>> = List(options)
             .map((option: ToggleOption, index: number): Element<*> => {
@@ -137,7 +138,7 @@ export default class ToggleSet extends React.Component<Props> {
                         return;
                     }
                     if(multi) {
-                        const newSelection: Set<string> = added
+                        const newSelection: Set<*> = added
                             ? selection.add(value)
                             : selection.delete(value);
 

@@ -229,6 +229,28 @@ test('ToggleSet should call onChange with appropriate values when multi=true', (
     tt.deepEqual(onChange3.firstCall.args[0], []);
 });
 
+
+test('ToggleSet should preserve order of options', (tt: Object) => {
+    const options = [
+        {value: "1", label: "x"},
+        {value: "2", label: "x"},
+        {value: "3", label: "x"},
+        {value: "4", label: "x"},
+        {value: "5", label: "x"},
+        {value: "6", label: "x"},
+        {value: "7", label: "x"},
+        {value: "8", label: "x"}
+    ];
+
+    const value = ['1','2','3','4','5','6','7','8'];
+
+    const onChange = sinon.spy();
+    const toggles = shallow(<ToggleSet options={options} onChange={onChange} multi value={value} />).children();
+    toggles.first().prop('onChange')(true);
+    tt.deepEqual(onChange.firstCall.args[0], value);
+
+});
+
 test('toggleset classes', (tt: Object) => {
     tt.truthy(
         shallow(<ToggleSet options={options}/>)

@@ -4,7 +4,7 @@ import React from 'react';
 import type {ComponentType, Element} from 'react';
 import {is} from 'immutable';
 import ConfigureHock from '../deprecated/util/ConfigureHock';
-import getIn from 'unmutable/lib/pa/getIn';
+import getIn from 'unmutable/lib/getIn';
 
 /**
  * @module Hocks

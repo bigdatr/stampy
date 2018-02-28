@@ -7,11 +7,11 @@ import {
 } from 'immutable';
 import isPlainObject from 'is-plain-object';
 
-import unmutableGet from 'unmutable/lib/pa/get';
-import unmutableSet from 'unmutable/lib/pa/set';
-import unmutableGetIn from 'unmutable/lib/pa/getIn';
-import unmutableSetIn from 'unmutable/lib/pa/setIn';
-import unmutableHas from 'unmutable/lib/pa/has';
+import unmutableGet from 'unmutable/lib/get';
+import unmutableSet from 'unmutable/lib/set';
+import unmutableGetIn from 'unmutable/lib/getIn';
+import unmutableSetIn from 'unmutable/lib/setIn';
+import unmutableHas from 'unmutable/lib/has';
 import unmutableIsKeyed from 'unmutable/lib/util/isKeyed';
 import unmutableIsIndexed from 'unmutable/lib/util/isIndexed';
 

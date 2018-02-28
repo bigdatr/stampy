@@ -2,7 +2,7 @@
 import React from 'react';
 import type {ChildrenArray, ComponentType, Element} from 'react';
 import SpruceClassName from '../util/SpruceClassName';
-import set from 'unmutable/lib/pa/set';
+import set from 'unmutable/lib/set';
 import pipeWith from 'unmutable/lib/util/pipeWith';
 
 // peer dependencies

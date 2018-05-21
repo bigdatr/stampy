@@ -26,7 +26,6 @@
     "app-module-path": "^2.0.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.0",
-    "babel-plugin-istanbul": "^3.0.0",
     "babel-plugin-transform-class-properties": "^6.18.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-blueflag": "^0.6.0",
@@ -50,7 +49,6 @@
     "numeral": "^2.0.6",
     "prop-types": "^15.5.8",
     "proto-babel-plugin-extract-flow-types": "git+ssh://git@github.com/blueflag/proto-babel-plugin-extract-flow-types.git#v0.1",
-    "proto-blueflag-test": "git+ssh://git@github.com/blueflag/proto-blueflag-test.git#v0.8.0",
     "proxyquire": "^1.7.11",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.0",
@@ -66,6 +64,7 @@
     "react-select": "^1.0.0-rc.4"
   },
   "dependencies": {
+    "blueflag-test": "^0.18.1",
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.12",
     "is-plain-object": "^2.0.3",

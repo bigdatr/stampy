@@ -8,3 +8,4 @@ src/decls/FlowTypes.js
 
 [ignore]
 .*/node_modules/fbjs/.*
+<PROJECT_ROOT>/node_modules/ava

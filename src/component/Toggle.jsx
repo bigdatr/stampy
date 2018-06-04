@@ -43,7 +43,7 @@ export default class Toggle extends React.Component<Props> {
         disabled: false,
         modifier: '',
         peer: '',
-        parent,
+        parent: '',
         spruceName: 'Toggle',
         style: {},
         toggleProps: {},

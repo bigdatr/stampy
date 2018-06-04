@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 import ShowHide, {ShowHideStateful} from '../ShowHide';
 
-import {CheckClassName} from '../../util/TestHelpers';
+import {ClassName} from '../../util/TestHelpers';
 
 
 const toggle = () => <div></div>;
@@ -24,8 +24,9 @@ test.afterEach(t => {
 
 test('ShowHide will toggle props.show onChange', (tt: Object) => {
     const onChange = sinon.spy();
+    const toggle = ({onChange}) => <div className="TOGGLE" onClick={() => onChange(true)} ></div>;
     const showHide = shallow(<ShowHide show={false} onChange={onChange} toggle={toggle}/>);
-    showHide.find('.ShowHide_toggle').simulate('click');
+    showHide.find('.TOGGLE').simulate('click');
     tt.is(onChange.firstCall.args[0], true);
 });
 
@@ -71,11 +72,12 @@ test('ShowHideStateful default visibility off defaultShow', (tt: Object) => {
 
 test('ShowHideStateful will passthrough props.onChange', (tt: Object) => {
     const onChange = sinon.spy();
+    const toggle = ({onChange}) => <div className="TOGGLE" onClick={() => onChange(true)} ></div>;
     const showHide = shallow(<ShowHideStateful toggle={toggle} onChange={onChange}/>);
     showHide
         .dive()
         .dive()
-        .find('.ShowHide_toggle')
+        .find('.TOGGLE')
         .simulate('click');
 
     tt.is(onChange.firstCall.args[0], true);
@@ -85,33 +87,41 @@ test('ShowHideStateful will passthrough props.onChange', (tt: Object) => {
 
 
 test('showhide classes', (tt: Object) => {
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle}/>, 'ShowHide'),
+
+
+    tt.is(
+        ClassName(<ShowHide toggle={toggle}/>),
+        'ShowHide',
         'showhide should have a class of ShowHide'
     );
 
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle} spruceName="Thing"/>, 'Thing'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} spruceName="Thing"/>),
+        'Thing',
         'showhide should change class if given a spruceName prop'
     );
 
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle} modifier="large"/>, 'ShowHide-large'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} modifier="large"/>),
+        'ShowHide ShowHide-large',
         'showhides with modifiers should be rendered with that modifier class'
     );
 
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle} peer="Thing"/>, 'ShowHide--Thing'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} peer="Thing"/>),
+        'ShowHide ShowHide--Thing',
         'showhides with peers should be rendered with that peer class'
     );
 
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle} className="foo"/>, 'foo'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} className="foo"/>),
+        'ShowHide foo',
         'showhides with className should append className'
     );
 
-    tt.true(
-        CheckClassName(<ShowHide toggle={toggle} className="foo"/>, 'ShowHide'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} modifier="rad" className="foo"/>),
+        'ShowHide ShowHide-rad foo',
         'showhides with className should not replace other class names'
     );
 });

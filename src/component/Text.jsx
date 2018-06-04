@@ -71,6 +71,7 @@ export default class Text extends React.Component<Props> {
             modifier,
             numberFormat,
             onClick,
+            parent,
             peer,
             spruceName,
             style,

@@ -79,5 +79,7 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
         peers,
         args,
         props.className
-    ).replace(/\s+/g, ' ');
+    )
+        .replace(/\s+/g, ' ')
+        .trim();
 }

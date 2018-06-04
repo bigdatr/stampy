@@ -5,8 +5,11 @@ import SelectHock from '../SelectHock';
 import UpdateProps from '../UpdateProps';
 import test from 'ava';
 import pipeWith from 'unmutable/lib/util/pipeWith';
+import get from 'unmutable/lib/get';
 import {shallow} from 'enzyme';
 import {spy} from 'sinon';
+import {CheckHockChildProps} from '../../util/TestHelpers';
+
 
 const options = [
     {id: 'foo', name: 'Foo'},
@@ -19,14 +22,6 @@ const KEY_DOWN = {keyCode: 38};
 const KEY_RETURN = {keyCode: 13};
 const KEY_BACKSPACE = {keyCode: 8};
 
-function CheckHockChildProps(hock: Function, props: *, render: (props: *) => void) {
-    const Component = hock((props: Object): Node => {
-        render(props);
-        return <div/>;
-    });
-    shallow(<Component {...props}/>).dive()
-}
-
 test('SelectHock will create new props', (t: *) => {
     CheckHockChildProps(
         SelectHock(),
@@ -34,8 +29,7 @@ test('SelectHock will create new props', (t: *) => {
         (props) => {
             t.is(props.focusIndex, 0);
             t.is(props.options.length, 3);
-            t.is(props.value[0].id, 'foo');
-            t.is(typeof props.onChange, 'function');
+            t.is(props.value[0].value, 'foo');
             t.is(typeof props.onKeyDown, 'function');
             t.is(typeof props.onHover, 'function');
         }
@@ -68,7 +62,7 @@ test('props.valueAsPrimitive lets you select an option by its id', (t: *) => {
     CheckHockChildProps(
         SelectHock(),
         {options, value: 'foo', valueAsPrimitive: true},
-        (props) => t.is(props.value[0].id, 'foo')
+        (props) => t.is(props.value[0].value, 'foo')
     )
 });
 
@@ -76,7 +70,7 @@ test('props.valueAsPrimitive=false lets you select an option by valueKey', (t: *
     CheckHockChildProps(
         SelectHock(),
         {options, value: options[0], valueAsPrimitive: false},
-        (props) => t.is(props.value[0].id, 'foo')
+        (props) => t.is(props.value[0].value, 'foo')
     )
 });
 
@@ -91,8 +85,8 @@ test('you can change value and label keys to match your collection', (t: *) => {
         {
             options,
             value: options[0],
-            valueKey: 'value',
-            labelKey: 'label'
+            getLabel: get('label'),
+            getValue: get('value')
         },
         (props) => {
             t.is(props.value[0].value, 'foo');
@@ -109,8 +103,8 @@ test('You can have multiple values', (t: *) => {
             multi: true,
         },
         (props) => {
-            t.is(props.value[0].id, 'foo');
-            t.is(props.value[1].id, 'bar');
+            t.is(props.value[0].value, 'foo');
+            t.is(props.value[1].value, 'bar');
         }
     )
 });
@@ -272,7 +266,7 @@ test('props.valueAsPrimitive=true will return id values from the onChange', (t: 
         Component => shallow(<Component
             options={options}
             valueAsPrimitive
-            value={[options[1]]}
+            value={[options[1].id]}
             onChange={(id) => t.is(id, 'foo')} />)
     );
 

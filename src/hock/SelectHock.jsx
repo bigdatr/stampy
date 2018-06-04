@@ -142,8 +142,7 @@ export default Hock({
 
                 // make sure the value is a list and is primitive
                 const nextValue = pipeWith(
-                    (props.value || []),
-                    clear(),
+                    [],
                     concat(props.value || []),
                     valueAsPrimitive ? identity() : map(getValue)
                 );
@@ -271,7 +270,6 @@ export default Hock({
                         return pipeWith(
                             value,
                             keyCode === 8 ? pop() : shift(),
-                            log('newValue'),
                             this.onChangeMulti
                         );
 

@@ -52,6 +52,7 @@ export default class Textarea extends React.Component<Props> {
             modifier,
             name,
             onChange,
+            parent,
             peer,
             placeholder,
             spruceName,

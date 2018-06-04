@@ -4,7 +4,10 @@ import type {List} from 'immutable';
 import React from 'react';
 import Hock from '../util/Hock';
 
+import clear from 'unmutable/lib/clear';
 import concat from 'unmutable/lib/concat';
+import del from 'unmutable/lib/delete';
+import doIf from 'unmutable/lib/doIf';
 import find from 'unmutable/lib/find';
 import get from 'unmutable/lib/get';
 import identity from 'unmutable/lib/identity';
@@ -12,13 +15,15 @@ import map from 'unmutable/lib/map';
 import method from 'unmutable/lib/util/method';
 import pipe from 'unmutable/lib/util/pipe';
 import pipeWith from 'unmutable/lib/util/pipeWith';
+import pop from 'unmutable/lib/pop';
 import reduce from 'unmutable/lib/reduce';
+import reverse from 'unmutable/lib/reverse';
 import set from 'unmutable/lib/set';
 import size from 'unmutable/lib/size';
 import slice from 'unmutable/lib/slice';
-import reverse from 'unmutable/lib/reverse';
-import doIf from 'unmutable/lib/doIf';
-import pop from 'unmutable/lib/pop';
+import shift from 'unmutable/lib/shift';
+
+import log from 'unmutable/lib/log';
 
 
 const toLowerCase = method('toLowerCase');
@@ -36,14 +41,14 @@ const cycle = (index) => (array) => pipeWith(
 
 
 type Props = {
-    labelKey: string,
+    getLabel: (item: *) => string,
+    getValue: (item: *) => string,
+    match: string,
     multi: boolean,
     onChange: Function,
     options: List<*>|Array<*>,
-    match: string,
     value: List<*>|Array<*>,
-    valueAsPrimitive: boolean,
-    valueKey: string
+    valueAsPrimitive: boolean
 };
 type State = {
     focusIndex: number,
@@ -52,6 +57,23 @@ type State = {
     options: List<*>|Array<*>
 };
 
+type ChildOption<OptionType> = {
+    value: string,
+    label: string,
+    option: OptionType,
+    focused: boolean,
+    matched: boolean,
+    onChange: () => void,
+    onMouseOver: (event: Event) => void,
+    selected: boolean
+};
+
+type ChildValue<OptionType> = {
+    value: string,
+    label: string,
+    onDelete: () => void,
+    option: OptionType
+};
 
 export default Hock({
     hock: (config: *) => (Component: *): * => {
@@ -93,8 +115,8 @@ export default Hock({
          */
         class SelectHock extends React.Component<Props, State> {
             static defaultProps = {
-                valueKey: 'id',
-                labelKey: 'name',
+                getValue: get('id'),
+                getLabel: get('name'),
                 match: '',
                 multi: false,
                 valueAsPrimitive: false,
@@ -111,8 +133,8 @@ export default Hock({
                 this.setState(this.constructState(nextProps, this.state));
             }
             constructState(props: Props, state: *): State {
-                const value = get(props.valueKey);
-                const label = get(props.labelKey);
+                const {getValue} = props;
+                const {getLabel} = props;
                 const {options} = props;
                 const {match} = props;
                 const {valueAsPrimitive} = props;
@@ -120,20 +142,21 @@ export default Hock({
 
                 // make sure the value is a list and is primitive
                 const nextValue = pipeWith(
-                    [],
+                    (props.value || []),
+                    clear(),
                     concat(props.value || []),
-                    valueAsPrimitive ? identity() : map(value)
+                    valueAsPrimitive ? identity() : map(getValue)
                 );
 
                 const containsSearchTerm = pipe(
-                    doIf(label, label, value),
+                    doIf(getLabel, getLabel, getValue),
                     toLowerCase(),
                     includes(match.toLowerCase()),
                 );
 
                 const isSelected = item => pipeWith(
                     nextValue,
-                    includes(value(item))
+                    includes(getValue(item))
                 );
 
 
@@ -142,14 +165,15 @@ export default Hock({
                     value: nextValue,
                     optionByValue: pipeWith(
                         options,
-                        reduce((rr, ii) => set(value(ii), ii)(rr), {})
+                        reduce((rr, ii) => set(getValue(ii), ii)(rr), {})
                     ),
                     options: pipeWith(
                         props.options,
-                        map((option: *, index: number): * => {
+                        map((option: *, index: number): ChildOption<*> => {
 
                             const onChange = () => this.onChange(option);
                             const selected = isSelected(option);
+                            const canFocusSelectedItems = config.focusSelected || !selected;
 
                             const matched = (match === '') ? true : containsSearchTerm(option);
 
@@ -157,8 +181,11 @@ export default Hock({
                                 focused: focusIndex === index,
                                 matched,
                                 onChange: (!config.allowDuplicates && selected) ? noop : onChange,
+                                onMouseOver: () => canFocusSelectedItems && this.setIndex(index),
                                 selected,
-                                value: option
+                                label: getLabel(option),
+                                value: getValue(option),
+                                option
                             };
                         })
                     )
@@ -166,11 +193,12 @@ export default Hock({
             }
             onChange = (payload: *) => {
                 const {multi} = this.props;
+                const {getValue} = this.props;
                 const {value} = this.state;
 
                 pipeWith(
                     payload,
-                    get(this.props.valueKey),
+                    getValue,
                     data => [].concat(data), // make sure we have an array
                     multi ? (payload) => value.concat(payload) : identity(), // concat values if multi
                     this.onChangeMulti
@@ -235,13 +263,15 @@ export default Hock({
                             onChange()
                         );
 
-                    case 8: // delete
+                    case 8: // backspace
+                    case 46: // delete
                         if(match) {
                             return;
                         }
                         return pipeWith(
                             value,
-                            pop(),
+                            keyCode === 8 ? pop() : shift(),
+                            log('newValue'),
                             this.onChangeMulti
                         );
 
@@ -255,12 +285,24 @@ export default Hock({
                 const {focusIndex} = this.state;
                 const {options} = this.state;
                 const {value} = this.state;
+                const {getValue} = this.props;
+                const {getLabel} = this.props;
+
+                const childValues: Array<ChildValue<*>> = pipeWith(
+                    this.mapValueToOptions(this.state.value),
+                    map((option: *, index: number): ChildValue<*> => ({
+                        option,
+                        onDelete: () => pipeWith(value, del(index), this.onChangeMulti),
+                        value: getValue(option),
+                        label: getLabel(option)
+                    }))
+                );
 
                 return <Component
                     {...this.props}
                     focusIndex={focusIndex}
                     options={options}
-                    value={this.mapValueToOptions(value)}
+                    value={childValues}
                     onKeyDown={this.onKeyDown}
                     onHover={this.setIndex}
                 />;

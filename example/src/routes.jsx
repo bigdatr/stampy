@@ -7,6 +7,7 @@ import ContentsPage from 'components/ContentsPage';
 
 import ButtonExample from 'component/button/ButtonExample';
 import LabelExample from 'component/field/LabelExample';
+import CollectionSelectExample from 'component/CollectionSelectExample';
 import ShowHideExample from 'component/showHide/ShowHideExample';
 import TableExample from 'component/table/TableExample';
 
@@ -28,6 +29,7 @@ export const routesList = <Switch>
     <Route exact path="/" component={ContentsPage} />
     <Route path="/component/Button" component={ButtonExample}/>
     <Route path="/component/Label" component={LabelExample}/>
+    <Route path="/component/CollectionSelect" component={CollectionSelectExample}/>
     <Route path="/component/ShowHide" component={ShowHideExample}/>
     <Route path="/component/Table" component={TableExample}/>
     <Route path="/input/Input" component={InputExample}/>

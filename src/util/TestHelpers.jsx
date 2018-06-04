@@ -12,7 +12,11 @@ export function CheckHockChildProps(hock: Function, props: *, render: (props: *)
     shallow(<Component {...props}/>).dive();
 }
 
+export function CheckChildProps(node: Node, check: (props: *) => void) {
+    check(shallow(node).props());
+}
+
 
 export function CheckClassName(node: Node, className: string): boolean {
-    return shallow(node).hasClass(className);
+    return shallow(node).prop('className') === className;
 }

@@ -41,6 +41,7 @@ type SpruceComponentProps = {
     className?: string, // {ClassName}
     element?: ComponentType<*>|string, // React component to render as, or name of the HTML element to render as
     modifier?: SpruceModifier, // {SpruceModifier}
+    parent?: string, // {SpruceParent}
     peer?: string, // {SprucePeer}
     spruceName: string // {SpruceName}
 };
@@ -54,14 +55,16 @@ export default function SpruceComponent(name: string, defaultElement: ComponentT
             modifier,
             peer,
             spruceName,
+            parent,
             element,
             ...otherProps
         } = props;
 
+
         const Component = element || defaultElement;
 
         return <Component
-            className={SpruceClassName({className, modifier, peer, name: spruceName || name})}
+            className={SpruceClassName({className, modifier, peer, parent, name: spruceName || name})}
             children={children}
             {...otherProps}
         />;

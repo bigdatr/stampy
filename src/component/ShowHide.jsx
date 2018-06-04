@@ -29,6 +29,7 @@ type Props = {
     modifier: SpruceModifier,
     onChange: (show: boolean) => void,
     closeOnBlur?: boolean,
+    parent: string, // ${SpruceParent}
     peer: string,
     show: boolean,
     spruceName: string,
@@ -40,7 +41,9 @@ export default class ShowHide extends React.Component<Props> {
     static defaultProps = {
         className: '',
         modifier: '',
+        parent: '',
         onChange: (data) => data,
+        parent: '',
         peer: '',
         show: false,
         spruceName: 'ShowHide',
@@ -62,7 +65,6 @@ export default class ShowHide extends React.Component<Props> {
         }
     }
     handleClickOutside = (event: *) => {
-        console.log(this.wrapperRef, event.target);
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             this.props.onChange(false);
         }
@@ -74,6 +76,7 @@ export default class ShowHide extends React.Component<Props> {
             className,
             modifier,
             onChange,
+            parent,
             peer,
             show,
             spruceName: name,
@@ -83,10 +86,10 @@ export default class ShowHide extends React.Component<Props> {
 
         return <div
             ref={ref => this.wrapperRef = ref}
-            className={SpruceClassName({name, modifier, className, peer})}
+            className={SpruceClassName({name, modifier, className, parent, peer})}
             style={style}
         >
-            <div className={`${name}_toggle`} onClick={() => onChange(!show)}>
+            <div className={`${name}_toggle`}>
                 {toggle({show, onChange})}
             </div>
             {show && <div className={`${name}_children`}>{children && children({onChange})}</div>}

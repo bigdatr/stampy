@@ -46,3 +46,22 @@ test('modifier splitting with objects', tt => {
 });
 
 
+test('parent prefixing', tt => {
+    const className = SpruceClassName({
+        name: '_child',
+        parent: 'Parent'
+    });
+
+    tt.is(className.trim(), 'Parent_child');
+});
+
+
+test('child without a parent will throw', tt => {
+    tt.throws(() => SpruceClassName({name: '_child', parent: ''}));
+});
+
+test('Parent without an underscored child will throw', tt => {
+    tt.throws(() => SpruceClassName({parent: 'Parent', name: 'Child'}));
+});
+
+

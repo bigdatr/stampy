@@ -29,6 +29,7 @@ type Props = {
     modifier: SpruceModifier, // {SpruceModifier}
     onChange?: (newValue: boolean, meta: OnChangeMeta) => void, // {OnChange}
     peer: string, // {SprucePeer}
+    parent: string, // ${SpruceParent}
     placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
@@ -42,6 +43,7 @@ export default class Toggle extends React.Component<Props> {
         disabled: false,
         modifier: '',
         peer: '',
+        parent,
         spruceName: 'Toggle',
         style: {},
         toggleProps: {},
@@ -55,6 +57,7 @@ export default class Toggle extends React.Component<Props> {
             disabled,
             modifier,
             onChange,
+            parent,
             peer,
             spruceName,
             style,
@@ -71,7 +74,7 @@ export default class Toggle extends React.Component<Props> {
 
         return <button
             {...toggleProps}
-            className={SpruceClassName({name: spruceName, modifier, className, peer}, additionalClassNames)}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer}, additionalClassNames)}
             disabled={disabled}
             onClick={ee => !disabled && onChange && onChange(!value, {event: ee, element: ee.target})}
             type="button"

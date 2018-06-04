@@ -41,6 +41,7 @@ type Props = {
     modifier: SpruceModifier, // {SpruceModifier}
     numberFormat?: string, // Numeral format string. Will cause children to be passed through [numeral.format](https://momentjs.com/docs/#/displaying/)
     onClick?: OnClick, // {OnClick}
+    parent: string, // ${SpruceParent}
     peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
@@ -53,6 +54,7 @@ export default class Text extends React.Component<Props> {
         element: 'span',
         htmlProps: {},
         modifier: '',
+        parent: '',
         peer: '',
         spruceName: 'Text',
         style: {},
@@ -97,7 +99,7 @@ export default class Text extends React.Component<Props> {
         }
 
         return <TextElement
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             style={style}
             onClick={onClick}
             children={childrenToRender}

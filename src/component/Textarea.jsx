@@ -24,6 +24,7 @@ type Props = {
     name?: string, // HTML name attribute for the textarea
     onChange?: OnChange, // {OnChange}
     peer: string, // {SprucePeer}
+    parent: string, // ${SpruceParent}
     placeholder?: string, // The placeholder text to show in the textarea when there is no value
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
@@ -37,6 +38,7 @@ export default class Textarea extends React.Component<Props> {
         disabled: false,
         textareaProps: {},
         modifier: '',
+        parent: '',
         peer: '',
         spruceName: 'Textarea',
         style: {},
@@ -63,7 +65,7 @@ export default class Textarea extends React.Component<Props> {
             name={name}
             placeholder={placeholder}
             {...textareaProps}
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
             value={(value == null) ? '' : value}
             style={style}

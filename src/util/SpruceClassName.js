@@ -5,7 +5,8 @@ type ClassNameProps = {
     name?: string,
     modifier?: SpruceModifier,
     peer?: SprucePeer,
-    className?: string
+    className?: string,
+    parent?: string
 };
 
 /**
@@ -47,7 +48,17 @@ type ClassNameProps = {
 
 
 export default function SpruceClassName(props: ClassNameProps, ...args: Array<any>): string {
-    const {name} = props;
+    let {name = '', parent = ''} = props;
+
+    if(name[0] === '_' && !parent) {
+        throw new Error(`Invalid Spruce Component: ${parent}${name}. A child component must have a defined parent prop.`);
+    }
+
+    if(name[0] !== '_' && parent) {
+        throw new Error(`Invalid Spruce Component: ${parent}${name}.: A non child component cannot a defined parent prop.`);
+    }
+
+    name = `${parent}${name}`;
 
     const modifiers: string = classnames(props.modifier)
         .split(' ')
@@ -61,8 +72,9 @@ export default function SpruceClassName(props: ClassNameProps, ...args: Array<an
         // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
         .map(pp => `${name}--${pp}`);
 
+
     return classnames(
-        props.name,
+        name,
         modifiers,
         peers,
         args,

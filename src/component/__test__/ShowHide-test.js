@@ -6,17 +6,31 @@ import sinon from 'sinon';
 
 import ShowHide, {ShowHideStateful} from '../ShowHide';
 
+import {ClassName} from '../../util/TestHelpers';
+
 
 const toggle = () => <div></div>;
 
-test('ShowHide will toggle props.show onClick', (tt: Object) => {
-    const onClick = sinon.spy();
-    const showHide = shallow(<ShowHide show={false} onClick={onClick} toggle={toggle}/>);
-    showHide.find('.ShowHide_toggle').simulate('click');
-    tt.is(onClick.firstCall.args[0], true);
+
+test.beforeEach(t => {
+    global.document = {};
+    global.document.addEventListener = sinon.spy();
+    global.document.removeEventListener = sinon.spy();
 });
 
-test('ShowHide will not break if onClick is not provided', (tt: Object) => {
+test.afterEach(t => {
+    delete global.document;
+});
+
+test('ShowHide will toggle props.show onChange', (tt: Object) => {
+    const onChange = sinon.spy();
+    const toggle = ({onChange}) => <div className="TOGGLE" onClick={() => onChange(true)} ></div>;
+    const showHide = shallow(<ShowHide show={false} onChange={onChange} toggle={toggle}/>);
+    showHide.find('.TOGGLE').simulate('click');
+    tt.is(onChange.firstCall.args[0], true);
+});
+
+test('ShowHide will not break if onChange is not provided', (tt: Object) => {
     const showHide = shallow(<ShowHide show={false} toggle={toggle}/>);
     showHide.find('.ShowHide_toggle').simulate('click');
     tt.is(showHide.find('.ShowHide_children').length, 0);
@@ -29,6 +43,26 @@ test('ShowHide will show children based on props.show', (tt: Object) => {
     tt.is(hide.find('.ShowHide_children').length, 0);
 });
 
+test('ShowHide will create and destroy event listeners if closeOnBlur is true', (tt: Object) => {
+    global.document.addEventListener = sinon.spy();
+    global.document.removeEventListener = sinon.spy();
+
+    // event listeners will not be added without the closeOnBlur prop
+    shallow(<ShowHide toggle={toggle} />).unmount();
+    tt.is(global.document.addEventListener.callCount, 0);
+    tt.is(global.document.removeEventListener.callCount, 0);
+
+    // event listeners are added when the prop is true
+    shallow(<ShowHide closeOnBlur toggle={toggle} />).unmount();
+    tt.is(global.document.addEventListener.firstCall.args[0], 'mousedown');
+    tt.is(global.document.removeEventListener.firstCall.args[0], 'mousedown');
+    tt.is(typeof global.document.addEventListener.firstCall.args[1], 'function');
+    tt.is(typeof global.document.removeEventListener.firstCall.args[1], 'function');
+});
+
+
+test.todo('ShowHide will fire onChange with false on an ouside click');
+
 
 test('ShowHideStateful default visibility off defaultShow', (tt: Object) => {
     const show = shallow(<ShowHideStateful toggle={toggle} defaultShow={true}/>);
@@ -37,70 +71,58 @@ test('ShowHideStateful default visibility off defaultShow', (tt: Object) => {
     tt.deepEqual(hide.state('value'), {show: false});
 });
 
-test('ShowHideStateful will passthrough props.onClick', (tt: Object) => {
-    const onClick = sinon.spy();
-    const showHide = shallow(<ShowHideStateful toggle={toggle} onClick={onClick}/>);
+test('ShowHideStateful will passthrough props.onChange', (tt: Object) => {
+    const onChange = sinon.spy();
+    const toggle = ({onChange}) => <div className="TOGGLE" onClick={() => onChange(true)} ></div>;
+    const showHide = shallow(<ShowHideStateful toggle={toggle} onChange={onChange}/>);
     showHide
         .dive()
         .dive()
-        .find('.ShowHide_toggle')
+        .find('.TOGGLE')
         .simulate('click');
 
-    tt.is(onClick.firstCall.args[0], true);
+    tt.is(onChange.firstCall.args[0], true);
 });
 
+
+
+
 test('showhide classes', (tt: Object) => {
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle}/>)
-            .render()
-            .children()
-            .first()
-            .hasClass('ShowHide'),
+
+
+    tt.is(
+        ClassName(<ShowHide toggle={toggle}/>),
+        'ShowHide',
         'showhide should have a class of ShowHide'
     );
 
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle} spruceName="Thing"/>)
-            .render().
-            children()
-            .first()
-            .hasClass('Thing'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} spruceName="Thing"/>),
+        'Thing',
         'showhide should change class if given a spruceName prop'
     );
 
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle} modifier="large"/>)
-            .render()
-            .children()
-            .first()
-            .hasClass('ShowHide-large'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} modifier="large"/>),
+        'ShowHide ShowHide-large',
         'showhides with modifiers should be rendered with that modifier class'
     );
 
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle} peer="Thing"/>)
-            .render()
-            .children()
-            .first()
-            .hasClass('ShowHide--Thing'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} peer="Thing"/>),
+        'ShowHide ShowHide--Thing',
         'showhides with peers should be rendered with that peer class'
     );
 
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle} className="foo"/>)
-            .render()
-            .children()
-            .first()
-            .hasClass('foo'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} className="foo"/>),
+        'ShowHide foo',
         'showhides with className should append className'
     );
 
-    tt.truthy(
-        shallow(<ShowHide toggle={toggle} className="foo"/>)
-            .render()
-            .children()
-            .first()
-            .hasClass('ShowHide'),
+    tt.is(
+        ClassName(<ShowHide toggle={toggle} modifier="rad" className="foo"/>),
+        'ShowHide ShowHide-rad foo',
         'showhides with className should not replace other class names'
     );
 });

@@ -22,6 +22,7 @@ type Props = {
     htmlFor?: string, // The id of the input HTML element this label corresponds to
     labelProps?: Object, // Attributes applied to the component's <label> HTML element
     modifier: SpruceModifier, // {SpruceModifier}
+    parent: string, // ${SpruceParent}
     peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
     style: Object // React style object to apply to the rendered HTML element
@@ -32,6 +33,7 @@ export default class Label extends React.Component<Props> {
         className: '',
         labelProps: {},
         modifier: '',
+        parent: '',
         peer: '',
         spruceName: 'Label',
         style: {}
@@ -44,6 +46,7 @@ export default class Label extends React.Component<Props> {
             htmlFor,
             labelProps,
             modifier,
+            parent,
             peer,
             spruceName,
             style
@@ -52,7 +55,7 @@ export default class Label extends React.Component<Props> {
         return <label
             {...labelProps}
             htmlFor={htmlFor}
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             children={children}
             style={style}
         />;

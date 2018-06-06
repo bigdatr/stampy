@@ -24,6 +24,7 @@ type Props = {
     modifier: SpruceModifier, // {SpruceModifier}
     name?: string, // HTML name attribute for the input
     onChange?: OnChange, // {OnChange}
+    parent: string, // ${SpruceParent}
     peer: string, // {SprucePeer}
     placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
@@ -38,6 +39,7 @@ export default class Input extends React.Component<Props> {
         disabled: false,
         inputProps: {},
         modifier: '',
+        parent: '',
         peer: '',
         spruceName: 'Input',
         style: {},
@@ -54,6 +56,7 @@ export default class Input extends React.Component<Props> {
             name,
             onChange,
             peer,
+            parent,
             spruceName,
             style,
             type,
@@ -67,7 +70,7 @@ export default class Input extends React.Component<Props> {
             placeholder={placeholder}
             type={type}
             {...inputProps}
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             onChange={(ee) => onChange && onChange(ee.target.value, {event: ee, element: ee.target})}
             value={(value == null) ? '' : value}
             style={style}

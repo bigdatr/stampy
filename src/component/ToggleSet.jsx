@@ -71,6 +71,7 @@ type Props = {
     onChange?: (newValues: Array<string>|string, meta: OnChangeMeta) => void, // ${OnChange}
     options: ToggleOption[], // The options that the user can select. Each will appear as a toggle
     peer: string, // ${SprucePeer}
+    parent: string, // ${SpruceParent}
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
     toggleProps: Object, // Attributes applied to the component's <div> HTML element
@@ -91,6 +92,7 @@ export default class ToggleSet extends React.Component<Props> {
         disabled: false,
         modifier: '',
         multi: false,
+        parent: '',
         peer: '',
         spruceName: 'ToggleSet',
         style: {},
@@ -111,6 +113,7 @@ export default class ToggleSet extends React.Component<Props> {
             multi,
             onChange,
             options,
+            parent,
             peer,
             spruceName,
             style,
@@ -169,7 +172,7 @@ export default class ToggleSet extends React.Component<Props> {
 
         return <div
             {...toggleSetProps}
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             children={toggles}
             style={style}
         />;

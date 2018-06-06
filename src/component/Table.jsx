@@ -143,6 +143,7 @@ type TableProps = {
     className: string, // {ClassName}
     data: List<Object|Map<string,*>>|Array<Object|Map<string,*>>, // Collection of data to display in the table.
     modifier: SpruceModifier, // {SpruceModifier}
+    parent: string, // ${SpruceParent}
     peer: string, // {SprucePeer}
     rowProps: (row: Object) => Object, // {TableRowProps}
     schema: Schema, /**
@@ -160,6 +161,7 @@ export default class Table extends React.Component<TableProps> {
         className: '',
         data: List(),
         modifier: '',
+        parent: '',
         peer: '',
         rowProps: () => ({}),
         schema: List(),
@@ -178,6 +180,7 @@ export default class Table extends React.Component<TableProps> {
             className,
             data,
             modifier,
+            parent,
             peer,
             rowProps,
             schema,
@@ -202,7 +205,7 @@ export default class Table extends React.Component<TableProps> {
 
         return <table
             {...tableProps}
-            className={SpruceClassName({name: spruceName, modifier, className, peer})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
             style={style}
         >
             <thead><tr>{tableHead}</tr></thead>

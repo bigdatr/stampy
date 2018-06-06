@@ -18,6 +18,7 @@ type Props = {
     multi?: boolean, // Boolean indicating if more than one selected item at once
     onChange?: OnChangeMulti, // ${OnChange}
     options: SelectOption[], // Array of options that the user can select from
+    parent: string, // ${SpruceParent}
     peer: string, // ${SprucePeer}
     placeholder?: string, // {Placeholder}
     spruceName: string, // {SpruceName}
@@ -79,6 +80,7 @@ export default class Select extends React.Component<Props> {
             onChange,
             className,
             modifier,
+            parent,
             peer,
             spruceName: name,
             style,
@@ -91,7 +93,7 @@ export default class Select extends React.Component<Props> {
 
         return <ReactSelect
             {...this.props}
-            className={SpruceClassName({name, modifier, className, peer})}
+            className={SpruceClassName({name, modifier, className, parent, peer})}
             onChange={modifiedOnChange}
             style={style}
         />;

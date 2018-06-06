@@ -22,10 +22,14 @@ import Compose from '../util/Compose';
  */
 
 type Props = {
-    children?: ChildrenArray<*>,
+    children?: (props: {
+        onChange: (show: boolean) => void
+    }) => ChildrenArray<*>,
     className: string,
     modifier: SpruceModifier,
-    onClick: (show: boolean) => void,
+    onChange: (show: boolean) => void,
+    closeOnBlur?: boolean,
+    parent: string, // ${SpruceParent}
     peer: string,
     show: boolean,
     spruceName: string,
@@ -37,31 +41,57 @@ export default class ShowHide extends React.Component<Props> {
     static defaultProps = {
         className: '',
         modifier: '',
-        onClick: (data) => data,
+        parent: '',
+        onChange: (data) => data,
         peer: '',
         show: false,
         spruceName: 'ShowHide',
         style: {}
     };
 
+    wrapperRef: *;
+    constructor(props: Props) {
+        super(props);
+        this.wrapperRef;
+
+        if(this.props.closeOnBlur) {
+            document.addEventListener('mousedown', this.handleClickOutside);
+        }
+    }
+    componentWillUnmount() {
+        if(this.props.closeOnBlur) {
+            document.removeEventListener('mousedown', this.handleClickOutside);
+        }
+    }
+    handleClickOutside = (event: *) => {
+        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.props.onChange(false);
+        }
+    }
+
     render(): Element<*> {
         const {
             children,
             className,
             modifier,
-            onClick,
+            onChange,
+            parent,
             peer,
             show,
             spruceName: name,
             style,
-            toggle: Toggle
+            toggle
         } = this.props;
 
-        return <div className={SpruceClassName({name, modifier, className, peer})} style={style}>
-            <div className={`${name}_toggle`} onClick={() => onClick(!show)}>
-                <Toggle value={show} show={show} />
+        return <div
+            ref={ref => this.wrapperRef = ref}
+            className={SpruceClassName({name, modifier, className, parent, peer})}
+            style={style}
+        >
+            <div className={`${name}_toggle`}>
+                {toggle({show, onChange})}
             </div>
-            {show && <div className={`${name}_children`}>{children}</div>}
+            {show && <div className={`${name}_children`}>{children && children({onChange})}</div>}
         </div>;
     }
 }
@@ -73,7 +103,7 @@ export default class ShowHide extends React.Component<Props> {
  *
  *
  * @example
- * return <ShowHide show={false} onClick={props.onClick} toggle={() => <div>Toggle Me!</div>}>
+ * return <ShowHide show={false} onChange={props.onChange} toggle={() => <div>Toggle Me!</div>}>
  *     <h1>Hello!</h1>
  * </ShowHide>
  */
@@ -83,31 +113,34 @@ type ShowHideStateProps = {
     className?: string,
     defaultShow?: boolean,
     modifier?: SpruceModifier,
-    onClick?: (show: boolean) => void,
+    onChange?: (show: boolean) => void,
     peer?: string,
     spruceName?: string,
     toggle?: ComponentType<*>
 };
 
 type StatefulChildProps = {
-    onChange: (newState: Object) => {},
-    onClick?: (show: boolean) => void,
+    onChangeState: (newState: Object) => {},
+    onChange?: (show: boolean) => void,
     value: {
         show: boolean
     }
 };
 
-export const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
-    StateHock(({defaultShow = false}: ShowHideStateProps): Object => ({
-        show: defaultShow
-    })),
-    (Component) => (props: StatefulChildProps): Element<*> => {
+const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
+    StateHock({
+        initialState: ({defaultShow = false}: ShowHideStateProps): Object => ({
+            show: defaultShow
+        }),
+        onChangeProp: () => 'onChangeState'
+    }),
+    (Component) => function ShowHideStateful(props: StatefulChildProps): Element<*> {
         return <Component
             {...props}
             show={props.value.show}
-            onClick={(show: boolean) => {
-                props.onClick && props.onClick(show);
-                props.onChange({show});
+            onChange={(show: boolean) => {
+                props.onChange && props.onChange(show);
+                props.onChangeState({show});
             }}
         />;
     }

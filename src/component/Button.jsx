@@ -24,6 +24,7 @@ type Props = {
     disabled: boolean, // Set to true to disable the button, and `onClick` calls will no longer be called when clicked.
     modifier: SpruceModifier, // {SpruceModifier}
     onClick?: OnClick, // {OnClick}
+    parent: string, // ${SpruceParent}
     peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
@@ -36,6 +37,7 @@ export default class Button extends React.Component<Props> {
         className: '',
         disabled: false,
         modifier: '',
+        parent: '',
         peer: '',
         spruceName: 'Button',
         style: {},
@@ -50,6 +52,7 @@ export default class Button extends React.Component<Props> {
             disabled,
             modifier,
             onClick,
+            parent,
             peer,
             spruceName,
             style,
@@ -64,7 +67,7 @@ export default class Button extends React.Component<Props> {
         return <button
             {...buttonProps}
             children={children}
-            className={SpruceClassName({name: spruceName, modifier, className, peer}, additionalClassNames)}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer}, additionalClassNames)}
             disabled={disabled}
             onClick={!disabled && onClick}
             type={type}

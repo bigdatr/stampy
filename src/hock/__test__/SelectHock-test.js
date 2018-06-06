@@ -159,18 +159,19 @@ test('Selected options will have a prop of selected', (t: *) => {
 });
 
 test('Matched options will have a prop of matched', (t: *) => {
-    CheckHockChildProps(
-        SelectHock(),
-        {
-            options,
-            match: 'bar',
-            value: [options[0]],
-        },
-        ({options}) => {
-            t.is(options[0].matched, false);
-            t.is(options[1].matched, true);
-        }
-    )
+    const Component = SelectHock()((props: Object): Node => {
+        const {options} = props;
+        t.is(options[0].matched, false);
+        t.is(options[1].matched, true);
+        t.is(options[2].matched, false);
+        return <div/>;
+    });
+
+    const select = shallow(<Component options={options} value={[options[0]]} />);
+
+    select.instance().onChangeMatch('bar');
+    select.dive();
+    // t.log(select.instance());
 });
 
 test('The focused option will have a prop of focused', (t: *) => {
@@ -213,8 +214,11 @@ test('When hocked with focusUnmatched false keyDown events will skip unmatched',
     let wrapper = pipeWith(
         () => <div/>,
         SelectHock({focusUnmatched: false, focusSelected: true}),
-        Component => shallow(<Component match="foo" options={options} value={[options[0]]} />)
+        Component => shallow(<Component options={options} value={[options[0]]} />)
     );
+
+    wrapper.instance().onChangeMatch('foo');
+
 
     wrapper.prop('onKeyDown')(KEY_UP);
     t.is(wrapper.state('focusIndex'), 0);
@@ -297,10 +301,11 @@ test('backspace will not remove items if props.match is present', (t: *) => {
             options={options}
             value={options}
             multi
-            match="foo"
             onChange={onChange}
         />)
     );
+
+    wrapper.instance().onChangeMatch('foo');
 
     wrapper.prop('onKeyDown')(KEY_BACKSPACE);
     t.is(onChange.callCount, 0);

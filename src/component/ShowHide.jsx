@@ -43,7 +43,6 @@ export default class ShowHide extends React.Component<Props> {
         modifier: '',
         parent: '',
         onChange: (data) => data,
-        parent: '',
         peer: '',
         show: false,
         spruceName: 'ShowHide',
@@ -128,14 +127,14 @@ type StatefulChildProps = {
     }
 };
 
-export const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
+const ShowHideState: ComponentType<ShowHideStateProps> = Compose(
     StateHock({
         initialState: ({defaultShow = false}: ShowHideStateProps): Object => ({
             show: defaultShow
         }),
         onChangeProp: () => 'onChangeState'
     }),
-    (Component) => (props: StatefulChildProps): Element<*> => {
+    (Component) => function ShowHideStateful(props: StatefulChildProps): Element<*> {
         return <Component
             {...props}
             show={props.value.show}

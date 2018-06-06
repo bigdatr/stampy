@@ -2,7 +2,8 @@
 /* eslint-disable no-unused-vars */
 
 import type {ComponentType} from 'react';
-import {List} from 'immutable';
+import type {Node} from 'react';
+import type {List} from 'immutable';
 
 type ClassName = string;
 
@@ -34,3 +35,5 @@ type OnClick = (event: Object) => void;
 type ValueChangePair = List<string> | Array<string>;
 
 type ValueChangePairList = List<string>;
+
+type NodeThunk = () => Node;

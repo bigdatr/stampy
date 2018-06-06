@@ -60,6 +60,7 @@ test('ShowHide will create and destroy event listeners if closeOnBlur is true', 
     tt.is(typeof global.document.removeEventListener.firstCall.args[1], 'function');
 });
 
+
 test.todo('ShowHide will fire onChange with false on an ouside click');
 
 

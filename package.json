@@ -53,8 +53,7 @@
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.3.2",
-    "react-select": "^1.0.0-rc.4",
-    "sinon": "^1.17.6"
+    "react-select": "^1.0.0-rc.4"
   },
   "peerDependencies": {
     "immutable": "^3.8.1",

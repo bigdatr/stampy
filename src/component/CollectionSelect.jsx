@@ -1,52 +1,44 @@
 // @flow
-import React from 'react';
 import type {Node} from 'react';
-import type {List} from 'immutable';
+import type {ChildOption} from '../hock/SelectHock';
+import type {ChildValue} from '../hock/SelectHock';
+import type {ChildOptionList} from '../hock/SelectHock';
+import type {ChildValueList} from '../hock/SelectHock';
+
+import React from 'react';
+import map from 'unmutable/lib/map';
+import pipeWith from 'unmutable/lib/util/pipeWith';
+
 import SpruceComponent from '../util/SpruceComponent';
 import {ShowHideStateful} from './ShowHide';
 import SelectHock from '../hock/SelectHock';
-import StateHock from '../hock/StateHock';
-import Input from '../component/Input';
-import Compose from '../util/Compose';
-
-import map from 'unmutable/lib/map';
-import get from 'unmutable/lib/get';
-import filter from 'unmutable/lib/filter';
-import doIf from 'unmutable/lib/doIf';
-import isEmpty from 'unmutable/lib/isEmpty';
-import pipeWith from 'unmutable/lib/util/pipeWith';
-
-
-
+import CollectionSelect_control from './CollectionSelect_control';
+import CollectionSelect_optionItem from './CollectionSelect_optionItem';
+import CollectionSelect_valueItem from './CollectionSelect_valueItem';
+import CollectionSelect_optionList from './CollectionSelect_optionList';
 
 
 type Props = {
     className: string, // {ClassName}
+    defaultShow?: boolean,
     modifier: SpruceModifier, // {SpruceModifier}
-    options: Array<*>|List<*>,
+    options: ChildOptionList<*>,
     spruceName: string, // {SpruceName}
-    labelKey: string,
-    valueKey: string,
     match: string,
-    onChangeState: (string) => void,
+    onChangeMatch: OnChange,
     onKeyDown: Function,
-    renderOption: (item: *, index: number) => Node,
-    renderValue: (item: *, index: number) => Node,
-    emptyMessage: () => Node,
+    renderOption?: (item: *) => Node,
+    renderValue?: (item: *) => Node,
+    emptyMessage?: () => Node,
     placeholder?: string,
-    openIcon: () => Node,
-    deleteItemIcon: () => Node,
-    closeIcon: () => Node,
-    value: *
+    openIcon?: () => Node,
+    closeIcon?: () => Node,
+    value: ChildValueList<*>
 };
 
-const OptionList = SpruceComponent(`_optionList`, 'ul');
-const Control = SpruceComponent(`_control`, 'div');
-const OptionItem = SpruceComponent(`_optionItem`, 'li');
+
 const ValueList = SpruceComponent(`_valueList`, 'ul');
-const ValueItem = SpruceComponent(`_valueItem`, 'li');
-const OpenClose = SpruceComponent(`_openClose`, 'div');
-const Box = SpruceComponent('Box', 'div');
+const OptionItem = SpruceComponent(`_optionItem`, 'li');
 
 
 /**
@@ -81,120 +73,105 @@ const Box = SpruceComponent('Box', 'div');
  * return <CollectionSelect onChange={(val) => doStuff(val)} options={options}/>
  */
 
-class CollectionSelect extends React.Component<Props> {
+export default class CollectionSelect extends React.Component<Props> {
     static defaultProps = {
         spruceName: 'CollectionSelect'
     };
-    onChangeMatch = (payload: string, {event}: *) => {
-        event.stopPropagation();
-        this.props.onChangeState(payload);
-    }
-    renderValue = (value: *, index: number): Node => {
-        const {spruceName: name} = this.props;
-        const {renderValue = (value: *, index: number) => <span
-            key={index}
-            onClick={() => value.onDelete()}
-            children={`${value.label} ×`}
-        />} = this.props;
+    renderControl = ({show, onChange}: *): Node => {
+        const {closeIcon} = this.props;
+        const {match} = this.props;
+        const {onKeyDown} = this.props;
+        const {openIcon} = this.props;
+        const {onChangeMatch} = this.props;
+        const {spruceName} = this.props;
+        const {placeholder = ''} = this.props;
+        const {value} = this.props;
+        const {renderValue = this.renderValue} = this.props;
 
-        return <ValueItem
-            parent={name}
+        return <CollectionSelect_control
+            dangerouslyInsideParentComponent={true}
+            closeIcon={closeIcon}
+            match={match}
+            onChangeMatch={onChangeMatch}
+            onChangeShow={onChange}
+            onKeyDownInput={onKeyDown}
+            openIcon={openIcon}
+            parent={spruceName}
+            placeholder={placeholder}
+            show={show}
+            valueList={(): Node => {
+                return <ValueList parent={spruceName}>
+                    {pipeWith(
+                        value,
+                        map(renderValue)
+                    )}
+                </ValueList>;
+            }}
+        />;
+    }
+    renderValue = (value: ChildValue<*>, index: number): Node => {
+        const {spruceName} = this.props;
+
+        return <CollectionSelect_valueItem
+            dangerouslyInsideParentComponent={true}
             key={value.label + index}
-            onMouseDown={event => event.preventDefault()}
-            children={renderValue(value, index)}
+            value={value}
+            parent={spruceName}
+        />;
+    }
+    renderOptionList = ({onChange}: *): Node => {
+        const {renderOption = this.renderOption} = this.props;
+        const {options} = this.props;
+        const {spruceName} = this.props;
+        const {emptyMessage = () => 'No items found'} = this.props;
+        const renderEmpty = () => <OptionItem parent={spruceName}>{emptyMessage()}</OptionItem>;
+
+        return <CollectionSelect_optionList
+            dangerouslyInsideParentComponent={true}
+            onChangeShow={onChange}
+            options={options}
+            parent={spruceName}
+            renderEmpty={renderEmpty}
+            renderOption={renderOption}
+        />;
+    }
+    renderOption = (option: ChildOption<*>): Node => {
+        const {focused} = option;
+        const {selected} = option;
+        const {label} = option;
+        const {value} = option;
+        const {onChange} = option;
+        const {onMouseOver} = option;
+        const {spruceName} = this.props;
+
+        return <CollectionSelect_optionItem
+            key={value}
+            dangerouslyInsideParentComponent={true}
+            focused={focused}
+            selected={selected}
+            label={label}
+            onChange={onChange}
+            onMouseOver={onMouseOver}
+            parent={spruceName}
         />;
     }
     render(): Node {
-        const {spruceName: name} = this.props;
+        const {spruceName} = this.props;
         const {modifier} = this.props;
         const {className} = this.props;
-        const {options} = this.props;
-        const {onKeyDown} = this.props;
-        const {match} = this.props;
-        const {emptyMessage = () => <span>No items found</span>} = this.props;
-        const {placeholder} = this.props;
-        const {openIcon = () => <div>▾</div>} = this.props;
-        const {closeIcon = () => <div style={{transform: 'rotate(180deg)'}}>▾</div>} = this.props;
+        const {defaultShow} = this.props;
 
-        const {renderOption = (oo: *, index: number): Node => {
-            return <OptionItem
-                parent={name}
-                key={oo.value + index}
-                modifier={`${oo.matched ? 'matched ' : ''}${oo.selected ? 'selected ': ''}${oo.focused ? 'focused': ''}`}
-                onMouseDown={(event: Event) => event.preventDefault()}
-                onClick={() => oo.onChange()}
-                onMouseOver={oo.onMouseOver}
-                children={oo.label}
-            />;
-        }} = this.props;
-
-
-        const toggle = ({show, onChange}) => <Control parent={name}>
-            <Input
-                value={show ? match : ''}
-                spruceName="_input"
-                parent={name}
-                onChange={this.onChangeMatch}
-                inputProps={{
-                    placeholder,
-                    onKeyDown: (event: Event) => {
-                        if(event.keyCode === 13 || event.keyCode === 27) {
-                            onChange(false);
-                        } else {
-                            onChange(true);
-                        }
-                        onKeyDown(event);
-                    },
-                    onClick: () => console.log('onClick input') || onChange(true),
-                    onFocus: () => onChange(true),
-                    onBlur: () => onChange(false)
-                }}
-            />
-            {(!match || !show) && <ValueList parent={name}>
-                {pipeWith(
-                    this.props.value,
-                    map(this.renderValue)
-                )}
-            </ValueList>}
-            <OpenClose parent={name}>
-                {show ? closeIcon() : openIcon()}
-            </OpenClose>
-        </Control>;
-
-        return <Box>
-            <ShowHideStateful
-                closeOnBlur={true}
-                spruceName={name}
-                modifier={modifier}
-                className={className}
-                toggle={toggle}
-                children={({onChange}) => <OptionList parent={name}>
-                    {pipeWith(
-                        options,
-                        filter(get('matched')),
-                        map((item: *, index: number) => renderOption({
-                            ...item,
-                            onChange: () => {
-                                item.onChange();
-                                onChange(false);
-                            }
-                        }, index)),
-                        doIf(isEmpty(), () => <OptionItem>{emptyMessage()}</OptionItem>)
-                    )}
-                </OptionList>}
-            />
-        </Box>;
+        return <ShowHideStateful
+            closeOnBlur={true}
+            spruceName={spruceName}
+            modifier={modifier}
+            className={className}
+            toggle={this.renderControl}
+            defaultShow={defaultShow}
+            children={this.renderOptionList}
+        />;
     }
 }
 
-export const ShowHideState: ComponentType<*> = Compose(
-    StateHock({
-        initialState: () => '',
-        onChangeProp: () => 'onChangeState',
-        valueProp: () => 'match'
-    }),
-    SelectHock({})
-);
+export const CollectionSelectStateful = SelectHock({})(CollectionSelect);
 
-
-export default ShowHideState(CollectionSelect);

@@ -38,6 +38,16 @@ type Props = {
     style?: *
 };
 
+function remify(rems?: string): ?string {
+    return rems && typeof rems === 'string'
+        ? rems
+            .trim()
+            .split(' ')
+            .join('rem ') + 'rem'
+        : undefined
+    ;
+}
+
 export default function Box(props: Props): Node {
     const {children} = props;
     const {className} = props;
@@ -65,16 +75,16 @@ export default function Box(props: Props): Node {
         {...boxProps}
         style={{
             ...style,
-            margin,
-            marginBottom,
-            marginLeft,
-            marginRight,
-            marginTop,
-            padding,
-            paddingBottom,
-            paddingLeft,
-            paddingRight,
-            paddingTop
+            margin: remify(margin),
+            marginBottom: remify(marginBottom),
+            marginLeft: remify(marginLeft),
+            marginRight: remify(marginRight),
+            marginTop: remify(marginTop),
+            padding: remify(padding),
+            paddingBottom: remify(paddingBottom),
+            paddingLeft: remify(paddingLeft),
+            paddingRight: remify(paddingRight),
+            paddingTop: remify(paddingTop)
         }}
     />;
 }

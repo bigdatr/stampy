@@ -89,14 +89,17 @@ test('box classes', (tt: Object) => {
 
 
 test('box styles', (tt: Object) => {
-    tt.is(shallow(<Box margin="1rem" />).prop('style').margin, '1rem');
-    tt.is(shallow(<Box marginBottom="1rem" />).prop('style').marginBottom, '1rem');
-    tt.is(shallow(<Box marginLeft="1rem" />).prop('style').marginLeft, '1rem');
-    tt.is(shallow(<Box marginRight="1rem" />).prop('style').marginRight, '1rem');
-    tt.is(shallow(<Box marginTop="1rem" />).prop('style').marginTop, '1rem');
-    tt.is(shallow(<Box padding="1rem" />).prop('style').padding, '1rem');
-    tt.is(shallow(<Box paddingBottom="1rem" />).prop('style').paddingBottom, '1rem');
-    tt.is(shallow(<Box paddingLeft="1rem" />).prop('style').paddingLeft, '1rem');
-    tt.is(shallow(<Box paddingRight="1rem" />).prop('style').paddingRight, '1rem');
-    tt.is(shallow(<Box paddingTop="1rem" />).prop('style').paddingTop, '1rem');
+    tt.is(shallow(<Box margin="1 2 3 4" />).prop('style').margin, '1rem 2rem 3rem 4rem');
+    tt.is(shallow(<Box margin=" 1 2 " />).prop('style').margin, '1rem 2rem');
+
+    tt.is(shallow(<Box margin="1" />).prop('style').margin, '1rem');
+    tt.is(shallow(<Box marginBottom="1" />).prop('style').marginBottom, '1rem');
+    tt.is(shallow(<Box marginLeft="1" />).prop('style').marginLeft, '1rem');
+    tt.is(shallow(<Box marginRight="1" />).prop('style').marginRight, '1rem');
+    tt.is(shallow(<Box marginTop="1" />).prop('style').marginTop, '1rem');
+    tt.is(shallow(<Box padding="1" />).prop('style').padding, '1rem');
+    tt.is(shallow(<Box paddingBottom="1" />).prop('style').paddingBottom, '1rem');
+    tt.is(shallow(<Box paddingLeft="1" />).prop('style').paddingLeft, '1rem');
+    tt.is(shallow(<Box paddingRight="1" />).prop('style').paddingRight, '1rem');
+    tt.is(shallow(<Box paddingTop="1" />).prop('style').paddingTop, '1rem');
 });

@@ -28,7 +28,7 @@ type Props = {
     peer: string, // {SprucePeer}
     spruceName: string, // {SpruceName}
     style: Object, // React style object to apply to the rendered HTML element
-    value?: ?string // {Value}
+    value?: boolean // Boolean value
 };
 
 export default class Checkbox extends React.Component<Props> {

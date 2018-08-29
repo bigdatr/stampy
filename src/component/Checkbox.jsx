@@ -59,13 +59,20 @@ export default class Checkbox extends React.Component<Props> {
             value
         } = this.props;
 
+        const additionalClassNames: Object = {
+            // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+            [`${spruceName}-active`]: !!value,
+            // $FlowFixMe: flow doesnt seem to know that vars passed into template strings are implicitly cast to strings
+            [`${spruceName}-disabled`]: disabled
+        };
+
         return <input
             disabled={disabled}
             name={name}
             type="checkbox"
             {...inputProps}
-            className={SpruceClassName({name: spruceName, modifier, className, parent, peer})}
-            onChange={(ee) => onChange && onChange(!!(ee.target.checked), {event: ee, element: ee.target})}
+            className={SpruceClassName({name: spruceName, modifier, className, parent, peer}, additionalClassNames)}
+            onChange={(ee) => onChange && !disabled && onChange(!!(ee.target.checked), {event: ee, element: ee.target})}
             checked={!!value}
             style={style}
         />;

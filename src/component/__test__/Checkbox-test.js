@@ -8,34 +8,52 @@ import Checkbox from '../Checkbox';
 test('checkbox can be true', (tt: Object) => {
 
     const inputOnChange = sinon.spy();
-    const inputComponent = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={true} />);
-    const inputElem = inputComponent.find('input');
+    const wrapper = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={true} />);
+    const inputElem = wrapper.find('input');
 
     tt.is(
         inputElem.props().checked,
         true,
         'checkbox is checked'
     );
+
+    tt.true(
+        wrapper
+            .render()
+            .children()
+            .first()
+            .hasClass('Checkbox-active'),
+        'checkbox has a class of Checkbox-active when value is true'
+    );
 });
 
 test('checkbox can be false', (tt: Object) => {
 
     const inputOnChange = sinon.spy();
-    const inputComponent = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={false} />);
-    const inputElem = inputComponent.find('input');
+    const wrapper = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={false} />);
+    const inputElem = wrapper.find('input');
 
     tt.is(
         inputElem.props().checked,
         false,
         'checkbox is not checked'
     );
+
+    tt.false(
+        wrapper
+            .render()
+            .children()
+            .first()
+            .hasClass('Checkbox-active'),
+        'checkbox doesnt has a class of Checkbox-active when value is false'
+    );
 });
 
 test('checkbox', (tt: Object) => {
 
     const inputOnChange = sinon.spy();
-    const inputComponent = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={true} />);
-    const inputElem = inputComponent.find('input');
+    const wrapper = shallow(<Checkbox onChange={inputOnChange} className='OtherToggle' modifier='large' value={true} />);
+    const inputElem = wrapper.find('input');
 
     inputElem.simulate('change', {target: {}});
 
@@ -133,5 +151,30 @@ test('checkbox classes', (tt: Object) => {
             .first()
             .hasClass('Checkbox'),
         'checkboxes with className should not replace other class names'
+    );
+});
+
+test('disabled checkbox', (tt: Object) => {
+    const toggleOnChange = sinon.spy();
+    const wrapper = shallow(<Checkbox disabled onChange={toggleOnChange} />);
+
+    tt.true(
+        wrapper.prop('disabled'),
+        'disabled checkboxes have a disabled attribute'
+    );
+
+    wrapper.find('input').simulate('change', {target: {}});
+    tt.false(
+        toggleOnChange.calledOnce,
+        'disabled checkboxes do not call their onChange events when clicked'
+    );
+
+    tt.true(
+        wrapper
+            .render()
+            .children()
+            .first()
+            .hasClass('Checkbox-disabled'),
+        'checkbox has a class of Checkbox-disabled when disabled'
     );
 });

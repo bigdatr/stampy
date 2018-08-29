@@ -41,7 +41,7 @@ export default class Checkbox extends React.Component<Props> {
         peer: '',
         spruceName: 'Checkbox',
         style: {},
-        value: ''
+        value: false
     };
 
     render(): Element<*> {

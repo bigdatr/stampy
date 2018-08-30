@@ -206,6 +206,7 @@ export default (config: ?Object = null): HockApplier => {
                 // react router v4
                 var newPath = pathname;
                 if(!newQuery.isEmpty()) {
+                    let escapeAmpersand = (ii) => ii.replace(/&/g,"%26");
 
                     // build query string
                     const newQueryString: string = newQuery
@@ -213,11 +214,12 @@ export default (config: ?Object = null): HockApplier => {
                             if(List.isList(value)) {
                                 return list.concat(
                                     // $FlowFixMe: flow doesnt seem to know that List.isList() returns false for strings
-                                    value.map(ii => `${key}=${ii}`)
+                                    value.map(ii => `${key}=${escapeAmpersand(ii)}`)
                                 );
                             }
+
                             // $FlowFixMe: flow doesnt seem to know that List.isList() returns false for strings
-                            return list.push(`${key}=${value}`);
+                            return list.push(`${key}=${escapeAmpersand(value)}`);
                         }, List())
                         .join("&");
 

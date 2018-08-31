@@ -321,6 +321,44 @@ test('QueryStringHock should set query for react-router v4 using context.router.
     tt.false(replace.called, 'router.replace should not be called');
 });
 
+test('QueryStringHock should escape ampersand charcters', tt => {
+
+    const componentToWrap = () => <div>Example Component</div>;
+    const WrappedComponent = QueryStringHock()(componentToWrap);
+    const myWrappedComponent = new WrappedComponent();
+
+    const push = sinon.spy();
+    const replace = sinon.spy();
+
+    const pathname = "PATH";
+
+    myWrappedComponent.context = {
+        router: {
+            history: {
+                push,
+                replace
+            }
+        }
+    };
+    myWrappedComponent.props = {
+        location: {
+            search: "",
+            pathname
+        }
+    };
+
+    const newQuery = {
+        a: "abc&abc&abc"
+    };
+
+    const newPathname = `${pathname}?a=abc%26abc%26abc`;
+
+    myWrappedComponent.render().props.setQuery(newQuery);
+
+    tt.true(push.calledOnce, 'router.push is called');
+    tt.is(push.firstCall.args[0], newPathname, 'First arg should contain new pathname with escaped ampersands');
+});
+
 test('QueryStringHock should set query for react-router v4 using context.router.history.replace', tt => {
 
     const componentToWrap = () => <div>Example Component</div>;

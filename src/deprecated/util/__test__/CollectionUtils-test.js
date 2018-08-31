@@ -6,11 +6,11 @@ test('isKeyed() works', tt => {
     tt.true(isKeyed({}));
     tt.true(isKeyed(Map()));
     tt.true(isKeyed(OrderedMap()));
+    tt.true(isKeyed(() => {}));
 
     tt.false(isKeyed());
     tt.false(isKeyed(1));
     tt.false(isKeyed(null));
-    tt.false(isKeyed(() => {}));
     tt.false(isKeyed([]));
     tt.false(isKeyed(List()));
     tt.false(isKeyed(Stack()));

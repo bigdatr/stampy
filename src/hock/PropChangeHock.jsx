@@ -2,9 +2,9 @@
 
 import React from 'react';
 import type {ComponentType, Element} from 'react';
-import {is} from 'immutable';
 import ConfigureHock from '../deprecated/util/ConfigureHock';
 import getIn from 'unmutable/lib/getIn';
+import equals from 'unmutable/lib/equals';
 
 /**
  * @module Hocks
@@ -60,10 +60,7 @@ export default ConfigureHock(
                             const keyPath = ii.split('.');
                             const getKeyPath = getIn(keyPath);
 
-                            return !is(
-                                getKeyPath(this.props),
-                                getKeyPath(nextProps)
-                            );
+                            return !equals(getKeyPath(this.props))(getKeyPath(nextProps));
                         });
 
                     if(propsHaveChanged) {

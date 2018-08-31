@@ -206,7 +206,7 @@ export default (config: ?Object = null): HockApplier => {
                 // react router v4
                 var newPath = pathname;
                 if(!newQuery.isEmpty()) {
-                    let escapeAmpersand = (ii) => ii.replace(/&/g,"%26");
+                    let escapeAmpersand = (ii: string) => ii.replace(/&/g,"%26");
 
                     // build query string
                     const newQueryString: string = newQuery

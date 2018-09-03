@@ -1,12 +1,14 @@
 {
   "name": "stampy",
-  "version": "0.43.1",
+  "version": "0.43.2",
   "description": "The new and improved stampy",
   "repository": {
     "type": "git",
     "url": "git@github.com:bigdatr/stampy.git"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib --copy-files",

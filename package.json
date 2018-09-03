@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git@github.com:bigdatr/stampy.git"
   },
+  "files": ["lib"],
   "license": "MIT",
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib --copy-files",

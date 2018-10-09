@@ -34,6 +34,7 @@
     "babel-preset-blueflag": "^0.6.0",
     "babel-register": "^6.23.0",
     "babel-runtime": "^6.23.0",
+    "blueflag-test": "^0.18.1",
     "cheerio": "^0.22.0",
     "debounce": "^1.0.2",
     "enzyme": "^2.5.1",
@@ -66,7 +67,6 @@
     "react-select": "^1.0.0-rc.4"
   },
   "dependencies": {
-    "blueflag-test": "^0.18.1",
     "classnames": "^2.2.5",
     "element-resize-detector": "^1.1.12",
     "is-plain-object": "^2.0.3",

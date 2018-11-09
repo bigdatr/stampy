@@ -5,6 +5,11 @@ import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import ToggleSet from '../ToggleSet';
 
+const mockEvent = () => ({
+    preventDefault: () => undefined,
+    stopPropagation: () => undefined
+})
+
 const options = [
     {value: "1", label: "one"},
     {value: "2", label: "two"},
@@ -102,7 +107,7 @@ test('ToggleSet should apply toggleSetProps to outer element', (tt: Object) => {
 test('ToggleSet should render toggle with labels according to options', (tt: Object) => {
     const toggles = shallow(<ToggleSet options={options} />).children();
     tt.deepEqual(
-        toggles.map(ii => ii.prop('children')),
+        toggles.map(ii => ii.prop('children').props.children),
         ["one", "two", "three"]
     );
 });
@@ -229,6 +234,21 @@ test('ToggleSet should call onChange with appropriate values when multi=true', (
     tt.deepEqual(onChange3.firstCall.args[0], []);
 });
 
+test('ToggleSet should not call onChange if onClick returns false', (tt: Object) => {
+    const onChange = sinon.spy();
+    const onClick = () => false;
+    shallow(<ToggleSet options={options} onChange={onChange} onClick={onClick} />);
+    tt.false(onChange.called);
+});
+
+test('ToggleSet should call onClick function', (tt: Object) => {
+    const onClick = sinon.spy();
+
+    const toggles = shallow(<ToggleSet options={options} onChange={sinon.spy()} onClick={onClick} />).children()
+    toggles.forEach(toggle => toggle.find('span').simulate('click', mockEvent()));
+
+    tt.true(onClick.callCount === toggles.length);
+});
 
 test('ToggleSet should preserve order of options', (tt: Object) => {
     const options = [

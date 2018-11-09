@@ -69,6 +69,7 @@ type Props = {
     modifier: SpruceModifier, // ${SpruceModifier}
     multi: boolean, // Boolean indicating if more than one selected item at once
     onChange?: (newValues: Array<string>|string, meta: OnChangeMeta) => void, // ${OnChange}
+    onClick?: (value: ?string, disabled: boolean) => ?boolean, // ${OnClick} Callback that is fired when Toggle is clicked. Returning false prevents the event from being handled further
     options: ToggleOption[], // The options that the user can select. Each will appear as a toggle
     peer: string, // ${SprucePeer}
     parent: string, // ${SpruceParent}
@@ -112,6 +113,7 @@ export default class ToggleSet extends React.Component<Props> {
             modifier,
             multi,
             onChange,
+            onClick = (value, disabled) => true, // eslint-disable-line no-unused-vars
             options,
             parent,
             peer,
@@ -157,8 +159,18 @@ export default class ToggleSet extends React.Component<Props> {
                     }
                 };
 
+                const toggleOnClick = (ee: Event) => {
+                    if(!onClick(value, (disabled || componentDisabled))) {
+                        ee.preventDefault();
+                        ee.stopPropagation();
+                    }
+                };
+
+                // Wrapping the label in a span allows the onClick handler to always be fired, even if the Toggle's <button> is disabled
+                const toggleChildren = <span onClick={toggleOnClick}>{label}</span>;
+
                 return <Toggle
-                    children={label}
+                    children={toggleChildren}
                     disabled={disabled || componentDisabled}
                     onChange={toggleOnChange}
                     toggleProps={toggleProps}

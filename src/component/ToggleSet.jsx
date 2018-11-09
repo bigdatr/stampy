@@ -3,7 +3,7 @@ import React from 'react';
 import type {Element} from 'react';
 import {List, OrderedSet} from 'immutable';
 import {Set} from 'immutable';
-import SpruceClassName from 'stampy/lib/util/SpruceClassName';
+import SpruceClassName from '../util/SpruceClassName';
 import Toggle from './Toggle';
 
 /**

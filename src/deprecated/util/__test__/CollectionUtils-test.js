@@ -6,7 +6,6 @@ test('isKeyed() works', tt => {
     tt.true(isKeyed({}));
     tt.true(isKeyed(Map()));
     tt.true(isKeyed(OrderedMap()));
-    tt.true(isKeyed(() => {}));
 
     tt.false(isKeyed());
     tt.false(isKeyed(1));

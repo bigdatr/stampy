@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: blueflag/client-build:0.0.7
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys: ['v1-root-{{ checksum "yarn.lock" }}']
+      - restore_cache:
+          keys: ['v1-stampy-{{ checksum "yarn.lock" }}']
+
+      - run: yarn install
+      - run: yarn lerna bootstrap
+
+      - save_cache:
+          key: v1-root-{{ checksum "yarn.lock" }}
+          paths: ['node_modules']
+
+      - save_cache:
+          key: v1-stampy-{{ checksum "yarn.lock" }}
+          paths: ['packages/bigdatr-client-main/node_modules']
+
+      - run: yarn test-all
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: org-global

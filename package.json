@@ -1,0 +1,13 @@
+{
+  "name": "stampy-monorepo",
+  "version": "0.0.0",
+  "repository": "https://github.com/bigdatr/stampy",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "test-all": "lerna run test-all --concurrency 2"
+  },
+  "devDependencies": {
+    "lerna": "^3.5.1"
+  }
+}

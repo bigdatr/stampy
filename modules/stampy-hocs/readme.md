@@ -1,1 +1,0 @@
-# Stampy Hocs

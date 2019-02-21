@@ -1,80 +1,13 @@
 {
-  "name": "stampy",
-  "version": "0.44.0",
-  "description": "The new and improved stampy",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:bigdatr/stampy.git"
-  },
-  "files": [
-    "lib"
-  ],
-  "license": "MIT",
+  "name": "stampy-monorepo",
+  "version": "0.0.0",
+  "repository": "https://github.com/bigdatr/stampy",
+  "license": "UNLICENSED",
+  "private": true,
   "scripts": {
-    "build": "rm -rf lib && babel src --out-dir lib --copy-files",
-    "build-examples": "cd example && yarn install && yarn run build && cd -",
-    "coverage": "blueflag-test coverage",
-    "deploy-to-gh-pages": "yarn run build && yarn run build-examples && yarn run docs && node scripts/publish.js",
-    "dev": "babel src -d lib --watch",
-    "docs": "jsdoc -c jsdoc.json",
-    "flow": "blueflag-test flow",
-    "lint": "blueflag-test lint",
-    "prepublish": "yarn run build",
-    "test": "blueflag-test test",
-    "test-all": "yarn lint && yarn flow && yarn coverage",
-    "view-coverage": "yarn run coverage; open ./coverage/lcov-report/index.html",
-    "watch": "yarn run dev"
+    "test-all": "lerna run test-all --concurrency 2"
   },
   "devDependencies": {
-    "app-module-path": "^2.0.0",
-    "babel-cli": "^6.23.0",
-    "babel-core": "^6.23.0",
-    "babel-plugin-transform-class-properties": "^6.18.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-blueflag": "^0.6.0",
-    "babel-register": "^6.23.0",
-    "babel-runtime": "^6.23.0",
-    "blueflag-test": "^0.18.1",
-    "cheerio": "^0.22.0",
-    "debounce": "^1.0.2",
-    "enzyme": "^2.5.1",
-    "eslint": "^4.9.0",
-    "eslint-config-blueflag": "^0.6.1",
-    "gh-pages": "^0.11.0",
-    "git-url-parse": "^6.0.1",
-    "immutable": "^3.8.1",
-    "jsdoc": "^3.4.2",
-    "jsdoc-babel": "^0.2.1",
-    "jsdoc-react-proptypes": "^1.0.2",
-    "jsdom": "^9.8.3",
-    "jsdonk": "^0.5.0",
-    "lru-memoize": "^1.0.2",
-    "moment": "^2.18.1",
-    "numeral": "^2.0.6",
-    "prop-types": "^15.5.8",
-    "proto-babel-plugin-extract-flow-types": "git+ssh://git@github.com/blueflag/proto-babel-plugin-extract-flow-types.git#v0.1",
-    "proxyquire": "^1.7.11",
-    "react": "^15.3.2",
-    "react-addons-test-utils": "^15.0.0",
-    "react-dom": "^15.3.2",
-    "react-select": "^1.0.0-rc.4"
-  },
-  "peerDependencies": {
-    "immutable": "^3.8.1",
-    "moment": "^2.18.1",
-    "numeral": "^2.0.6",
-    "react": "^15.x.x",
-    "react-select": "^1.0.0-rc.4"
-  },
-  "dependencies": {
-    "classnames": "^2.2.5",
-    "element-resize-detector": "^1.1.12",
-    "is-plain-object": "^2.0.3",
-    "unmutable": "^0.34.1",
-    "url-search-params": "^0.9.0"
-  },
-  "main": "lib/index.js",
-  "engines": {
-    "npm": "^3.0.0"
+    "lerna": "^3.5.1"
   }
 }

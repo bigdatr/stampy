@@ -3856,16 +3856,9 @@ js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-js-yaml@^3.10.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
-  dependencies:
-    argparse "^1.0.7"
-    esprima "^4.0.0"
-
-js-yaml@^3.9.1:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
+js-yaml@^3.10.0, js-yaml@^3.9.1:
+  version "3.15.2"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.15.2.tgz#3f83823ac6be17f570f23b2ecdef3777ff5ea364"
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
@@ -4970,6 +4963,7 @@ prop-types@^15.5.8:
 
 "proto-babel-plugin-extract-flow-types@git+ssh://git@github.com/blueflag/proto-babel-plugin-extract-flow-types.git#v0.1":
   version "0.1.1"
+  uid "3384cee89880d8bccd3c27bb734744629dfc342b"
   resolved "git+ssh://git@github.com/blueflag/proto-babel-plugin-extract-flow-types.git#3384cee89880d8bccd3c27bb734744629dfc342b"
   dependencies:
     fs-extra "^4.0.1"
